@@ -1,19 +1,17 @@
 {
-  "name": "@atomic/web",
+  "name": "@atomic/web-finance",
   "private": true,
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite --port 8000",
+    "dev": "vite --port 8002",
     "build": "tsc && vite build",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview"
   },
   "dependencies": {
     "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "@atomic/web-ui": "*",
-    "@atomic/frontend-logic": "*"
+    "react-dom": "^18.2.0"
   },
   "devDependencies": {
     "@types/react": "^18.2.15",
