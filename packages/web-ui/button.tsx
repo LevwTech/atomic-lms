@@ -1,4 +1,4 @@
-import * as React from 'react';
+import * as React from "react";
 
 interface ButtonProps {
   onPress: () => void;
@@ -7,7 +7,7 @@ interface ButtonProps {
 
 export function Button({ onPress, title }: ButtonProps): JSX.Element {
   return (
-    <button onClick={onPress} type="button">
+    <button className="bg-orange-500" onClick={onPress} type="button">
       {title}
     </button>
   );
