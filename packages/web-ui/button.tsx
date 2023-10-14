@@ -1,13 +1,14 @@
-import * as React from 'react';
+import * as React from "react";
 
 interface ButtonProps {
+  style?: React.CSSProperties;
   onPress: () => void;
   title: string;
 }
 
-export function Button({ onPress, title }: ButtonProps): JSX.Element {
+export function Button({ style, onPress, title }: ButtonProps): JSX.Element {
   return (
-    <button onClick={onPress} type="button">
+    <button style={style} onClick={onPress} type="button">
       {title}
     </button>
   );
