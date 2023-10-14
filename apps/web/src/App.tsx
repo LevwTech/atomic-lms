@@ -16,7 +16,7 @@ function App() {
         >
           <CountDisplay count={count} />
           <Button onPress={increment} title="+1" />
-          <Button onPress={decrement} title="-1" />
+          <Button onPress={decrement} title="1" />
         </div>
       )}
     </CountLogic>
