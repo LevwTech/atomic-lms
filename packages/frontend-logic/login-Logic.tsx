@@ -1,27 +1,22 @@
 import * as React from "react";
 
-interface loginLogicProps {
+interface LoginLogicProps {
   children: (
     username: string,
     password: string,
-    setUsername: () => void,
-    setPassword: () => void,
+    setUsername: (value: string) => void,
+    setPassword: (value: string) => void,
     login: () => void
   ) => JSX.Element;
 }
 
-export const LoginLogic: React.FC<loginLogicProps> = ({ children }) => {
+export const LoginLogic: React.FC<LoginLogicProps> = ({ children }) => {
   const [username, setUsername] = React.useState("");
   const [password, setPassword] = React.useState("");
-  const usernameSetter = (value) => {
-    setUsername(value);
-  };
-  const passwordSetter = (value) => {
-    setPassword(value);
-  };
-  const login = () => {
+
+  const login = (): void => {
     console.log(username, password);
   };
 
-  return children(username, password, usernameSetter, passwordSetter, login);
+  return children(username, password, setUsername, setPassword, login);
 };
