@@ -1,3 +1,3 @@
 // component exports
-export { CountLogic } from "./count-logic";
-export { LoginLogic } from "./login-Logic";
+export { LoginLogic } from "./login-logic";
+export { CarousalLogic } from "./carousal";
