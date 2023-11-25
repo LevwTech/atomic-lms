@@ -1,5 +1,6 @@
 import "./index.css";
 
 // component exports
-export { CountDisplay } from "./count-display";
-export { Button } from "./button";
+export { Button } from "./Button/button";
+export { TextInput } from "./TextInput/textInput";
+export { LoginForm } from "./loginForm";
