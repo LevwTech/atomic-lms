@@ -1,17 +1,15 @@
-import * as React from "react";
+import type { ComponentProps } from "react";
 import styles from "./button.module.css";
-import { ComponentProps } from "react";
 
-type ButtonProps = ComponentProps<"button"> &{
+type ButtonProps = ComponentProps<"button"> & {
   onPress: () => void;
-  title: string;
+  children: string;
 };
 
-
-export function Button({ onPress, title }: ButtonProps): JSX.Element {
+export function Button({ onPress, children }: ButtonProps): JSX.Element {
   return (
     <button className={styles.button} onClick={onPress} type="button">
-      {title}
+      {children}
     </button>
   );
 }
