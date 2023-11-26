@@ -18,8 +18,15 @@ function App() {
 
   return (
     <div className="flex items-center justify-end h-screen bg-[#EFF2FB]">
-      <LoginForm />
-      <Carousal images={images} />
+      <img
+        src="./logo-banner.svg"
+        className="absolute top-0 left-[7.5%] w-16 "
+      />
+      {/* <img src="./LogoBackground.svg" alt="" className=" z-100" /> */}
+      <LoginForm logo="./BUE_Logo.svg" />
+      <div className="w-[50%] h-full py-[70px] pr-[70px]">
+        <Carousal images={images} />
+      </div>
     </div>
   );
 }
