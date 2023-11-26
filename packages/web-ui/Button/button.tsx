@@ -8,7 +8,7 @@ type ButtonProps = ComponentProps<"button"> & {
 
 export function Button({ onPress, children }: ButtonProps): JSX.Element {
   return (
-    <button className={styles.button} onClick={onPress} type="button">
+    <button className={`${styles.button}`} onClick={onPress} type="button">
       {children}
     </button>
   );
