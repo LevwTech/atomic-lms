@@ -10,7 +10,8 @@ export function LoginForm(): JSX.Element {
             <FormInput
               label="Username"
               onChange={(e) => {
-                setUsername(e.target.value);
+                const target = e.target as HTMLInputElement;
+                setUsername(target.value);
               }}
               placeholder="Username"
               type="text"
@@ -21,7 +22,8 @@ export function LoginForm(): JSX.Element {
               forgetPassword
               label="Password"
               onChange={(e) => {
-                setPassword(e.target.value);
+                const target = e.target as HTMLInputElement;
+                setPassword(target.value);
               }}
               placeholder="Password"
               type="password"

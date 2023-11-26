@@ -1,7 +1,6 @@
 import type { ComponentProps } from "react";
 import * as React from "react";
 import styles from "./formInput.module.css";
-
 type TextInputProps = ComponentProps<"input"> & {
   type: string;
   label: string;
@@ -28,7 +27,10 @@ export function FormInput({
           <label className={styles.label} htmlFor={appliedId}>
             {label}
           </label>
-          <p className={`${styles.label} text-[#3F7BF0]`}>Forgot Password?</p>
+          {/*---------------------------------------------------- forget password link not provided yet------------------------------------------------------------------------------------ */}
+          <a href="#" className={`${styles.label} text-[#3F7BF0]`}>
+            Forgot Password?
+          </a>
         </div>
       ) : (
         <label className={styles.label} htmlFor={appliedId}>
