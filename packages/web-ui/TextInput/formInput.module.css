@@ -1,9 +1,5 @@
-[type="text"] {
-  border-radius: 20px;
-}
-
 .textInput {
-  @apply w-full h-[80px] pt-4 pb-2 px-4 !rounded-2xl mt-2 mb-4 border-none;
+  @apply w-full h-[80px] pt-4 pb-2 px-4 !rounded-2xl mt-2 mb-4 border-none !text-[24px] font-medium;
 }
 
 .label {
