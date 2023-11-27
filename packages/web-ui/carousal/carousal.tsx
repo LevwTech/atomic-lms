@@ -1,13 +1,12 @@
 import { CarousalLogic } from "@atomic/frontend-logic";
 
-export function Carousal({ images }: { images: string }): JSX.Element {
+export function Carousal({ images }: { images: HTMLImageElement[] }) {
   return (
     <CarousalLogic imagesLength={images.length}>
       {(current, setCurrent) => (
         <div className="h-full w-full flex relative">
           <div className="h-full w-full flex absolute z-10 bg-gradient-to-tr from-black/90 to-red-500/20  rounded-2xl "></div>
           <img
-          
             src={images[current].src}
             alt={images[current].alt}
             className="w-full h-full flex object-cover relative rounded-2xl"
@@ -23,7 +22,7 @@ export function Carousal({ images }: { images: string }): JSX.Element {
               impedit.
             </p>
             <div className="flex gap-3 self-center mt-10">
-              {images.map((_: string, index: number) => (
+              {images.map((_: HTMLImageElement, index: number) => (
                 <span
                   onClick={() => setCurrent(index)}
                   className={`${
