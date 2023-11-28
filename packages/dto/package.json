@@ -1,0 +1,15 @@
+{
+  "name": "@atomic/dto",
+  "version": "0.0.0",
+  "private": true,
+  "license": "MIT",
+  "main": "./index.ts",
+  "types": "./index.ts",
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "@atomic/common": "*",
+    "zod": "^3.22.4"
+  }
+}

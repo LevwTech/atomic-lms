@@ -1,0 +1,7 @@
+export enum USER_TYPES {
+  STUDENT = 'STUDENT',
+  TEACHER = 'TEACHER',
+  ADMIN = 'ADMIN',
+  STAFF = 'STAFF',
+  FINANCE = 'FINANCE',
+}
