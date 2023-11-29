@@ -2,7 +2,7 @@ import bcrypt from 'bcrypt';
 import { AuthDTO } from '@atomic/dto';
 import jwt from 'jsonwebtoken';
 
-import UserModel from '../models/user.model';
+import UserModel from '../models/user/user.model';
 import { DTOBodyType } from '../../../common/types/DTOType';
 import { API_ERROR } from '../../../common/helpers/throwApiError';
 import { API_MESSAGES } from '../../../common/helpers/apiMessages';

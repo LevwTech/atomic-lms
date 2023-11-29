@@ -16,4 +16,8 @@ export const API_MESSAGES = {
     code: 401,
     message: 'Invalid credentials',
   },
+  GROUP_ALREADY_EXISTS: {
+    code: 409,
+    message: 'Group already exists',
+  },
 };
