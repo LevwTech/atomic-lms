@@ -17,6 +17,8 @@ class UserModel {
     username,
     password,
     email,
+    permissions,
+    prmissionsGroupIds,
   }: DTOBodyType<typeof AuthDTO.createUser>) {
     const user = new User();
     user.firstName = firstName;
@@ -25,6 +27,17 @@ class UserModel {
     user.username = username;
     user.password = password;
     user.email = email;
+    user.permissions = permissions as PERMISSIONS_TYPE<USER_TYPES>[];
+
+    if (prmissionsGroupIds) {
+      const groups = prmissionsGroupIds.map((id) => {
+        const group = new PermissionsGroup();
+        group.id = id;
+        return group;
+      });
+
+      user.permissionGroups = groups;
+    }
 
     try {
       await PostGresDataSource.getRepository(User).save(user);

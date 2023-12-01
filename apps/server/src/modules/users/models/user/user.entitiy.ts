@@ -1,6 +1,7 @@
 import {
   PERMISSIONS_TYPE,
   USER_TYPES,
+  getPermissionsArrayForUserType,
   getPermissionsEnumForUserType,
 } from '@atomic/common';
 import {
@@ -53,13 +54,13 @@ export class User {
 
   @BeforeInsert()
   @BeforeUpdate()
-  validatePermissions() {
+  validatePermissions?() {
     const userType = this.type;
-    const permissions = Object.values(getPermissionsEnumForUserType(userType)!);
+    const permissions = getPermissionsArrayForUserType(userType);
     if (!this.permissions || this.permissions.length < 1) return;
 
     this.permissions.forEach((permission) => {
-      if (!permissions.includes(permission)) {
+      if (!permissions.includes(permission as string)) {
         throw new Error(`Invalid permission: ${permission}`);
       }
     });

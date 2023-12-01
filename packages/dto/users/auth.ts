@@ -17,6 +17,8 @@ export class AuthDTO {
       username: z.string().min(4).max(40),
       password: z.string().min(8).max(60),
       email: z.string().email(),
+      permissions: z.array(z.string()),
+      prmissionsGroupIds: z.array(z.string().uuid()),
     }),
   };
 }

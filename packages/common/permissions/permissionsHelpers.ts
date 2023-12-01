@@ -48,7 +48,5 @@ export const getPermissionsArrayForUserType = (type: USER_TYPES) => {
       return Object.values(STUDENT_PERMISSIONS);
     case USER_TYPES.FINANCE:
       return Object.values(FINANCE_PERMISSIONS);
-    default:
-      return null;
   }
 };

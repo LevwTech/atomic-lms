@@ -6,9 +6,10 @@ import { PERMISSIONS_TYPE, USER_TYPES } from '@atomic/common';
 import { tokenBodyType } from '../types/jwtPayload';
 import UserModel from '../../modules/users/models/user/user.model';
 import { User } from '../../modules/users/models/user/user.entitiy';
+import getAllUserPermissions from '../helpers/getAllUserPermissions';
 
 export interface AuthRequest extends Request<{}, any, {}, {}> {
-  user: User;
+  user: User & { allPermissions: PERMISSIONS_TYPE<USER_TYPES>[] };
 }
 
 type AuthMiddlewareParam = {
@@ -39,20 +40,19 @@ export default function authMiddleware(
         throw new Error();
       }
 
+      const userGrantedPermissions = getAllUserPermissions(user);
+
       if (!requiredPermissions) {
-        (req as AuthRequest).user = user;
+        (req as AuthRequest).user = {
+          ...user,
+          allPermissions: userGrantedPermissions,
+        };
 
         return next();
       }
 
       if (!Object.keys(requiredPermissions).includes(user.type)) {
         throw new Error();
-      }
-
-      const userGrantedPermissions = [...user.permissions];
-
-      for (const permissionsGroup of user.permissionGroups) {
-        userGrantedPermissions.push(...permissionsGroup.permissions);
       }
 
       const requiredPermissionsToGrantAccess = requiredPermissions[
@@ -65,7 +65,10 @@ export default function authMiddleware(
         }
       }
 
-      (req as AuthRequest).user = user;
+      (req as AuthRequest).user = {
+        ...user,
+        allPermissions: userGrantedPermissions,
+      };
 
       return next();
     } catch (err) {
