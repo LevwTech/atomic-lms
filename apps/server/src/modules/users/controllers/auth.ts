@@ -21,16 +21,9 @@ class AuthController {
     req: ValidatedRequest<typeof AuthDTO.createUser>,
     res: Response
   ) {
-    const { firstName, lastName, type, username, password, email } = req.body;
+    const userData = req.body;
 
-    await AuthSerivce.createUser({
-      firstName,
-      lastName,
-      type,
-      username,
-      password,
-      email,
-    });
+    await AuthSerivce.createUser(userData);
 
     return res
       .status(StatusCodes.CREATED)
