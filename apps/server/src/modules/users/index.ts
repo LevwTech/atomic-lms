@@ -26,4 +26,16 @@ usersRouter.post(
 
 usersRouter.get('/refresh-token', AuthController.refreshToken);
 
+// change user password
+// change user info
+// forgot password
+// delete user
+
+// change user permissions
+// add user/s to permissions group
+// remove user/s from permissions group
+// create permissions group
+// change group permissions
+// delete permissions group (remove all users from group first)
+
 export default usersRouter;
