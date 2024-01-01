@@ -1,4 +1,5 @@
 import 'reflect-metadata';
+import 'express-async-errors';
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
@@ -6,6 +7,7 @@ import { DataSource } from 'typeorm';
 
 import entities from './entities';
 import mainRouter from './router';
+import errorHandler from './errorHandler';
 
 dotenv.config();
 
@@ -16,6 +18,8 @@ app.use(cors());
 app.use(express.json());
 
 app.use('/', mainRouter);
+
+app.use(errorHandler);
 
 export const PostGresDataSource = new DataSource({
   type: 'postgres',
