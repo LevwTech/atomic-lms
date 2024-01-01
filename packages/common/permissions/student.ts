@@ -1,0 +1,3 @@
+enum STUDENT_PERMISSIONS {}
+
+export default STUDENT_PERMISSIONS;

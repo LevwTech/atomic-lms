@@ -1,0 +1,5 @@
+enum ADMIN_PERMISSIONS {
+  CREATE_USER = 'CREATE_USER',
+}
+
+export default ADMIN_PERMISSIONS;
