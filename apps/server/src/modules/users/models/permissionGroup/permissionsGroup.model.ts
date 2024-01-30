@@ -17,6 +17,10 @@ class PermissionsGroupModel {
     });
   }
 
+  public static async savePermissionsGroup(group: PermissionsGroup) {
+    await PostGresDataSource.getRepository(PermissionsGroup).save(group);
+  }
+
   public static async createPermissionsGroup({
     name,
     permissions,
@@ -40,6 +44,21 @@ class PermissionsGroupModel {
         throw new API_ERROR(API_MESSAGES.GROUP_ALREADY_EXISTS);
       }
     }
+  }
+
+  public static async deletePermissionsGroup({
+    groupId,
+    groupName,
+  }:
+    | { groupId?: string; groupName: string }
+    | { groupName?: string; groupId: string }) {
+    let query = {};
+    if (groupId) {
+      query = { id: groupId };
+    } else if (groupName) {
+      query = { name: groupName };
+    }
+    await PostGresDataSource.getRepository(PermissionsGroup).delete(query);
   }
 }
 

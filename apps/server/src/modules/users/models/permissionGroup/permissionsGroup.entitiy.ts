@@ -31,7 +31,10 @@ export class PermissionsGroup {
   })
   permissions: PERMISSIONS_TYPE<typeof this.type>[];
 
-  @ManyToMany(() => User, (user) => user.permissionGroups, { lazy: true })
+  @ManyToMany(() => User, (user) => user.permissionGroups, {
+    lazy: true,
+    onDelete: 'CASCADE',
+  })
   users: Promise<User[]>;
 
   @BeforeInsert()
@@ -49,5 +52,7 @@ export class PermissionsGroup {
         throw new Error(`Invalid permission: ${permission}`);
       }
     });
+
+    this.permissions = [...new Set(this.permissions)];
   }
 }
