@@ -1,6 +1,9 @@
 import { CarousalLogic } from "@atomic/frontend-logic";
-
-export function Carousal({ images }: { images: HTMLImageElement[] }) {
+interface Image {  
+  src: string;
+  alt: string;
+ }
+export function Carousal({ images }: { images: Image[] }) {
   return (
     <CarousalLogic imagesLength={images.length}>
       {(current, setCurrent) => (
@@ -22,7 +25,7 @@ export function Carousal({ images }: { images: HTMLImageElement[] }) {
               impedit.
             </p>
             <div className="flex gap-3 self-center mt-10">
-              {images.map((_: HTMLImageElement, index: number) => (
+              {images.map((image: Image, index: number) => (
                 <span
                   onClick={() => setCurrent(index)}
                   className={`${

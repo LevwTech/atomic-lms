@@ -1,5 +1,6 @@
 import * as React from "react";
 
+
 interface CarousalLogicProps {
   children: (current: number, setCurrent:(value:number)=>void) => JSX.Element;
   imagesLength: number;
