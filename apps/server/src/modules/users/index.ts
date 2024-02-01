@@ -24,18 +24,68 @@ usersRouter.post(
   AuthController.createUser
 );
 
+// takes refresh token and returns new access token and refresh token
 usersRouter.get('/refresh-token', AuthController.refreshToken);
+
+// takes refresh token and removes it from user
+usersRouter.get('/logout', AuthController.logout);
+
+usersRouter.post(
+  '/delete-user',
+  authMiddleware({
+    [USER_TYPES.ADMIN]: [ADMIN_PERMISSIONS.DELETE_USER],
+  }),
+  validationMiddleware(AuthDTO.deleteUser),
+  AuthController.deleteUser
+);
 
 // change user password
 // change user info
 // forgot password
-// delete user
 
-// change user permissions
-// add user/s to permissions group
-// remove user/s from permissions group
-// create permissions group
-// change group permissions
-// delete permissions group (remove all users from group first)
+usersRouter.post(
+  '/add-permissions',
+  authMiddleware({
+    [USER_TYPES.ADMIN]: [ADMIN_PERMISSIONS.ADD_PERMISSIONS_TO_USER],
+  }),
+  validationMiddleware(AuthDTO.addPermissions),
+  AuthController.addPermissions
+);
+
+usersRouter.post(
+  '/remove-permissions',
+  authMiddleware({
+    [USER_TYPES.ADMIN]: [ADMIN_PERMISSIONS.REMOVE_PERMISSIONS_FROM_USER],
+  }),
+  validationMiddleware(AuthDTO.addPermissions),
+  AuthController.removePermissions
+);
+
+usersRouter.post(
+  '/create-permissions-group',
+  authMiddleware({
+    [USER_TYPES.ADMIN]: [ADMIN_PERMISSIONS.CREATE_PERMISSIONS_GROUP],
+  }),
+  validationMiddleware(AuthDTO.createPermissionsGroup),
+  AuthController.createPermissionsGroup
+);
+
+usersRouter.post(
+  '/delete-permissions-group',
+  authMiddleware({
+    [USER_TYPES.ADMIN]: [ADMIN_PERMISSIONS.DELETE_PERMISSIONS_GROUP],
+  }),
+  validationMiddleware(AuthDTO.deletePermissionsGroup),
+  AuthController.deletePermissionsGroup
+);
+
+usersRouter.post(
+  '/edit-permissions-group',
+  authMiddleware({
+    [USER_TYPES.ADMIN]: [ADMIN_PERMISSIONS.EDIT_PERMISSIONS_GROUP],
+  }),
+  validationMiddleware(AuthDTO.editPermissionsGroup),
+  AuthController.editPermissionsGroup
+);
 
 export default usersRouter;

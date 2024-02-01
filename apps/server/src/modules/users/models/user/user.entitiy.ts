@@ -45,7 +45,10 @@ export class User {
   })
   permissions: PERMISSIONS_TYPE<USER_TYPES>[];
 
-  @ManyToMany(() => PermissionsGroup, (group) => group.users, { eager: true })
+  @ManyToMany(() => PermissionsGroup, (group) => group.users, {
+    eager: true,
+    onDelete: 'CASCADE',
+  })
   @JoinTable()
   permissionGroups: PermissionsGroup[];
 
@@ -64,5 +67,7 @@ export class User {
         throw new Error(`Invalid permission: ${permission}`);
       }
     });
+
+    this.permissions = [...new Set(this.permissions)];
   }
 }

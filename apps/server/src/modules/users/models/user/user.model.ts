@@ -1,4 +1,4 @@
-import { QueryFailedError } from 'typeorm';
+import { In, QueryFailedError } from 'typeorm';
 import { User } from './user.entitiy';
 import { AuthDTO } from '@atomic/dto';
 
@@ -56,10 +56,28 @@ class UserModel {
     }
   }
 
+  public static async deleteUser(username: string) {
+    await PostGresDataSource.getRepository(User).delete({ username });
+  }
+
   public static async getUserByUsername(username: string) {
     return await PostGresDataSource.getRepository(User).findOne({
       where: { username },
     });
+  }
+
+  public static async getUsersByUsernames(usernames: string[]) {
+    return await PostGresDataSource.getRepository(User).find({
+      where: { username: In(usernames) },
+    });
+  }
+
+  public static async saveUser(user: User) {
+    await PostGresDataSource.getRepository(User).save(user);
+  }
+
+  public static async saveUsers(users: User[]) {
+    await PostGresDataSource.getRepository(User).save(users);
   }
 
   public static async updateUserRefreshToken(
@@ -79,6 +97,18 @@ class UserModel {
       );
       user!.refreshTokens.push(refreshToken);
     }
+
+    await PostGresDataSource.getRepository(User).save(user!);
+  }
+
+  public static async removeUserRefreshToken(username: string, token: string) {
+    const user = await PostGresDataSource.getRepository(User).findOne({
+      where: { username },
+    });
+
+    user!.refreshTokens = user!.refreshTokens.filter(
+      (refreshToken) => refreshToken !== token
+    );
 
     await PostGresDataSource.getRepository(User).save(user!);
   }
