@@ -5,4 +5,15 @@
 
 body {
   font-family: "Poppins", sans-serif;
+  background-color: var(--BG);
+}
+:root {
+  --Primary: #2828f8;
+  --Secondary: #f88808;
+  --White:#F9F9F9;
+  --Black:#000000;
+  --BG:#EFF2FB;
+  --PDarker: #0E0ECC;
+  --SDarker: #F14900;
+  --WDarker: #F3F3F3;
 }

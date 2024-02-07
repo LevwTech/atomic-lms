@@ -1,11 +1,15 @@
 // import React from 'react'
 import styles from "./CoursesPage.module.css";
-// import { sideBar } from "@atomic/web-ui";
+// Import the logo image
+import { useState } from "react";
+import  Sidebar  from "@atomic/web-ui/SideBar/sideBar"; // Import the sideBar component
+
+
 function CoursesPage() {
+  const [isSidebarOpen,toggleSidebar] = useState(true);
   return (
     <>
-      {/* <sideBar universityLogo={logo} /> */}
-
+      <Sidebar logo="./BUE_Logo.svg" isSidebarOpen={isSidebarOpen} toggleSidebar={toggleSidebar}  /> 
     </>
   )
 }

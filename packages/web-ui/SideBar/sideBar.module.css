@@ -1,0 +1,71 @@
+.logo {
+  width: 130px;
+  margin: 0 10px;
+  margin-bottom: 80px;
+}
+
+.sidebar {
+  width: 12%;
+  min-width: max-content;
+  margin: 40px;
+  background-color: white;
+  padding: 20px;
+  border-radius: 10px;
+  font-weight: 500;
+  color: #35383f;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: calc(100vh - 80px);
+}
+.navLink {
+  padding: 2px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  min-width: max-content;
+}
+.navLink:hover {
+  background-color: #f3f3f3;
+  border-radius: 10px;
+}
+.navLink__active {
+  padding: 2px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  background-color: var(--Primary);
+  border-radius: 10px;
+  color: white;
+  min-width: max-content;
+}
+
+.sidebar__logos {
+  filter: invert(0.8);
+}
+
+.username {
+  font-weight: 600;
+  text-align: center;
+  font-size: 20px;
+}
+.userID {
+  font-weight: 400;
+  text-align: center;
+  color: #35383f;
+  font-size: 14px;
+}
+
+.custom_button {
+  width: 100%;
+  margin: 0 auto;
+}
+.custom_button img {
+  filter: hue-rotate(0deg);
+  transition: filter 0.3s ease;
+}
+
+.custom_button:hover img {
+  filter: invert(15%) sepia(73%) saturate(5342%) hue-rotate(230deg)
+    brightness(92%) contrast(88%);
+}

@@ -1,4 +1,5 @@
 import LoginPage from "./Pages/LoginPage/LoginPage";
+import CoursesPage from "./Pages/Courses/CoursesPage";
 import { Route, Routes } from "react-router-dom";
 import ProtectedRoute from "./utils/ProtectedRoute";
 function App() {
@@ -8,7 +9,7 @@ function App() {
     //     path="/"
     //     element={
     //       <ProtectedRoute>
-    <LoginPage />
+    <CoursesPage />
     //       </ProtectedRoute>
     //     }
     //   />
