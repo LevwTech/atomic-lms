@@ -2,12 +2,17 @@ import bcrypt from 'bcrypt';
 import { AuthDTO } from '@atomic/dto';
 import jwt from 'jsonwebtoken';
 
-import UserModel from '../models/user.model';
+import UserModel from '../models/user/user.model';
 import { DTOBodyType } from '../../../common/types/DTOType';
 import { API_ERROR } from '../../../common/helpers/throwApiError';
 import { API_MESSAGES } from '../../../common/helpers/apiMessages';
-import { USER_TYPES } from '@atomic/common';
+import {
+  PERMISSIONS_TYPE,
+  USER_TYPES,
+  getPermissionsArrayForUserType,
+} from '@atomic/common';
 import { tokenBodyType } from '../../../common/types/jwtPayload';
+import PermissionsGroupModel from '../models/permissionGroup/permissionsGroup.model';
 
 class AuthSerivce {
   public static async createUser(user: DTOBodyType<typeof AuthDTO.createUser>) {
@@ -24,7 +29,7 @@ class AuthSerivce {
     const accessToken = jwt.sign(
       { email, username, type },
       process.env.ACCESS_TOKEN_SECRET!,
-      { expiresIn: '15m' }
+      { expiresIn: process.env.NODE_ENV === 'development' ? '90d' : '15m' }
     );
     const refreshToken = jwt.sign(
       { email, username, type },
@@ -88,6 +93,142 @@ class AuthSerivce {
     );
 
     return { accessToken, refreshToken };
+  }
+
+  public static async logout(refreshToken: string) {
+    const jwtPayload = jwt.verify(
+      refreshToken,
+      process.env.REFRESH_TOKEN_SECRET!
+    ) as tokenBodyType;
+
+    const user = await UserModel.getUserByUsername(jwtPayload.username);
+
+    if (!user) {
+      throw new API_ERROR(API_MESSAGES.INVALID_CREDENTIALS);
+    }
+
+    await UserModel.removeUserRefreshToken(
+      user.username,
+      refreshToken.split('.')[2]
+    );
+  }
+
+  public static async deleteUser(username: string) {
+    await UserModel.deleteUser(username);
+  }
+
+  public static async addPermissions(
+    usernames: string[],
+    permissions: string[]
+  ) {
+    const users = await UserModel.getUsersByUsernames(usernames);
+
+    users.forEach((user) => {
+      const userPermissions = getPermissionsArrayForUserType(user.type);
+
+      permissions.forEach((permission) => {
+        if (!userPermissions.includes(permission)) {
+          throw new API_ERROR(API_MESSAGES.INVALID_PERMISSION);
+        }
+      });
+      user.permissions.push(...(permissions as PERMISSIONS_TYPE<USER_TYPES>[]));
+    });
+
+    await UserModel.saveUsers(users);
+  }
+
+  public static async removePermissions(
+    usernames: string[],
+    permissions: string[]
+  ) {
+    const users = await UserModel.getUsersByUsernames(usernames);
+
+    users.forEach((user) => {
+      user.permissions = user.permissions.filter(
+        (permission) => !permissions.includes(permission as string)
+      );
+    });
+
+    await UserModel.saveUsers(users);
+  }
+
+  public static async createPermissionsGroup(
+    permissionsGroup: DTOBodyType<typeof AuthDTO.createPermissionsGroup>
+  ) {
+    await PermissionsGroupModel.createPermissionsGroup(permissionsGroup);
+  }
+
+  public static async deletePermissionsGroup(
+    permissionGroup: DTOBodyType<typeof AuthDTO.deletePermissionsGroup>
+  ) {
+    if (permissionGroup.id) {
+      await PermissionsGroupModel.deletePermissionsGroup({
+        groupId: permissionGroup.id,
+      });
+    }
+
+    if (permissionGroup.name) {
+      await PermissionsGroupModel.deletePermissionsGroup({
+        groupName: permissionGroup.name,
+      });
+    }
+  }
+
+  public static async editPermissionsGroup(
+    permissionsGroup: DTOBodyType<typeof AuthDTO.editPermissionsGroup>
+  ) {
+    const group = await PermissionsGroupModel.getGroupPermission({
+      groupId: permissionsGroup.id,
+    });
+
+    if (!group) {
+      throw new API_ERROR(API_MESSAGES.DOESNT_EXIST);
+    }
+
+    if (permissionsGroup.name) {
+      group.name = permissionsGroup.name;
+    }
+
+    if (permissionsGroup.addPermissions) {
+      const permissions = getPermissionsArrayForUserType(group.type);
+      permissionsGroup.addPermissions.forEach((permission) => {
+        if (!permissions.includes(permission as string)) {
+          throw new API_ERROR(API_MESSAGES.INVALID_PERMISSION);
+        }
+      });
+      group.permissions.push(...permissionsGroup.addPermissions);
+    }
+
+    if (permissionsGroup.removePermissions) {
+      group.permissions = group.permissions.filter(
+        (permission) =>
+          !permissionsGroup.removePermissions?.includes(permission)
+      );
+    }
+
+    if (permissionsGroup.addUsers) {
+      const users = await UserModel.getUsersByUsernames(
+        permissionsGroup.addUsers
+      );
+      users.forEach((user) => {
+        user.permissionGroups.push(group);
+      });
+      await UserModel.saveUsers(users);
+    }
+
+    if (permissionsGroup.removeUsers) {
+      const users = await UserModel.getUsersByUsernames(
+        permissionsGroup.removeUsers
+      );
+      users.forEach((user) => {
+        user.permissionGroups = user.permissionGroups.filter(
+          (permissionGroup) => permissionGroup.id !== group.id
+        );
+      });
+      await UserModel.saveUsers(users);
+    }
+
+    await PermissionsGroupModel.savePermissionsGroup(group);
   }
 }
 

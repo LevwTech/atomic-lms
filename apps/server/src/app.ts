@@ -1,15 +1,15 @@
 import 'reflect-metadata';
 import 'express-async-errors';
+import dotenv from 'dotenv';
+dotenv.config();
+
 import express from 'express';
 import cors from 'cors';
-import dotenv from 'dotenv';
 import { DataSource } from 'typeorm';
 
 import entities from './entities';
 import mainRouter from './router';
 import errorHandler from './errorHandler';
-
-dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 3000;

@@ -1,17 +1,24 @@
 import { NextFunction, Request, Response } from 'express';
 import { StatusCodes, getReasonPhrase } from 'http-status-codes';
 import jwt from 'jsonwebtoken';
-import { USER_TYPES } from '@atomic/common';
+import { PERMISSIONS_TYPE, USER_TYPES } from '@atomic/common';
 
 import { tokenBodyType } from '../types/jwtPayload';
-import UserModel from '../../modules/users/models/user.model';
-import { User } from '../../modules/users/models/user.entitiy';
+import UserModel from '../../modules/users/models/user/user.model';
+import { User } from '../../modules/users/models/user/user.entitiy';
+import getAllUserPermissions from '../helpers/getAllUserPermissions';
 
 export interface AuthRequest extends Request<{}, any, {}, {}> {
-  user: User;
+  user: User & { allPermissions: PERMISSIONS_TYPE<USER_TYPES>[] };
 }
 
-export default function authMiddleware(userTypes?: USER_TYPES[]) {
+type AuthMiddlewareParam = {
+  [K in USER_TYPES]?: PERMISSIONS_TYPE<K>[];
+};
+
+export default function authMiddleware(
+  requiredPermissions?: AuthMiddlewareParam
+) {
   return async (req: Request, res: Response, next: NextFunction) => {
     const authToken = req.headers.authorization;
 
@@ -33,12 +40,35 @@ export default function authMiddleware(userTypes?: USER_TYPES[]) {
         throw new Error();
       }
 
-      if (!userTypes?.includes(user.type)) {
+      const userGrantedPermissions = getAllUserPermissions(user);
+
+      if (!requiredPermissions) {
+        (req as AuthRequest).user = {
+          ...user,
+          allPermissions: userGrantedPermissions,
+        };
+
+        return next();
+      }
+
+      if (!Object.keys(requiredPermissions).includes(user.type)) {
         throw new Error();
       }
 
-      // pass user data to request handler
-      (req as AuthRequest).user = user;
+      const requiredPermissionsToGrantAccess = requiredPermissions[
+        user.type
+      ] as PERMISSIONS_TYPE<typeof user.type>[];
+
+      for (const permission of requiredPermissionsToGrantAccess) {
+        if (!userGrantedPermissions.includes(permission)) {
+          throw new Error();
+        }
+      }
+
+      (req as AuthRequest).user = {
+        ...user,
+        allPermissions: userGrantedPermissions,
+      };
 
       return next();
     } catch (err) {
