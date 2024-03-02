@@ -35,6 +35,7 @@
   },
   "scripts": {
     "dev": "ts-node-dev --respawn src/app.ts",
-    "start": "ts-node src/app.ts"
+    "start": "node dist/app.js",
+    "build": "tsc"
   }
 }
