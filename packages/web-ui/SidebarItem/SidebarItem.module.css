@@ -1,14 +1,13 @@
 .logo {
   width: 110px;
   margin: 0 10px;
-  margin-top: 10px;
   margin-bottom: 80px;
 }
 
 .sidebar {
   width: 15vw;
   min-width: max-content;
-  background-color: var(--White);
+  background-color: white;
   padding: 20px;
   border-radius: 10px;
   font-weight: 500;
@@ -17,30 +16,27 @@
   flex-direction: column;
   justify-content: space-between;
   height: 100%;
-  position: relative;
 }
 .navLink {
   display: flex;
   align-items: center;
   cursor: pointer;
   max-width: 100%;
-  padding: 10px;
 }
 .navLink:hover {
   background-color: #f3f3f3;
   border-radius: 10px;
 }
-.collapsed {
-  width: 3vw;
-  /* overflow: hidden; */
+.navLink__active {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  background-color: var(--Primary);
   border-radius: 10px;
-  padding: 20px;
-  background-color: var(--White);
-  position: relative;
-  height: 100%;
+  color: white;
+  max-width: 100%;
 }
-
-.username {
+.NavLinkLabel {
   color: #35383f;
   font-family: Poppins;
   font-size: 13.5px;
@@ -48,40 +44,40 @@
   font-weight: 700;
   line-height: normal;
 }
-.userID {
-  color: #35383f;
+.NavLinkLabelSelected {
+  color: var(--White, #f9f9f9);
   font-family: Poppins;
-  font-size: 10px;
+  font-size: 13.5px;
   font-style: normal;
-  font-weight: 300;
+  font-weight: 700;
   line-height: normal;
+}
+.sidebar__logos {
+  filter: invert(0.8);
+}
+
+.username {
+  font-weight: 600;
+  text-align: center;
+  font-size: 20px;
+}
+.userID {
+  font-weight: 400;
+  text-align: center;
+  color: #35383f;
+  font-size: 14px;
 }
 
 .custom_button {
   width: 100%;
   margin: 0 auto;
 }
-
 .custom_button img {
   filter: hue-rotate(0deg);
   transition: filter 0.3s ease;
 }
 
-.toggle_button {
-  position: absolute;
-  right: -10px;
-  top: 40px;
-}
-
-.AIButton {
-  fill: var(--Primary);
-}
-.AIButton:hover {
-  fill: #1919dd;
-}
-
-@media (max-width: 1199px) {
-  .hideOnSmallScreens {
-    display: none;
-  }
-}
+/* .custom_button:hover img {
+  filter: invert(15%) sepia(73%) saturate(5342%) hue-rotate(230deg)
+    brightness(92%) contrast(88%);
+} */
