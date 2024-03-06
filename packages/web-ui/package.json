@@ -21,9 +21,5 @@
     "tsconfig": "*",
     "typescript": "^4.5.2"
   },
-  "dependencies": {
-    "add": "^2.0.6",
-    "avatar": "^0.1.0",
-    "shadcn-ui": "^0.8.0"
-  }
+  "dependencies": {}
 }
