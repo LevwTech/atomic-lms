@@ -38,15 +38,19 @@ function SideBar({
         isSidebarOpen ? "w-[15vw] p-[20px] " : "w-[5.5vw]  p-[10px]"
       } bg-[var(--White)] h-full relative rounded-[13.6px] duration-300 justify-between flex flex-col`}
     >
-      <div>
+      <div className="mx-auto">
         <div
           className={
             isSidebarOpen ? " mb-20 mt-4" : "flex justify-center mb-20 mt-4"
           }
         >
-          <NavLink to="/">
+          <NavLink to="/" className={"inline-block "}>
             <img
-              className={isSidebarOpen ? styles.logo : styles.navLink}
+              className={
+                isSidebarOpen
+                  ? `mx-2 ${styles.logo} ${styles.navLink} `
+                  : styles.navLink
+              }
               src={isSidebarOpen ? primaryLogo : secondaryLogo}
               alt="University Logo"
             />
