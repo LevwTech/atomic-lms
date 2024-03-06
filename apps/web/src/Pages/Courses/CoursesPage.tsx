@@ -1,5 +1,6 @@
 // import React from "react";
 // import styles from "./CoursesPage.module.css";
+import Announcements from "@atomic/web-ui/Announcements/Announcements";
 import { SidebarLogic } from "@atomic/frontend-logic/SidebarLogic";
 import Sidebar from "@atomic/web-ui/SideBar/sideBar";
 
@@ -19,7 +20,7 @@ function CoursesPage() {
             {" "}
           </div>
           <div className="bg-[var(--White)] h-full w-[30vw] rounded-[13.6px]">
-            {" "}
+            <Announcements />
           </div>
         </div>
       )}

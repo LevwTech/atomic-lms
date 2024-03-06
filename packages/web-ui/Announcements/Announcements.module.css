@@ -1,0 +1,44 @@
+.AnnouncementsIcon{
+    fill: var(--Secondary);
+}
+
+.header{
+    color: var(--White, #F9F9F9);
+    text-align: center;
+    font-family: Poppins;
+    font-size: 18.373px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+}
+
+
+.itemsTitle{
+    color: var(--Black);
+font-family: Poppins;
+font-size: 18px;
+font-style: normal;
+font-weight: 700;
+line-height: normal;
+}
+.itemsDate{
+    color: var(--Black);
+    font-family: Poppins;
+    font-size: 15px;
+    font-style: normal;
+    font-weight: 300;
+    line-height: normal;
+}
+
+.itemsTime{
+    color: var(--Black);
+font-family: Poppins;
+font-size: 15px;
+font-style: normal;
+font-weight: 400;
+line-height: normal;
+}
