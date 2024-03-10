@@ -1,5 +1,14 @@
 {
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"]
+    }
+  },
+
+
   "extends": "tsconfig/react-library.json",
-  "include": ["."],
+  "include": [".", "typings.d.ts"],
   "exclude": ["dist", "build", "node_modules"]
+  
 }

@@ -1,5 +1,8 @@
+import exp from "constants";
 import "./index.css";
 
 // component exports
-export { CountDisplay } from "./count-display";
-export { Button } from "./button";
+export { Button } from "./Button/button";
+export { FormInput } from "./TextInput/form-input";
+export { LoginForm } from "./LoginForm/login-form";
+export { Carousal } from "./carousal/carousal";
