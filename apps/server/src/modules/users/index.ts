@@ -1,42 +1,41 @@
-import express from 'express';
-import { AuthDTO } from '@atomic/dto';
+import express from "express";
+import { AuthDTO } from "@atomic/dto";
 
-import AuthController from './controllers/auth';
-import validationMiddleware from '../../common/middlewares/validationMiddleware';
-import authMiddleware from '../../common/middlewares/authMiddleware';
-import { USER_TYPES } from '@atomic/common';
-import ADMIN_PERMISSIONS from '@atomic/common/permissions/admin';
+import AuthController from "./controllers/auth";
+import validationMiddleware from "../../common/middlewares/validationMiddleware";
+import authMiddleware from "../../common/middlewares/authMiddleware";
+import { USER_TYPES, ADMIN_PERMISSIONS } from "@atomic/common";
 
 const usersRouter = express.Router();
 
 usersRouter.post(
-  '/login',
+  "/login",
   validationMiddleware(AuthDTO.login),
-  AuthController.login
+  AuthController.login,
 );
 
 usersRouter.post(
-  '/create',
+  "/create",
   authMiddleware({
     [USER_TYPES.ADMIN]: [ADMIN_PERMISSIONS.CREATE_USER],
   }),
   validationMiddleware(AuthDTO.createUser),
-  AuthController.createUser
+  AuthController.createUser,
 );
 
 // takes refresh token and returns new access token and refresh token
-usersRouter.get('/refresh-token', AuthController.refreshToken);
+usersRouter.get("/refresh-token", AuthController.refreshToken);
 
 // takes refresh token and removes it from user
-usersRouter.get('/logout', AuthController.logout);
+usersRouter.get("/logout", AuthController.logout);
 
 usersRouter.post(
-  '/delete-user',
+  "/delete-user",
   authMiddleware({
     [USER_TYPES.ADMIN]: [ADMIN_PERMISSIONS.DELETE_USER],
   }),
   validationMiddleware(AuthDTO.deleteUser),
-  AuthController.deleteUser
+  AuthController.deleteUser,
 );
 
 // change user password
@@ -44,48 +43,48 @@ usersRouter.post(
 // forgot password
 
 usersRouter.post(
-  '/add-permissions',
+  "/add-permissions",
   authMiddleware({
     [USER_TYPES.ADMIN]: [ADMIN_PERMISSIONS.ADD_PERMISSIONS_TO_USER],
   }),
   validationMiddleware(AuthDTO.addPermissions),
-  AuthController.addPermissions
+  AuthController.addPermissions,
 );
 
 usersRouter.post(
-  '/remove-permissions',
+  "/remove-permissions",
   authMiddleware({
     [USER_TYPES.ADMIN]: [ADMIN_PERMISSIONS.REMOVE_PERMISSIONS_FROM_USER],
   }),
   validationMiddleware(AuthDTO.addPermissions),
-  AuthController.removePermissions
+  AuthController.removePermissions,
 );
 
 usersRouter.post(
-  '/create-permissions-group',
+  "/create-permissions-group",
   authMiddleware({
     [USER_TYPES.ADMIN]: [ADMIN_PERMISSIONS.CREATE_PERMISSIONS_GROUP],
   }),
   validationMiddleware(AuthDTO.createPermissionsGroup),
-  AuthController.createPermissionsGroup
+  AuthController.createPermissionsGroup,
 );
 
 usersRouter.post(
-  '/delete-permissions-group',
+  "/delete-permissions-group",
   authMiddleware({
     [USER_TYPES.ADMIN]: [ADMIN_PERMISSIONS.DELETE_PERMISSIONS_GROUP],
   }),
   validationMiddleware(AuthDTO.deletePermissionsGroup),
-  AuthController.deletePermissionsGroup
+  AuthController.deletePermissionsGroup,
 );
 
 usersRouter.post(
-  '/edit-permissions-group',
+  "/edit-permissions-group",
   authMiddleware({
     [USER_TYPES.ADMIN]: [ADMIN_PERMISSIONS.EDIT_PERMISSIONS_GROUP],
   }),
   validationMiddleware(AuthDTO.editPermissionsGroup),
-  AuthController.editPermissionsGroup
+  AuthController.editPermissionsGroup,
 );
 
 export default usersRouter;

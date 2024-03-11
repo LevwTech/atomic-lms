@@ -1,9 +1,9 @@
-import { USER_TYPES } from '../constants';
-import ADMIN_PERMISSIONS from './admin';
-import STAFF_PERMISSIONS from './staff';
-import TEACHER_PERMISSIONS from './teacher';
-import STUDENT_PERMISSIONS from './student';
-import FINANCE_PERMISSIONS from './finance';
+import { USER_TYPES } from "../constants";
+import { ADMIN_PERMISSIONS } from "./admin";
+import { STAFF_PERMISSIONS } from "./staff";
+import { TEACHER_PERMISSIONS } from "./teacher";
+import { STUDENT_PERMISSIONS } from "./student";
+import { FINANCE_PERMISSIONS } from "./finance";
 
 export type PERMISSIONS_TYPE<T extends USER_TYPES> = T extends USER_TYPES.ADMIN
   ? ADMIN_PERMISSIONS
@@ -18,7 +18,7 @@ export type PERMISSIONS_TYPE<T extends USER_TYPES> = T extends USER_TYPES.ADMIN
   : never;
 
 export const getPermissionsEnumForUserType = (
-  type: USER_TYPES
+  type: USER_TYPES,
 ): PERMISSIONS_TYPE<typeof type> | null => {
   switch (type) {
     case USER_TYPES.ADMIN:

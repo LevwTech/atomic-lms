@@ -1,3 +1,1 @@
-enum STAFF_PERMISSIONS {}
-
-export default STAFF_PERMISSIONS;
+export enum STAFF_PERMISSIONS {}

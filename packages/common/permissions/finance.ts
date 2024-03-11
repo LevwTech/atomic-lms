@@ -1,3 +1,1 @@
-enum FINANCE_PERMISSIONS {}
-
-export default FINANCE_PERMISSIONS;
+export enum FINANCE_PERMISSIONS {}
