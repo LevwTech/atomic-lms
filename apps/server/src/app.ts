@@ -10,6 +10,7 @@ import { DataSource } from 'typeorm';
 import entities from './entities';
 import mainRouter from './router';
 import errorHandler from './errorHandler';
+import mongoose from 'mongoose';
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -29,8 +30,13 @@ export const PostGresDataSource = new DataSource({
   entities: entities,
 });
 
-PostGresDataSource.initialize().then(() => {
-  app.listen(PORT, () => {
-    console.log(`⚡️[server]: Server is running at http://localhost:${PORT}`);
-  });
+PostGresDataSource.initialize().then(async () => {
+  try {
+    await mongoose.connect(process.env.MONGO_URL!);
+    app.listen(PORT, () => {
+      console.log(`⚡️[server]: Server is running at http://localhost:${PORT}`);
+    });
+  } catch (error) {
+    console.log('Error while connecting to mongo', error);
+  }
 });

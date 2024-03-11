@@ -31,4 +31,8 @@ export const API_MESSAGES = {
     code: 400,
     message: 'Invalid permission for user type',
   },
+  ALREADY_EXISTS: {
+    code: 409,
+    message: 'Already exists',
+  },
 };
