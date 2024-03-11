@@ -3,6 +3,8 @@
   "scripts": {
     "build": "turbo run build",
     "build:web": "turbo run build --filter=web",
+    "build:server": "turbo run build --filter=server",
+    "start:server": "turbo run start --filter=server",
     "dev": "turbo run dev --concurrency 12",
     "dev:server": "turbo run dev --filter=server",
     "lint": "turbo run lint",
