@@ -1,0 +1,17 @@
+.grayCardTypo {
+  color: var(--Primary, #2828f8);
+  font-family: Poppins;
+  font-size: 23px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+}
+
+.blueCardTypo {
+  color: var(--White, #f9f9f9);
+  font-family: Poppins;
+  font-size: 23px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+}
