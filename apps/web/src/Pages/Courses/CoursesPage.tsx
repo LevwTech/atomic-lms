@@ -86,7 +86,7 @@ export default function CoursesPage() {
         isSidebarOpen={isSidebarOpen}
         toggleSidebar={toggleSidebar}
       />
-      <div className="h-full w-[50vw] rounded-[14px] items-center justify-between flex flex-col bg-white p-[30px]">
+      <div className="h-full w-[50vw] rounded-[14px] items-center justify-between flex flex-col bg-white p-[30px] overflow-hidden">
         <div className="flex flex-col gap-[30px]">
           <BannerCarousal images={images} />
           <CoursesGrid
