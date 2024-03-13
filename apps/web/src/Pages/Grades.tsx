@@ -1,5 +1,4 @@
 import { useState } from "react";
-import Sidebar from "@atomic/web-ui/SideBar/sideBar"; // Import the sideBar component
 import { SectionsHeader } from "@atomic/web-ui"; // Import the SectionsHeader component
 import { GradeCardOpened, GradeCardClosed } from "@atomic/web-ui"; // Import the sideBar component
 
@@ -44,12 +43,6 @@ export default function Grades() {
 
   return (
     <div className="h-screen p-[30px] flex justify-between gap-[50px]">
-      <Sidebar
-        primaryLogo="./BUE_Logo.svg"
-        secondaryLogo="./miniUniLogo.svg"
-        isSidebarOpen={isSidebarOpen}
-        toggleSidebar={toggleSidebar}
-      />
       <div className="h-full w-[50vw] rounded-[14px] items-center flex flex-col bg-white p-[30px]">
         <SectionsHeader sectionName={"Grades"} />
         <div className="flex items-center justify-center h-full w-full gap-[60px]">

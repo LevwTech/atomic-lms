@@ -1,5 +1,4 @@
 import { useState } from "react";
-import Sidebar from "@atomic/web-ui/SideBar/sideBar";
 import { CoursesGrid } from "@atomic/web-ui";
 import { BannerCarousal } from "@atomic/web-ui";
 import { Pagination } from "@atomic/web-ui";
@@ -80,12 +79,6 @@ export default function CoursesPage() {
   const displayedCourses = courses.slice(startIndex, endIndex);
   return (
     <div className="h-screen p-[30px] flex justify-between gap-[30px]">
-      <Sidebar
-        primaryLogo="./BUE_Logo.svg"
-        secondaryLogo="./miniUniLogo.svg"
-        isSidebarOpen={isSidebarOpen}
-        toggleSidebar={toggleSidebar}
-      />
       <div className="h-full w-[50vw] rounded-[14px] items-center justify-between flex flex-col bg-white p-[30px] overflow-hidden">
         <div className="flex flex-col gap-[30px]">
           <BannerCarousal images={images} />

@@ -1,5 +1,5 @@
-import styles from "./GradeCards.module.css";
 import { motion } from "framer-motion";
+import styles from "./GradeCards.module.css";
 
 interface GradeCardClosedProps {
   onClick: () => void;

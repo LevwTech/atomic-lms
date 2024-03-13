@@ -1,7 +1,6 @@
 // import React from 'react'
 // Import the logo image
 import { useState } from "react";
-import Sidebar from "@atomic/web-ui/SideBar/sideBar"; // Import the sideBar component
 import { SectionsHeader } from "@atomic/web-ui"; // Import the SectionsHeader component
 import { SingleCourseGrid } from "@atomic/web-ui"; // Import the SectionsHeader component
 
@@ -56,12 +55,6 @@ export default function SingleCoursePage() {
 
   return (
     <div className="h-screen p-[30px] flex justify-between gap-[30px]">
-      <Sidebar
-        primaryLogo="./BUE_Logo.svg"
-        secondaryLogo="./miniUniLogo.svg"
-        isSidebarOpen={isSidebarOpen}
-        toggleSidebar={toggleSidebar}
-      />
       <div className="h-full w-[50vw] rounded-[14px] items-center justify-between flex flex-col bg-white p-[30px]">
         <SectionsHeader sectionName={"Sections"} />
         <SingleCourseGrid courseContent={courseContent} />
