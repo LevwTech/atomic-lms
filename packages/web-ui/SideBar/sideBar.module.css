@@ -5,9 +5,7 @@
 }
 
 .sidebar {
-  width: 12%;
   min-width: max-content;
-  margin: 40px;
   background-color: white;
   padding: 20px;
   border-radius: 10px;
@@ -16,7 +14,6 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  height: calc(100vh - 80px);
 }
 .navLink {
   padding: 2px;
