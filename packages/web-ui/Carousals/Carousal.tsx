@@ -1,18 +1,19 @@
 import { CarousalLogic } from "@atomic/frontend-logic";
-interface Image {  
+
+interface Image {
   src: string;
   alt: string;
- }
-export function Carousal({ images }: { images: Image[] }) {
+}
+export function Carousal({ images }: { images: Image[] }): JSX.Element {
   return (
-    <CarousalLogic imagesLength={images.length}>
+    <CarousalLogic autoScrollDuration={5000} imagesLength={images.length}>
       {(current, setCurrent) => (
         <div className="h-full w-full flex relative">
-          <div className="h-full w-full flex absolute z-10 bg-gradient-to-tr from-black/90 to-red-500/20  rounded-2xl "></div>
+          <div className="h-full w-full flex absolute z-10 bg-gradient-to-tr from-black/90 to-red-500/20  rounded-2xl " />
           <img
-            src={images[current].src}
             alt={images[current].alt}
             className="w-full h-full flex object-cover relative rounded-2xl"
+            src={images[current].src}
           />
           <div className="py-10 px-20 flex absolute bottom-0 flex-col gap-2 text-white z-20">
             <p className="font-bold text-[35px]">Lorem ipsum</p>
@@ -25,16 +26,19 @@ export function Carousal({ images }: { images: Image[] }) {
               impedit.
             </p>
             <div className="flex gap-3 self-center mt-10">
-              {images.map((image: Image, index: number) => (
-                <span
-                  onClick={() => setCurrent(index)}
+              {images.map((_, index: number) => (
+                <button
                   className={`${
                     index === current
                       ? "h-5 w-10 bg-white lg:h-3 lg:w-8"
-                      : "h-5 w-5 bg-white lg:h-3 lg:w-3 "
+                      : "h-5 w-5 bg-white lg:h-3 lg:w-3"
                   } cursor-pointer rounded-full transition-all duration-500 ease-in-out`}
                   key={index}
-                ></span>
+                  onClick={() => {
+                    setCurrent(index);
+                  }}
+                  type="button"
+                />
               ))}
             </div>
           </div>
