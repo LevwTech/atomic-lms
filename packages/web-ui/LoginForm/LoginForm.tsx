@@ -1,13 +1,17 @@
 import { LoginLogic } from "@atomic/frontend-logic";
 import { Button, FormInput } from "@atomic/web-ui";
 
-export function LoginForm({ logo }: { logo: string }): JSX.Element {
+interface LoginFormProps {
+  logo: string;
+}
+
+export function LoginForm({ logo }: LoginFormProps): JSX.Element {
   return (
     <LoginLogic>
       {(username, password, setUsername, setPassword, login) => (
         <div className="w-[50%]">
           <form className="flex flex-col w-[480px] mx-auto">
-            <img src={logo} alt="Logo" className="w-72 self-center mb-20" />
+            <img alt="Logo" className="w-72 self-center mb-20" src={logo} />
             <FormInput
               label="Username"
               onChange={(e) => {
