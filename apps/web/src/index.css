@@ -8,12 +8,57 @@ body {
   background-color: var(--BG);
 }
 :root {
-  --Primary: #2828f8;
+  --Primary: #35383f;
   --Secondary: #f88808;
-  --White:#F9F9F9;
-  --Black:#000000;
-  --BG:#EFF2FB;
-  --PDarker: #0E0ECC;
-  --SDarker: #F14900;
-  --WDarker: #F3F3F3;
+  --White: #f9f9f9;
+  --Black: #000000;
+  --BG: #eff2fb;
+  --PDarker: #0e0ecc;
+  --SDarker: #f14900;
+  --WDarker: #f3f3f3;
+  --Gray: #d9e0f3;
+}
+
+.G1 {
+  background: linear-gradient(
+    206deg,
+    #ff61c4 2.09%,
+    #ff776b 50.58%,
+    #ff8810 99.06%
+  );
+}
+
+.G2 {
+  background: linear-gradient(204deg, #9a55fe 1.37%, #e25ffb 99.55%);
+}
+
+.G3 {
+  background: linear-gradient(
+    204deg,
+    #25e0e2 -0.74%,
+    #2cd1e7 49.06%,
+    #2ccaea 98.86%
+  );
+}
+
+.G4 {
+  background: linear-gradient(204deg, #29d1ce -0.29%, #00db97 97.37%);
+}
+
+.G5 {
+  background: linear-gradient(205deg, #ffaf24 0.74%, #ffdb1b 98.93%);
+}
+.G6 {
+  background: linear-gradient(204deg, #ff5987 3.13%, #ff929d 98.48%);
+}
+.G7 {
+  background: linear-gradient(203deg, #9498ff 1.31%, #945aff 98.27%);
+}
+.G8 {
+  background: linear-gradient(
+    204deg,
+    #ff4ca4 6.45%,
+    #ff85c0 71.16%,
+    #ff9dcd 96.33%
+  );
 }
