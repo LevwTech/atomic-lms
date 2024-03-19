@@ -47,7 +47,7 @@ export class Course {
       lazy: true,
       onDelete: 'CASCADE',
     })
-    students: Promise<User[]>;
+    students: User[];
 
     @ManyToMany(() => User, (user) => user.coursesCompleted, {
       lazy: true,
@@ -59,7 +59,7 @@ export class Course {
       lazy: true,
       onDelete: 'CASCADE',
     })
-    teachers: Promise<User[]>;
+    teachers: User[];
 
     @ManyToMany(() => CourseGroup, (group) => group.courses, {
       eager: true,

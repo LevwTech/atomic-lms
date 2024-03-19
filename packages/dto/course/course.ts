@@ -34,6 +34,8 @@ export class CourseDTO {
             image: z.string().url(),
             prerequisiteCourseIds: z.array(z.string().uuid()).optional(),
             prerequisiteCourseGroupIds: z.array(z.string().uuid()).optional(),
+            studentIds: z.array(z.string().uuid()).optional(),
+            teacherIds: z.array(z.string().uuid()).optional(),
         }),
       };
 
@@ -47,6 +49,8 @@ export class CourseDTO {
             academicYear: z.string().min(4).max(40).optional(),
             prerequisiteCourseIds: z.array(z.string().uuid()).optional(),
             prerequisiteCourseGroupIds: z.array(z.string().uuid()).optional(),
+            studentsUserNames: z.array(z.string().uuid()).optional(),
+            teachersUserNames: z.array(z.string().uuid()).optional(),
         }),
       };
 

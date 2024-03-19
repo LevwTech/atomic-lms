@@ -6,6 +6,7 @@ import { API_ERROR } from '../../../../common/helpers/throwApiError';
 import { API_MESSAGES } from '../../../../common/helpers/apiMessages';
 import { DTOBodyType } from '../../../../common/types/DTOType';
 import CourseGroupModel from '../courseGroup/courseGroup.model';
+import UserModel from '../../../users/models/user/user.model';
 
 export default class CourseModel {
 
@@ -19,7 +20,9 @@ export default class CourseModel {
         academicYear,
         image,
         prerequisiteCourseGroupIds,
-        prerequisiteCourseIds
+        prerequisiteCourseIds,
+        studentIds,
+        teacherIds,
       }: DTOBodyType<typeof CourseDTO.createBaseCourse>) {
         const course = new Course();
         course.name = name;
@@ -33,6 +36,17 @@ export default class CourseModel {
         if (academicYear) course.academicYear = academicYear;
         if (prerequisiteCourseIds) course.prerequisiteCourses = await this.getCourses(prerequisiteCourseIds);
         if (prerequisiteCourseGroupIds) course.prerequisiteCourseGroups = await CourseGroupModel.getCourseGroups(prerequisiteCourseGroupIds);
+        if (studentIds) {
+           let students = await UserModel.getUsersByUsernames(studentIds);
+           students = students.filter(student => student.type === 'STUDENT');
+           course.students = students;
+        }
+        if (teacherIds) {
+          let teachers = await UserModel.getUsersByUsernames(teacherIds);
+          teachers = teachers.filter(teacher => teacher.type === 'TEACHER');
+          course.teachers = teachers;
+          course.teachers = await UserModel.getUsersByUsernames(teacherIds);
+        }
         try {
           await PostGresDataSource.getRepository(Course).save(course);
         } catch (err) {
@@ -48,7 +62,9 @@ export default class CourseModel {
         academicDuration,
         academicYear,
         prerequisiteCourseIds,
-        prerequisiteCourseGroupIds
+        prerequisiteCourseGroupIds,
+        studentsUserNames,
+        teachersUserNames
       }: DTOBodyType<typeof CourseDTO.createCourse>) {
         const parentCourse = await this.getCourse(parentCourseId); 
         if (!parentCourse) throw new API_ERROR(API_MESSAGES.DOESNT_EXIST);
@@ -64,6 +80,17 @@ export default class CourseModel {
         if (academicYear) course.academicYear = academicYear;
         if (prerequisiteCourseIds) course.prerequisiteCourses = await this.getCourses(prerequisiteCourseIds);
         if (prerequisiteCourseGroupIds) course.prerequisiteCourseGroups = await CourseGroupModel.getCourseGroups(prerequisiteCourseGroupIds);
+        if (studentsUserNames) {
+          let students = await UserModel.getUsersByUsernames(studentsUserNames);
+          students = students.filter(student => student.type === 'STUDENT');
+          course.students = students;
+       }
+       if (teachersUserNames) {
+         let teachers = await UserModel.getUsersByUsernames(teachersUserNames);
+         teachers = teachers.filter(teacher => teacher.type === 'TEACHER');
+         course.teachers = teachers;
+         course.teachers = await UserModel.getUsersByUsernames(teachersUserNames);
+       }
         try {
           await PostGresDataSource.getRepository(Course).save(course);
         } catch (err) {
