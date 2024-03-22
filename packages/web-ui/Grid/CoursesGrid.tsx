@@ -4,7 +4,7 @@ import { CoursesCard } from "@atomic/web-ui";
 interface Course {
   displayedCourses: {
     name: string;
-    semester: string;
+    semester: number;
   }[];
   currentPage: number;
 }
@@ -24,10 +24,10 @@ export function CoursesGrid({
     >
       {displayedCourses.map((course, index) => (
         <CoursesCard
+          courseName={course.name}
+          img={`/Asset${index + 1}.png`}
           index={index}
           key={index}
-          img={`/Asset${index + 1}.png`}
-          courseName={course.name}
           semester={course.semester}
         />
       ))}
