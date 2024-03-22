@@ -1,4 +1,5 @@
 import styles from "./CoursesCard.module.css";
+import { Link } from "react-router-dom";
 
 interface CoursesCardProps {
   img: string;
@@ -14,7 +15,7 @@ export function CoursesCard({
   index,
 }: CoursesCardProps): JSX.Element {
   return (
-    <div className={styles.card}>
+    <Link className={styles.card} to={`/courses/${courseName}`}>
       <div
         className={`w-full h-[135px] flex justify-center items-center rounded-[5px] G${
           index + 1
@@ -22,10 +23,10 @@ export function CoursesCard({
       >
         <img alt={`Asset${index + 1}`} src={img} />
       </div>
-      <div className="">
+      <div className="flex flex-col">
         <p className={styles.cardTypographyHeader}>{courseName}</p>
         <p className={styles.cardTypographySubHeader}>Semester {semester}</p>
       </div>
-    </div>
+    </Link>
   );
 }

@@ -3,12 +3,15 @@
 import { useState } from "react";
 import { SectionsHeader } from "@atomic/web-ui"; // Import the SectionsHeader component
 import { SingleCourseGrid } from "@atomic/web-ui"; // Import the SectionsHeader component
+import { useParams } from "react-router-dom";
 
 export default function SingleCoursePage() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const toggleSidebar = () => {
     setIsSidebarOpen((prevState) => !prevState);
   };
+
+  const { courseName } = useParams();
 
   const courseContent = [
     {
@@ -56,7 +59,7 @@ export default function SingleCoursePage() {
   return (
     <div className="h-screen p-[30px] flex justify-between gap-[30px]">
       <div className="h-full w-[50vw] rounded-[14px] items-center justify-between flex flex-col bg-white p-[30px]">
-        <SectionsHeader sectionName={"Sections"} />
+        <SectionsHeader sectionName={courseName} />
         <SingleCourseGrid courseContent={courseContent} />
       </div>
       <div className="bg-[var(--White)] h-full w-[30vw] rounded-[14px]"> </div>

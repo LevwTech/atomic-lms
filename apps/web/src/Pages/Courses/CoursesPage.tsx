@@ -27,42 +27,52 @@ export default function CoursesPage() {
     {
       name: "Algebra",
       semester: "1",
+      id: "1",
     },
     {
-      name: "Algebra",
+      name: "Geometry",
       semester: "1",
+      id: "2",
     },
     {
-      name: "Algebra",
+      name: "Math",
       semester: "1",
+      id: "3",
     },
     {
-      name: "Algebra",
+      name: "Arabic",
       semester: "1",
+      id: "4",
     },
     {
-      name: "Algebra",
+      name: "Physics",
       semester: "1",
+      id: "5",
     },
     {
-      name: "Algebra",
+      name: "Chemistry",
       semester: "1",
+      id: "6",
     },
     {
-      name: "Algebra",
+      name: "Biology",
       semester: "1",
+      id: "7",
     },
     {
-      name: "Algebra",
+      name: "Embryology",
       semester: "1",
+      id: "8",
     },
     {
-      name: "Algebra",
+      name: "Anatomy",
       semester: "1",
+      id: "9",
     },
     {
-      name: "Algebra",
+      name: "Physiology",
       semester: "1",
+      id: "10",
     },
   ];
 

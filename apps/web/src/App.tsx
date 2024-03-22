@@ -12,7 +12,7 @@ function App() {
       <Route path="/courses" element={<CoursesPage />} />
       <Route path="/announcements" element={<Announcements />} />
       <Route path="/grades" element={<Grades />} />
-      <Route path="/courseId" element={<SingleCoursePage />} />
+      <Route path="/courses/:courseName" element={<SingleCoursePage />} />
     </Routes>
   );
 }
