@@ -9,10 +9,11 @@ import { API_MESSAGES } from '../../../../common/helpers/apiMessages';
 class CourseMaterialMethods extends CourseMaterialSchema {
   public static async createCourseMaterial(
     this: ReturnModelType<typeof CourseMaterialSchema>,
-    courseId: string
+    courseId: string,
+    sections: CourseSectionSchema[]
   ) {
     try {
-      const newCourse = new this({ courseId, sections: [] });
+      const newCourse = new this({ courseId, sections: sections });
       await newCourse.save();
       return newCourse;
     } catch (err) {

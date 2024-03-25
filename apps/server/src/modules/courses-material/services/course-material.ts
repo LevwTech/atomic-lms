@@ -3,14 +3,39 @@ import {
   AttachmentSchema,
   CourseSectionSchema,
 } from '../models/course-material/course-material.schema';
+import { DTOBodyType } from '../../../common/types/DTOType';
+import { CourseMaterialDTO } from '@atomic/dto';
+import { API_ERROR } from '../../../common/helpers/throwApiError';
+import { API_MESSAGES } from '../../../common/helpers/apiMessages';
 
 class CourseMaterialService {
-  public static async createCourseMaterial(courseId: string) {
-    return CourseMaterialModel.createCourseMaterial(courseId);
+  public static async createCourseMaterial(
+    createMaterialDTO: DTOBodyType<
+      typeof CourseMaterialDTO.createCourseMaterial
+    >
+  ) {
+    const sections = createMaterialDTO.sections
+      ? createMaterialDTO.sections.map((section) => {
+          return {
+            title: section.title,
+            content: [],
+          };
+        })
+      : [];
+    return CourseMaterialModel.createCourseMaterial(
+      createMaterialDTO.courseId,
+      sections
+    );
   }
 
   public static async getCourseMaterial(courseId: string) {
-    return CourseMaterialModel.getCourseMaterial(courseId);
+    const material = await CourseMaterialModel.getCourseMaterial(courseId);
+
+    if (!material) {
+      throw new API_ERROR(API_MESSAGES.DOESNT_EXIST);
+    }
+
+    return material;
   }
 
   public static async addSection(
@@ -37,6 +62,9 @@ class CourseMaterialService {
     sectionId: string,
     attachmentId: string
   ) {
+    // ? should I delete the attachment from the storage as well?
+    // let's leave it for now until we decide if soft delete is the way to go
+
     return CourseMaterialModel.removeAttachment(
       courseId,
       sectionId,

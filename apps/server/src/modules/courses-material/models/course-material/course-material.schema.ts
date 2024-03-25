@@ -22,6 +22,9 @@ export class CourseSectionSchema {
   @Prop({ required: true })
   public title!: string;
 
+  @Prop({ required: false })
+  public description?: string;
+
   @Prop({ required: true, type: () => [AttachmentSchema] })
   public content!: AttachmentSchema[];
 }
