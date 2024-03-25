@@ -1,18 +1,19 @@
-import React from "react";
-import { Navigate } from "react-router-dom";
-import { ReactElement } from "react";
+// ! to be implemented when the auth is connected to the backend
 
-function ProtectedRoute({
-  children,
-}: {
-  children: React.ReactNode | null;
-}): React.ReactNode | null {
-  const session = localStorage.getItem("session");
-  const { accessToken, role } = session
-    ? JSON.parse(session)
-    : { accessToken: null, role: null };
+// import React from "react";
+// import { Navigate } from "react-router-dom";
 
-  return accessToken && role === "admin" ? { children } : Navigate("/");
-}
+// function ProtectedRoute({
+//   children,
+// }: {
+//   children: React.ReactNode | null;
+// }): React.ReactNode | null {
+//   const session = localStorage.getItem("session");
+//   const { accessToken, role } = session
+//     ? JSON.parse(session)
+//     : { accessToken: null, role: null };
 
-export default ProtectedRoute;
+//   return accessToken && role === "admin" ? { children } : Navigate({ to: "/"});
+// }
+
+// export default ProtectedRoute;

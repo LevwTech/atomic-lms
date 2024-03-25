@@ -1,7 +1,7 @@
-import LoginPage from "./Pages/LoginPage/LoginPage";
+// import LoginPage from "./Pages/LoginPage/LoginPage";
 import CoursesPage from "./Pages/Courses/CoursesPage";
-import { Route, Routes } from "react-router-dom";
-import ProtectedRoute from "./utils/ProtectedRoute";
+// import { Route, Routes } from "react-router-dom";
+// import ProtectedRoute from "./utils/ProtectedRoute";
 function App() {
   return (
     // <Routes>
