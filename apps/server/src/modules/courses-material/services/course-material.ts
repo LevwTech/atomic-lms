@@ -38,11 +38,35 @@ class CourseMaterialService {
     return material;
   }
 
+  public static async getSection(courseId: string, sectionId: string) {
+    const section = await CourseMaterialModel.getSection(courseId, sectionId);
+
+    if (!section) {
+      throw new API_ERROR(API_MESSAGES.DOESNT_EXIST);
+    }
+
+    return section;
+  }
+
   public static async addSection(
     courseId: string,
     section: CourseSectionSchema
   ) {
     return CourseMaterialModel.addSection(courseId, section);
+  }
+
+  public static async editSection(
+    courseId: string,
+    sectionId: string,
+    title?: string,
+    description?: string
+  ) {
+    return CourseMaterialModel.editSection(
+      courseId,
+      sectionId,
+      title,
+      description
+    );
   }
 
   public static async removeSection(courseId: string, sectionId: string) {
@@ -55,6 +79,20 @@ class CourseMaterialService {
     attachment: AttachmentSchema
   ) {
     return CourseMaterialModel.addAttachment(courseId, sectionId, attachment);
+  }
+
+  public static async editAttachment(
+    courseId: string,
+    sectionId: string,
+    attachmentId: string,
+    title: string
+  ) {
+    return CourseMaterialModel.editAttachment(
+      courseId,
+      sectionId,
+      attachmentId,
+      title
+    );
   }
 
   public static async removeAttachment(

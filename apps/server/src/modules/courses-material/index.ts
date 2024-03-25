@@ -33,8 +33,25 @@ materialsRouter.post(
   CourseMaterialController.addSection
 );
 
+materialsRouter.get(
+  '/:courseId/section/:sectionId',
+  authMiddleware(),
+  validationMiddleware(CourseMaterialDTO.getSection),
+  CourseMaterialController.getSection
+);
+
+materialsRouter.put(
+  '/:courseId/section/:sectionId',
+  authMiddleware({
+    [USER_TYPES.TEACHER]: [],
+    [USER_TYPES.ADMIN]: [ADMIN_PERMISSIONS.EDIT_COURSE_MATERIALS],
+  }),
+  validationMiddleware(CourseMaterialDTO.editSection),
+  CourseMaterialController.editSection
+);
+
 materialsRouter.delete(
-  '/:courseId/section',
+  '/:courseId/section/:sectionId',
   authMiddleware({
     [USER_TYPES.TEACHER]: [],
     [USER_TYPES.ADMIN]: [ADMIN_PERMISSIONS.EDIT_COURSE_MATERIALS],
@@ -54,8 +71,18 @@ materialsRouter.post(
   CourseMaterialController.addAttachment
 );
 
+materialsRouter.put(
+  '/:courseId/section/:sectionId/attachment/:attachmentId',
+  authMiddleware({
+    [USER_TYPES.TEACHER]: [],
+    [USER_TYPES.ADMIN]: [ADMIN_PERMISSIONS.EDIT_COURSE_MATERIALS],
+  }),
+  validationMiddleware(CourseMaterialDTO.editAttachment),
+  CourseMaterialController.editAttachment
+);
+
 materialsRouter.delete(
-  '/:courseId/section/:sectionId/attachment',
+  '/:courseId/section/:sectionId/attachment/:attachmentId',
   authMiddleware({
     [USER_TYPES.TEACHER]: [],
     [USER_TYPES.ADMIN]: [ADMIN_PERMISSIONS.EDIT_COURSE_MATERIALS],

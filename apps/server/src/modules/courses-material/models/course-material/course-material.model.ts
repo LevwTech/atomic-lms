@@ -25,7 +25,7 @@ class CourseMaterialMethods extends CourseMaterialSchema {
     this: ReturnModelType<typeof CourseMaterialSchema>,
     courseId: string
   ) {
-    return this.findOne({ courseId });
+    return this.findOne({ courseId }).select('-sections.content');
   }
 
   public static async addSection(
@@ -34,6 +34,42 @@ class CourseMaterialMethods extends CourseMaterialSchema {
     section: CourseSectionSchema
   ) {
     return this.updateOne({ courseId }, { $push: { sections: section } });
+  }
+
+  public static async getSection(
+    this: ReturnModelType<typeof CourseMaterialSchema>,
+    courseId: string,
+    sectionId: string
+  ) {
+    const course = await this.findOne(
+      { courseId },
+      { sections: { $elemMatch: { _id: sectionId } } }
+    );
+
+    return course ? course.sections[0] : null;
+  }
+
+  public static async editSection(
+    this: ReturnModelType<typeof CourseMaterialSchema>,
+    courseId: string,
+    sectionId: string,
+    title?: string,
+    description?: string
+  ) {
+    const update: Record<string, string> = {};
+
+    if (title) {
+      update['sections.$.title'] = title;
+    }
+
+    if (description) {
+      update['sections.$.description'] = description;
+    }
+
+    return this.updateOne(
+      { courseId, 'sections._id': sectionId },
+      { $set: update }
+    );
   }
 
   public static async removeSection(
@@ -56,6 +92,31 @@ class CourseMaterialMethods extends CourseMaterialSchema {
     return this.updateOne(
       { courseId, 'sections._id': sectionId },
       { $push: { 'sections.$.content': attachment } }
+    );
+  }
+
+  public static async editAttachment(
+    this: ReturnModelType<typeof CourseMaterialSchema>,
+    courseId: string,
+    sectionId: string,
+    attachmentId: string,
+    title: string
+  ) {
+    return this.updateOne(
+      {
+        courseId,
+      },
+      {
+        $set: {
+          'sections.$[section].content.$[content].title': title,
+        },
+      },
+      {
+        arrayFilters: [
+          { 'section._id': sectionId },
+          { 'content._id': attachmentId },
+        ],
+      }
     );
   }
 

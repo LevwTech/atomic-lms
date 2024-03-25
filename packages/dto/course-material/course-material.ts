@@ -21,6 +21,13 @@ export class CourseMaterialDTO {
     }),
   };
 
+  public static getSection = {
+    params: z.object({
+      courseId: UUIDString,
+      sectionId: ObjectIdString,
+    }),
+  };
+
   public static addSection = {
     body: z.object({
       section: this.section,
@@ -31,11 +38,23 @@ export class CourseMaterialDTO {
     }),
   };
 
+  public static editSection = {
+    body: z.object({
+      section: z.object({
+        title: z.string().optional(),
+        description: z.string().optional(),
+      }),
+    }),
+
+    params: z.object({
+      courseId: UUIDString,
+      sectionId: ObjectIdString,
+    }),
+  };
+
   public static removeSection = {
     params: z.object({
       courseId: UUIDString,
-    }),
-    query: z.object({
       sectionId: ObjectIdString,
     }),
   };
@@ -51,12 +70,22 @@ export class CourseMaterialDTO {
     }),
   };
 
+  public static editAttachment = {
+    body: z.object({
+      title: z.string(),
+    }),
+
+    params: z.object({
+      courseId: UUIDString,
+      sectionId: ObjectIdString,
+      attachmentId: ObjectIdString,
+    }),
+  };
+
   public static removeAttachment = {
     params: z.object({
       courseId: UUIDString,
       sectionId: ObjectIdString,
-    }),
-    query: z.object({
       attachmentId: ObjectIdString,
     }),
   };
