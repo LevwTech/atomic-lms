@@ -159,20 +159,20 @@ export default class CourseController {
         switch (option) {
             case studentCoursesOptions.ENROLLED:
                 const courses = await CourseService.getUserCourses(user.username);
-                courses.forEach(course => course.enrolled = true);
+                courses.forEach(course => (course as any).enrolled = true);
                 return res
                     .status(StatusCodes.OK)
                     .json({ courses });
             case studentCoursesOptions.COMPLETED:
                 const completedCourses = await CourseService.getUserCompletedCourses(user.username);
-                completedCourses.forEach(course => course.completed = true);
+                completedCourses.forEach(course => (course as any).completed = true);
                 return res
                     .status(StatusCodes.OK)
                     .json({ courses: completedCourses });
             case studentCoursesOptions.ALL:
                 const { enrolled, completed } = await CourseService.getAllUserCourses(user.username);
-                enrolled.forEach(course => course.enrolled = true);
-                completed.forEach(course => course.completed = true);
+                enrolled.forEach(course => (course as any).enrolled = true);
+                completed.forEach(course => (course as any).completed = true);
                 return res
                     .status(StatusCodes.OK)
                     .json({ enrolled, completed });
