@@ -19,7 +19,7 @@ export class Course {
     @Column()
     name: string;
     
-    @Column()
+    @Column( { unique: true })
     code: string;
 
     @Column({ nullable: true })

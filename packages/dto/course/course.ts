@@ -51,6 +51,7 @@ export class CourseDTO {
             prerequisiteCourseGroupIds: z.array(z.string().uuid()).optional(),
             studentsUserNames: z.array(z.string().uuid()).optional(),
             teachersUserNames: z.array(z.string().uuid()).optional(),
+            code: z.string().min(4).max(10),
         }),
       };
 

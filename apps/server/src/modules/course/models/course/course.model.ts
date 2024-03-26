@@ -64,15 +64,16 @@ export default class CourseModel {
         prerequisiteCourseIds,
         prerequisiteCourseGroupIds,
         studentsUserNames,
-        teachersUserNames
+        teachersUserNames,
+        code,
       }: DTOBodyType<typeof CourseDTO.createCourse>) {
         const parentCourse = await this.getCourse(parentCourseId); 
         if (!parentCourse) throw new API_ERROR(API_MESSAGES.DOESNT_EXIST);
         const course = new Course();
         course.name = parentCourse.name;
-        course.code = parentCourse.code;
         course.image = parentCourse.image;
         course.isBase = false;
+        course.code = code;
         course.description = description ? description : parentCourse.description;
         course.academicDuration = academicDuration ? academicDuration : parentCourse.academicDuration;
         if (startDate) course.startDate = startDate;
