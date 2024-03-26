@@ -87,6 +87,4 @@ export class Course {
       lazy: true,
     })
     childCourses: Promise<Course[]>;
-    enrolled: boolean;
-    completed: boolean;
 }
