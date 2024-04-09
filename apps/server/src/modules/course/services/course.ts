@@ -154,13 +154,14 @@ export default class CourseService {
     public static async editCourseGroup(courseGroupEdits: DTOBodyType<typeof CourseDTO.editCourseGroup>) {
         const courseGroup  = await CourseGroupModel.getCourseGroup({ groupId: courseGroupEdits.id});
         if (!courseGroup) throw new API_ERROR(API_MESSAGES.DOESNT_EXIST);
+        const groupCourseCourses = await courseGroup.courses;
         if (courseGroupEdits.name) courseGroup.name = courseGroupEdits.name;
         if (courseGroupEdits.courseIdsToAdd && courseGroupEdits.courseIdsToAdd.length) {
             const coursesToAdd = await CourseModel.getCourses(courseGroupEdits.courseIdsToAdd);
-            courseGroup.courses.push(...coursesToAdd);
+            groupCourseCourses.push(...coursesToAdd);
         }
         if (courseGroupEdits.courseIdsToRemove && courseGroupEdits.courseIdsToRemove.length) {
-            courseGroup.courses = courseGroup.courses.filter(course => !courseGroupEdits.courseIdsToRemove?.includes(course.id));
+            courseGroup.courses = Promise.resolve(groupCourseCourses.filter(course => !courseGroupEdits.courseIdsToRemove?.includes(course.id)));
         }
         await CourseGroupModel.saveCourseGroup(courseGroup);
     }
@@ -168,12 +169,16 @@ export default class CourseService {
     public static async editCoursePrerequisiteCourses(courseEdits: DTOBodyType<typeof CourseDTO.editCoursePrerequisiteCourses>) {
         const course  = await CourseModel.getCourse(courseEdits.id);
         if (!course) throw new API_ERROR(API_MESSAGES.DOESNT_EXIST);
+        let prerequisiteCourses = await course.prerequisiteCourses;
+        if (!course) throw new API_ERROR(API_MESSAGES.DOESNT_EXIST);
         if (courseEdits.prerequisiteCourseIdsToAdd && courseEdits.prerequisiteCourseIdsToAdd.length) {
             const prerequisiteCoursesToAdd = await CourseModel.getCourses(courseEdits.prerequisiteCourseIdsToAdd);
-            course.prerequisiteCourses.push(...prerequisiteCoursesToAdd)
+            prerequisiteCourses.push(...prerequisiteCoursesToAdd)
+            course.prerequisiteCourses = Promise.resolve(prerequisiteCourses);
         }
         if (courseEdits.prerequisiteCourseIdsToRemove && courseEdits.prerequisiteCourseIdsToRemove.length) {
-            course.prerequisiteCourses = course.prerequisiteCourses.filter(course => !courseEdits.prerequisiteCourseIdsToRemove?.includes(course.id));
+            prerequisiteCourses = prerequisiteCourses.filter(course => !courseEdits.prerequisiteCourseIdsToRemove?.includes(course.id));
+            course.prerequisiteCourses = Promise.resolve(prerequisiteCourses);
         }
         await CourseModel.saveCourse(course);
     }

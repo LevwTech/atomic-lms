@@ -36,7 +36,7 @@ export class CourseGroupModel {
   public static async createCourseGroup({ name, courseIds }: { name: string, courseIds?: string[]}) {
     const group = new CourseGroup();
     group.name = name;
-    if (courseIds && courseIds.length) group.courses =  await CourseModel.getCourses(courseIds);
+    if (courseIds && courseIds.length) group.courses =  Promise.resolve(await CourseModel.getCourses(courseIds));
     try {
       await this.saveCourseGroup(group);
     } catch (err) {

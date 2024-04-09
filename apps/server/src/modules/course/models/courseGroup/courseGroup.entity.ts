@@ -16,8 +16,8 @@ export class CourseGroup {
     name: string;
     
     @ManyToMany(() => Course, (course) => course.prerequisiteCourseGroups, {
-        eager: true,
+        lazy: true,
         onDelete: 'CASCADE',
     })
-    courses: Course[];
+    courses: Promise<Course[]>;
 }

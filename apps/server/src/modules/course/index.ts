@@ -5,9 +5,8 @@ import CourseController from './controllers/course';
 import validationMiddleware from '../../common/middlewares/validationMiddleware';
 import authMiddleware from '../../common/middlewares/authMiddleware';
 import { USER_TYPES } from '@atomic/common';
-import ADMIN_PERMISSIONS from '@atomic/common/permissions/admin';
-import TEACHER_PERMISSIONS from '@atomic/common/permissions/teacher';
-import STUDENT_PERMISSIONS from '@atomic/common/permissions/student';
+import { ADMIN_PERMISSIONS, TEACHER_PERMISSIONS, STUDENT_PERMISSIONS } from '@atomic/common';
+
 
 const courseRouter = express.Router();
 

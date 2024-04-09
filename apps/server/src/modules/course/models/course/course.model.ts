@@ -34,18 +34,17 @@ export default class CourseModel {
         if (endDate) course.endDate = endDate;
         if (academicDuration) course.academicDuration = academicDuration;
         if (academicYear) course.academicYear = academicYear;
-        if (prerequisiteCourseIds) course.prerequisiteCourses = await this.getCourses(prerequisiteCourseIds);
+        if (prerequisiteCourseIds) course.prerequisiteCourses = Promise.resolve(await this.getCourses(prerequisiteCourseIds));
         if (prerequisiteCourseGroupIds) course.prerequisiteCourseGroups = await CourseGroupModel.getCourseGroups(prerequisiteCourseGroupIds);
         if (studentIds) {
            let students = await UserModel.getUsersByUsernames(studentIds);
            students = students.filter(student => student.type === 'STUDENT');
-           course.students = students;
+           course.students = Promise.resolve(students);
         }
         if (teacherIds) {
           let teachers = await UserModel.getUsersByUsernames(teacherIds);
           teachers = teachers.filter(teacher => teacher.type === 'TEACHER');
-          course.teachers = teachers;
-          course.teachers = await UserModel.getUsersByUsernames(teacherIds);
+          course.teachers = Promise.resolve(teachers);
         }
         try {
           await PostGresDataSource.getRepository(Course).save(course);
@@ -79,18 +78,17 @@ export default class CourseModel {
         if (startDate) course.startDate = startDate;
         if (endDate) course.endDate = endDate;
         if (academicYear) course.academicYear = academicYear;
-        if (prerequisiteCourseIds) course.prerequisiteCourses = await this.getCourses(prerequisiteCourseIds);
+        if (prerequisiteCourseIds) course.prerequisiteCourses = Promise.resolve(await this.getCourses(prerequisiteCourseIds));
         if (prerequisiteCourseGroupIds) course.prerequisiteCourseGroups = await CourseGroupModel.getCourseGroups(prerequisiteCourseGroupIds);
         if (studentsUserNames) {
           let students = await UserModel.getUsersByUsernames(studentsUserNames);
           students = students.filter(student => student.type === 'STUDENT');
-          course.students = students;
+          course.students = Promise.resolve(students);
        }
        if (teachersUserNames) {
          let teachers = await UserModel.getUsersByUsernames(teachersUserNames);
          teachers = teachers.filter(teacher => teacher.type === 'TEACHER');
-         course.teachers = teachers;
-         course.teachers = await UserModel.getUsersByUsernames(teachersUserNames);
+         course.teachers = Promise.resolve(teachers);
        }
         try {
           await PostGresDataSource.getRepository(Course).save(course);
