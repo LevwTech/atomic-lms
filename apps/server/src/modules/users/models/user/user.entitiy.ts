@@ -14,6 +14,7 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { PermissionsGroup } from '../permissionGroup/permissionsGroup.entitiy';
+import { Course } from '../../../course/models/course/course.entity';
 
 @Entity({ name: 'users' })
 export class User {
@@ -51,6 +52,27 @@ export class User {
   })
   @JoinTable()
   permissionGroups: PermissionsGroup[];
+
+  @ManyToMany(() => Course, (course) => course.students, {
+    eager: true,
+    onDelete: 'CASCADE',
+  })
+  @JoinTable()
+  coursesEnrolled: Course[];
+
+  @ManyToMany(() => Course, (course) => course.studentsCompleted, {
+    eager: true,
+    onDelete: 'CASCADE',
+  })
+  @JoinTable()
+  coursesCompleted: Course[];
+
+  @ManyToMany(() => Course, (course) => course.teachers, {
+    eager: true,
+    onDelete: 'CASCADE',
+  })
+  @JoinTable()
+  coursesTeaching: Course[];
 
   @Column({ array: true, default: [], type: 'text' })
   refreshTokens: string[];

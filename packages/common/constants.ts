@@ -5,3 +5,9 @@ export enum USER_TYPES {
   STAFF = 'STAFF',
   FINANCE = 'FINANCE',
 }
+
+export enum studentCoursesOptions {
+  ENROLLED ='ENROLLED',
+  COMPLETED ='COMPLETED',
+  ALL = 'ALL',
+}

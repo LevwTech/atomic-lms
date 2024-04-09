@@ -1,1 +1,5 @@
-export enum STUDENT_PERMISSIONS {}
+enum STUDENT_PERMISSIONS {
+  GET_COURSE = "GET_COURSE",
+}
+
+export default STUDENT_PERMISSIONS;

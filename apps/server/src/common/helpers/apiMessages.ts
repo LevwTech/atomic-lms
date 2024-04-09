@@ -31,4 +31,8 @@ export const API_MESSAGES = {
     code: 400,
     message: 'Invalid permission for user type',
   },
+  COURSE_IS_NOT_BASE: {
+    code: 400,
+    message: 'Course is not a base course',
+  },
 };
