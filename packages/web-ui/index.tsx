@@ -3,7 +3,7 @@ import "./index.css";
 // component exports
 export { Button } from "./Button/button";
 export { FormInput } from "./TextInput/form-input";
-export { LoginForm } from "./LoginForm/loginForm";
+export { LoginForm } from "./Forms/LoginForm";
 export { Carousal } from "./Carousals/Carousal";
 export { BannerCarousal } from "./Carousals/BannerCarousel";
 export { SectionsHeader } from "./headers/SectionsHeader";

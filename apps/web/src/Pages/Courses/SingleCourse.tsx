@@ -1,16 +1,10 @@
 // import React from 'react'
 // Import the logo image
-import { useState } from "react";
 import { SectionsHeader } from "@atomic/web-ui"; // Import the SectionsHeader component
 import { SingleCourseGrid } from "@atomic/web-ui"; // Import the SectionsHeader component
 import { useParams } from "react-router-dom";
 
 export default function SingleCoursePage() {
-  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
-  const toggleSidebar = () => {
-    setIsSidebarOpen((prevState) => !prevState);
-  };
-
   const { courseName } = useParams();
 
   const courseContent = [

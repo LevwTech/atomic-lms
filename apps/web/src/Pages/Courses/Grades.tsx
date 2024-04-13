@@ -3,11 +3,6 @@ import { SectionsHeader } from "@atomic/web-ui"; // Import the SectionsHeader co
 import { GradeCardOpened, GradeCardClosed } from "@atomic/web-ui"; // Import the sideBar component
 
 export default function Grades() {
-  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
-  const toggleSidebar = () => {
-    setIsSidebarOpen((prevState) => !prevState);
-  };
-
   const [currentGrade, setCurrentGrade] = useState(0);
 
   const grades = [

@@ -4,10 +4,6 @@ import { BannerCarousal } from "@atomic/web-ui";
 import { Pagination } from "@atomic/web-ui";
 
 export default function CoursesPage() {
-  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
-  const toggleSidebar = () => {
-    setIsSidebarOpen((prevState) => !prevState);
-  };
   const images = [
     {
       src: "/banner.png",
@@ -26,52 +22,52 @@ export default function CoursesPage() {
   const courses = [
     {
       name: "Algebra",
-      semester: "1",
+      semester: 1,
       id: "1",
     },
     {
       name: "Geometry",
-      semester: "1",
+      semester: 1,
       id: "2",
     },
     {
       name: "Math",
-      semester: "1",
+      semester: 1,
       id: "3",
     },
     {
       name: "Arabic",
-      semester: "1",
+      semester: 1,
       id: "4",
     },
     {
       name: "Physics",
-      semester: "1",
+      semester: 1,
       id: "5",
     },
     {
       name: "Chemistry",
-      semester: "1",
+      semester: 1,
       id: "6",
     },
     {
       name: "Biology",
-      semester: "1",
+      semester: 1,
       id: "7",
     },
     {
       name: "Embryology",
-      semester: "1",
+      semester: 1,
       id: "8",
     },
     {
       name: "Anatomy",
-      semester: "1",
+      semester: 1,
       id: "9",
     },
     {
       name: "Physiology",
-      semester: "1",
+      semester: 1,
       id: "10",
     },
   ];

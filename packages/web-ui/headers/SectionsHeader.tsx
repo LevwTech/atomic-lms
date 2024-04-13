@@ -1,9 +1,9 @@
 import styles from "./SectionsHeader.module.css";
 
 interface SectionsHeaderProps {
-  sectionName: string;
-  button?: boolean;
-  icon?: string;
+  sectionName: string | undefined;
+  button?: boolean | undefined;
+  icon?: string | undefined;
 }
 
 export function SectionsHeader({

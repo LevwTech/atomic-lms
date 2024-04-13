@@ -5,6 +5,7 @@ interface Course {
   displayedCourses: {
     name: string;
     semester: number;
+    id: string;
   }[];
   currentPage: number;
 }
@@ -15,12 +16,12 @@ export function CoursesGrid({
 }: Course): JSX.Element {
   return (
     <motion.div
-      initial={{ x: 300, opacity: 0 }}
       animate={{ x: 0, opacity: 1 }}
-      exit={{ x: -300, opacity: 0 }}
-      transition={{ duration: 1.2, type: "spring" }}
-      key={currentPage}
       className="grid grid-cols-4 gap-[20px]"
+      exit={{ x: -300, opacity: 0 }}
+      initial={{ x: 300, opacity: 0 }}
+      key={currentPage}
+      transition={{ duration: 1.2, type: "spring" }}
     >
       {displayedCourses.map((course, index) => (
         <CoursesCard

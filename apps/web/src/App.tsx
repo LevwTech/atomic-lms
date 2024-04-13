@@ -1,9 +1,9 @@
-import LoginPage from "./Pages/LoginPage/LoginPage";
-import CoursesPage from "./Pages/Courses/CoursesPage";
+import LoginPage from "./Pages/Auth/Login/Login";
+import CoursesPage from "./Pages/Courses/Courses";
 import { Route, Routes } from "react-router-dom";
-import Announcements from "./Pages/Announcements";
-import Grades from "./Pages/Grades";
-import SingleCoursePage from "./Pages/Courses/SingleCoursePage";
+import Announcements from "./Pages/Courses/Announcements";
+import Grades from "./Pages/Courses/Grades";
+import SingleCoursePage from "./Pages/Courses/SingleCourse";
 
 function App() {
   return (
