@@ -12,4 +12,3 @@ export { Pagination } from "./Pagination/Pagination";
 export { AnnouncementsGrid } from "./Grid/AnnouncementsGrid";
 export { SingleCourseGrid } from "./Grid/SingleCourseGrid";
 export { GradeCardClosed, GradeCardOpened } from "./Cards/GradeCards";
-export { CoursesCard } from "./Cards/CoursesCard";

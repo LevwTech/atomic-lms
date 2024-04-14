@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
-import { CoursesCard } from "@atomic/web-ui";
+import { CoursesCard } from "../Cards/CoursesCard";
+import styles from "../Cards/CoursesCard.module.css";
 
 interface Course {
   displayedCourses: {
@@ -30,6 +31,7 @@ export function CoursesGrid({
           index={index}
           key={index}
           semester={course.semester}
+          styles={styles}
         />
       ))}
     </motion.div>

@@ -1,4 +1,4 @@
-import AnnouncementsCard from "../Cards/AnnouncementsCard";
+import { AnnouncementsCard } from "../Cards/AnnouncementsCard";
 
 export function AnnouncementsGrid(): JSX.Element {
   return (

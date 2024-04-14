@@ -1,4 +1,3 @@
-import styles from "./CoursesCard.module.css";
 import { Link } from "react-router-dom";
 
 interface CoursesCardProps {
@@ -6,6 +5,7 @@ interface CoursesCardProps {
   courseName: string;
   semester: number;
   index: number;
+  styles: string;
 }
 
 export function CoursesCard({
@@ -13,6 +13,7 @@ export function CoursesCard({
   courseName,
   semester,
   index,
+  styles,
 }: CoursesCardProps): JSX.Element {
   return (
     <Link className={styles.card} to={`/courses/${courseName}`}>
