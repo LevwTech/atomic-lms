@@ -54,7 +54,7 @@ export function GradeCardOpened({
   courseworkGrade,
   currentGrade,
 }: GradeCardOpenedProps): JSX.Element {
-  const gradeColors = {
+  const gradeColors: { [key: string]: string } = {
     "A+": "#75D00F",
     A: "#75D00F",
     "A-": "#75D00F",
