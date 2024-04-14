@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 50 49.58">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: url(#linear-gradient);
+      }
+
+      .cls-1, .cls-2, .cls-3, .cls-4 {
+        stroke-width: 0px;
+      }
+
+      .cls-5 {
+        isolation: isolate;
+      }
+
+      .cls-6 {
+        opacity: .8;
+      }
+
+      .cls-2 {
+        fill: url(#linear-gradient-2);
+      }
+
+      .cls-3 {
+        fill: url(#linear-gradient-3);
+      }
+
+      .cls-4 {
+        fill: url(#linear-gradient-4);
+      }
+
+      .cls-7 {
+        mix-blend-mode: multiply;
+      }
+    </style>
+    <linearGradient id="linear-gradient" x1="0" y1="24.79" x2="50" y2="24.79" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#efeaff"/>
+      <stop offset="1" stop-color="#efeaff"/>
+    </linearGradient>
+    <linearGradient id="linear-gradient-2" x1="33.83" y1="20.46" x2="38.38" y2="29.16" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#f3d3f4"/>
+      <stop offset=".16" stop-color="#f2d2f3" stop-opacity=".74"/>
+      <stop offset=".32" stop-color="#f2d1f3" stop-opacity=".52"/>
+      <stop offset=".48" stop-color="#f2d0f3" stop-opacity=".33"/>
+      <stop offset=".63" stop-color="#f2d0f3" stop-opacity=".19"/>
+      <stop offset=".77" stop-color="#f2d0f3" stop-opacity=".08"/>
+      <stop offset=".9" stop-color="#f2d0f3" stop-opacity=".02"/>
+      <stop offset="1" stop-color="#f2d0f3" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="linear-gradient-3" x1="11.3" y1="4.36" x2="17.23" y2="13.13" xlink:href="#linear-gradient-2"/>
+    <linearGradient id="linear-gradient-4" x1="11.13" y1="37.92" x2="17.4" y2="45.8" xlink:href="#linear-gradient-2"/>
+  </defs>
+  <g class="cls-5">
+    <g id="Layer_2" data-name="Layer 2">
+      <g id="HCI">
+        <g>
+          <g class="cls-6">
+            <path class="cls-1" d="m21.67,5.34C20.01,1.05,15.19-1.09,10.9.56c-2.2.85-3.94,2.59-4.79,4.79h-3.33c-1.53,0-2.78,1.24-2.78,2.78s1.24,2.78,2.78,2.78h3.33c1.65,4.3,6.47,6.44,10.77,4.79,2.2-.85,3.94-2.59,4.79-4.79h25.56c1.53,0,2.78-1.24,2.78-2.78s-1.24-2.78-2.78-2.78h-25.56ZM2.78,22.01h25.56c1.65-4.3,6.47-6.44,10.77-4.79,2.2.85,3.94,2.59,4.79,4.79h3.33c1.53,0,2.78,1.24,2.78,2.78s-1.24,2.78-2.78,2.78h-3.33c-1.65,4.3-6.47,6.44-10.77,4.79-2.2-.85-3.94-2.59-4.79-4.79H2.78c-1.53,0-2.78-1.24-2.78-2.78s1.24-2.78,2.78-2.78Zm3.33,16.67h-3.33c-1.53,0-2.78,1.24-2.78,2.78s1.24,2.78,2.78,2.78h3.33c1.65,4.3,6.47,6.44,10.77,4.79,2.2-.85,3.94-2.59,4.79-4.79h25.56c1.53,0,2.78-1.24,2.78-2.78s-1.24-2.78-2.78-2.78h-25.56c-1.65-4.3-6.47-6.44-10.77-4.79-2.2.85-3.94,2.59-4.79,4.79Z"/>
+          </g>
+          <g class="cls-7">
+            <circle class="cls-2" cx="36.1" cy="24.79" r="4.96"/>
+          </g>
+          <g class="cls-7">
+            <circle class="cls-3" cx="13.94" cy="8.27" r="4.96"/>
+          </g>
+          <g class="cls-7">
+            <circle class="cls-4" cx="13.94" cy="41.45" r="4.96"/>
+          </g>
+        </g>
+      </g>
+    </g>
+  </g>
+</svg>

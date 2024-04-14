@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 42.54 54.87">
+  <defs>
+    <style>
+      .cls-1 {
+        isolation: isolate;
+      }
+
+      .cls-2 {
+        fill: url(#linear-gradient);
+        fill-rule: evenodd;
+        opacity: .8;
+      }
+
+      .cls-2, .cls-3, .cls-4, .cls-5 {
+        stroke-width: 0px;
+      }
+
+      .cls-3 {
+        fill: url(#linear-gradient-2);
+      }
+
+      .cls-4 {
+        fill: url(#linear-gradient-3);
+      }
+
+      .cls-5 {
+        fill: url(#linear-gradient-4);
+      }
+
+      .cls-6 {
+        mix-blend-mode: multiply;
+      }
+    </style>
+    <linearGradient id="linear-gradient" x1="0" y1="27.44" x2="42.54" y2="27.44" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#fffbfb"/>
+      <stop offset="1" stop-color="#ffdae2"/>
+    </linearGradient>
+    <linearGradient id="linear-gradient-2" x1="5.53" y1="5.53" x2="16.06" y2="16.06" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#ffb9be"/>
+      <stop offset=".02" stop-color="#ffb9be" stop-opacity=".96"/>
+      <stop offset=".18" stop-color="#ffb9be" stop-opacity=".71"/>
+      <stop offset=".34" stop-color="#ffb9be" stop-opacity=".49"/>
+      <stop offset=".49" stop-color="#ffb9be" stop-opacity=".32"/>
+      <stop offset=".64" stop-color="#ffb9be" stop-opacity=".18"/>
+      <stop offset=".78" stop-color="#ffb9be" stop-opacity=".08"/>
+      <stop offset=".9" stop-color="#ffb9be" stop-opacity=".02"/>
+      <stop offset="1" stop-color="#ffb9be" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="linear-gradient-3" x1="30.16" y1="5.85" x2="41.24" y2="16.93" xlink:href="#linear-gradient-2"/>
+    <linearGradient id="linear-gradient-4" x1="17.77" y1="42.2" x2="27.66" y2="52.08" xlink:href="#linear-gradient-2"/>
+  </defs>
+  <g class="cls-1">
+    <g id="Layer_2" data-name="Layer 2">
+      <g id="HCI">
+        <g>
+          <path class="cls-2" d="m0,9.2C-.05,4.17,4,.05,9.03,0c5.03-.05,9.15,3.99,9.2,9.03.04,3.89-2.4,7.38-6.08,8.68v3.65c0,1.68,1.36,3.04,3.04,3.04h12.15c1.68,0,3.04-1.36,3.04-3.04v-3.65c-4.75-1.68-7.23-6.89-5.56-11.63,1.68-4.75,6.89-7.23,11.63-5.56,4.75,1.68,7.23,6.89,5.56,11.63-.92,2.6-2.96,4.64-5.56,5.56v3.65c0,5.03-4.08,9.12-9.12,9.12h-3.04v6.68c4.75,1.68,7.23,6.89,5.56,11.63-1.68,4.75-6.89,7.23-11.63,5.56-4.75-1.68-7.23-6.89-5.56-11.63.92-2.6,2.96-4.64,5.56-5.56v-6.68h-3.04c-5.03,0-9.12-4.08-9.12-9.12v-3.65C2.47,16.44.04,13.04,0,9.2Z"/>
+          <circle class="cls-3" cx="9.12" cy="9.12" r="5.01"/>
+          <circle class="cls-4" cx="33.43" cy="9.12" r="5.01"/>
+          <g class="cls-6">
+            <circle class="cls-5" cx="21.33" cy="45.76" r="5.01"/>
+          </g>
+        </g>
+      </g>
+    </g>
+  </g>
+</svg>

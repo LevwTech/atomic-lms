@@ -1,0 +1,26 @@
+.card {
+  @apply flex flex-col p-[15px] gap-[10px] bg-[var(--White)] rounded-[10px] cursor-pointer;
+  transition: box-shadow 300ms ease-in-out;
+}
+
+.card:hover {
+  box-shadow: 0px 0px 10px 0px rgba(193, 203, 229, 0.6);
+}
+
+.cardTypographyHeader {
+  color: #35383f;
+  font-family: Poppins;
+  font-size: 17px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+}
+
+.cardTypographySubHeader {
+  color: #35383f;
+  font-family: Poppins;
+  font-size: 13px;
+  font-style: normal;
+  font-weight: 300;
+  line-height: normal;
+}
