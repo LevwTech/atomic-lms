@@ -1,4 +1,4 @@
-import styles from "./SingleCourseGrid.module.css";
+import styles from "./singleCourseGrid.module.css";
 
 interface SingleCourseGridProps {
   courseContent: {
