@@ -2,6 +2,7 @@ import {
     Column,
     Entity,
     JoinTable,
+    JoinColumn,
     ManyToMany,
     PrimaryGeneratedColumn,
     ManyToOne,
@@ -75,16 +76,9 @@ export class Course {
     @JoinTable()
     prerequisiteCourses: Promise<Course[]>;
 
-    @ManyToOne(() => Course, (course) => course.childCourses, {
-      onDelete: 'CASCADE',
-      eager: true,
-    })
-    @JoinTable()
+    @ManyToOne(() => Course, (course) => course.childCourses, { onDelete: 'CASCADE' })
     parentCourse: Course;
-  
-    @OneToMany(() => Course, (course) => course.parentCourse, {
-      onDelete: 'CASCADE',
-      lazy: true,
-    })
+    
+    @OneToMany(() => Course, (course) => course.parentCourse, { onDelete: 'CASCADE', lazy: true })
     childCourses: Promise<Course[]>;
 }
