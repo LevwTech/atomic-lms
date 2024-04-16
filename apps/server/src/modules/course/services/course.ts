@@ -107,7 +107,7 @@ export default class CourseService {
         const course = await CourseModel.getCourse(courseId);
         if (!course) throw new API_ERROR(API_MESSAGES.DOESNT_EXIST);
         if (!course.isBase) throw new API_ERROR(API_MESSAGES.COURSE_IS_NOT_BASE);
-        return course.childCourses;
+        return await course.childCourses;
     }
 
     public static async editCourse(courseEdits: DTOBodyType<typeof CourseDTO.editCourse>) {
