@@ -35,7 +35,7 @@ function SideBar({
   return (
     <div
       className={` ${
-        isSidebarOpen ? "w-[15vw] p-[20px] " :  "w-[5.5vw]  p-[10px]"
+        isSidebarOpen ? "w-[15vw] p-[20px] " : "w-[5.5vw]  p-[10px]"
       } bg-[var(--White)] h-full relative rounded-[13.6px] duration-300 justify-between flex flex-col `}
     >
       <div className="mx-auto">

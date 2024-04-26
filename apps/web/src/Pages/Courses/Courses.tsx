@@ -3,7 +3,7 @@ import { CoursesGrid } from "@atomic/web-ui";
 import { BannerCarousal } from "@atomic/web-ui";
 import { Pagination } from "@atomic/web-ui";
 
-export default function CoursesPage() {
+export default function CoursesPage1() {
   const images = [
     {
       src: "/banner.png",
@@ -101,7 +101,7 @@ export default function CoursesPage() {
           totalCourses={totalCourses}
         />
       </div>
-      <div className="bg-[var(--White)] h-full w-[30vw] rounded-[14px]"> </div>
+      {/* <div className="bg-[var(--White)] h-full w-[30vw] rounded-[14px]"> </div> */}
     </div>
   );
 }
