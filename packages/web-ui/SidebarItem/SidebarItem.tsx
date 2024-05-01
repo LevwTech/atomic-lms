@@ -16,7 +16,10 @@ export const SidebarItem: React.FC<SidebarItemProps> = ({
   ...props
 }) => {
   const location = useLocation();
-  const isActive = (path: string) => location.pathname === path;
+  const isActive = (path: string) => location.pathname === path || location.pathname.includes(path);
+  
+
+  console.log(isActive(to.toString()));
   return (
     <div className="m-[5px] p-[2px]">
       <NavLink
@@ -38,7 +41,7 @@ export const SidebarItem: React.FC<SidebarItemProps> = ({
             className={
               isActive(to.toString())
                 ? styles.NavLinkLabelSelected
-                : styles.NavLinkLabel
+                : `${styles.NavLinkLabel} `
             }
           >
             {isSidebarOpen ? label : ""}

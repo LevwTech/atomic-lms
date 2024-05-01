@@ -84,8 +84,8 @@ export default function CoursesPage1() {
   // Slice the array to display only the relevant portion
   const displayedCourses = courses.slice(startIndex, endIndex);
   return (
-    <div className="h-screen p-[30px] flex justify-between gap-[30px]">
-      <div className="h-full w-[50vw] rounded-[14px] items-center justify-between flex flex-col bg-white p-[30px] overflow-hidden">
+    // <div className="h-full  flex justify-between gap-[30px]">
+      <div className="h-full w-[50vw] rounded-[14px] items-center justify-between flex flex-col overflow-hidden">
         <div className="flex flex-col gap-[30px]">
           <BannerCarousal images={images} />
           <CoursesGrid
@@ -101,7 +101,6 @@ export default function CoursesPage1() {
           totalCourses={totalCourses}
         />
       </div>
-      {/* <div className="bg-[var(--White)] h-full w-[30vw] rounded-[14px]"> </div> */}
-    </div>
+    // </div>
   );
 }

@@ -12,7 +12,7 @@ export function SectionsHeader({
   icon,
 }: SectionsHeaderProps): JSX.Element {
   return (
-    <div className="flex h-[75px] text-white items-center px-[50px] py-[15px] w-full rounded-[5px] justify-between bg-[var(--Primary)]">
+    <div className="flex h-[75px] text-white items-center px-[15px] py-[15px] w-full rounded-[5px] justify-between bg-[var(--Primary)]">
       {icon ? (
         <div className="flex gap-4">
           <img alt="icon" src={icon} />
@@ -21,7 +21,7 @@ export function SectionsHeader({
       ) : (
         <p className={`${styles.sectionName}`}> {sectionName}</p>
       )}
-      {button ? <button type="button">button</button> : null}
+      {button ? button : null}
     </div>
   );
 }

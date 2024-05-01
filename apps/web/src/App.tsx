@@ -4,6 +4,7 @@ import { Route, Routes } from "react-router-dom";
 import Announcements from "./Pages/Courses/Announcements";
 import Grades from "./Pages/Courses/Grades";
 import SingleCoursePage from "./Pages/Courses/SingleCourse";
+import ModuleContentPage from "./Pages/Courses/ModuleContent";
 
 function App() {
   return (
@@ -14,6 +15,10 @@ function App() {
       <Route path="/grades" element={<Grades />} />
       <Route path="/courses/:courseName" element={<SingleCoursePage />} />
       <Route path="/courseContent" element={<Announcements />} />
+      <Route
+        path="/courses/:courseName/lectures"
+        element={<ModuleContentPage />}
+      />
     </Routes>
   );
 }
