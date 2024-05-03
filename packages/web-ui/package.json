@@ -24,7 +24,7 @@
   },
   "dependencies": {
     "avatar": "^0.1.0",
-    "framer-motion": "^11.0.8",
+    "framer-motion": "^11.1.7",
     "shadcn-ui": "^0.8.0"
   }
 }
