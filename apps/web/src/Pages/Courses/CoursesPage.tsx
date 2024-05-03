@@ -12,7 +12,6 @@ function CoursesPage() {
       />
       <div className=" h-full w-[55vw]  rounded-[13.6px] relative">
         <Courses />
-        <ModuleContent />
       </div>
       <div className="bg-[var(--White)] h-full w-[30vw] rounded-[13.6px]">
         <Announcements />
