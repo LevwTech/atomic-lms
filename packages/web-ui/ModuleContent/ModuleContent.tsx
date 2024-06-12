@@ -3,6 +3,8 @@ import styles from "./ModuleContent.module.css";
 import { motion } from "framer-motion";
 import { Pagination } from "../Pagination/Pagination";
 import { SectionsHeader } from "../headers/SectionsHeader";
+import LectureComponent from "../contentComponent/LectureComponent";
+import ContentComponent from "../contentComponent/ContentComponent";
 
 interface DownloadComponentProps extends React.SVGProps<SVGSVGElement> {
   fill?: string;
@@ -40,49 +42,58 @@ const SelectAllImg: React.FC<SelectAllProps> = (props) => (
   </svg>
 );
 
-interface Lecture {
+// interface Lecture {
+//   id: number;
+//   title: string;
+//   date: string;
+//   url: string;
+// }
+interface Content {
   id: number;
   title: string;
   date: string;
   url: string;
+  image: string;
 }
 const ModuleContent: React.FC = () => {
   const [batchDownload, setBatchDownload] = useState(false);
-  const [selectedLectures, setSelectedLectures] = useState<Lecture[]>([]);
+  const [selectedContents, setSelectedContents] = useState<Content[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [lecturesPerPage, setLecturesPerPage] = useState(0);
+  const [contentType, setContentType] = useState("Lecture");
   const itemsPerPage = 12;
   const [hoveredDiv, setHoveredDiv] = useState<number | null>(null);
-  const [lectures, setLectures] = useState<Lecture[]>(
-    Array.from({ length: 20 }, (_, index) => ({
-      id: index + 1,
-      title: `Lecture ${index + 1}`,
-      date: "10/19/2023",
-      url: `https://example.com/lecture/${index + 1}`,
-    })),
-  );
+  const [contents, setContents] = useState<Content[]>([]);
 
-  const numOfPages = Math.ceil(lectures.length / itemsPerPage);
-  const indexOfLastLecture = currentPage * itemsPerPage;
-  const indexOfFirstLecture = indexOfLastLecture - itemsPerPage;
-  const currentLectures = lectures.slice(
-    indexOfFirstLecture,
-    indexOfLastLecture,
-  );
   useEffect(() => {
-    if (!batchDownload) {
-      setSelectedLectures([]);
+    const newContents = Array.from({ length: 20 }, (_, index) => ({
+      id: index + 1,
+      title: `${contentType} ${index + 1}`,
+      date: "10/19/2023",
+      url: `https://example.com/${contentType.toLowerCase()}/${index + 1}`,
+      image: `/${contentType.toLowerCase()}Icon.svg`,
+    }));
+    {
+      console.log(`${contentType.toLowerCase()}Icon.svg`);
     }
-  }, [batchDownload]);
+    setContents(newContents);
+  }, [contentType]);
 
-  const handleLectureAddToSelected = (lecture: Lecture) => {
-    setSelectedLectures([...selectedLectures, lecture]);
+  const numOfPages = Math.ceil(contents.length / itemsPerPage);
+  const indexOfLastContent = currentPage * itemsPerPage;
+  const indexOfFirstContent = indexOfLastContent - itemsPerPage;
+  const currentContents = contents.slice(
+    indexOfFirstContent,
+    indexOfLastContent,
+  );
+
+  const handleContentAddToSelected = (content: Content) => {
+    setSelectedContents([...selectedContents, content]);
   };
-  const handleLectureRemoveFromSelected = (lecture: Lecture) => {
-    setSelectedLectures(selectedLectures.filter((l) => l !== lecture));
+  const handleContentRemoveFromSelected = (content: Content) => {
+    setSelectedContents(selectedContents.filter((c) => c !== content));
   };
-  const handleLectureSelectAll = () => {
-    setSelectedLectures(lectures);
+  const handleContentSelectAll = () => {
+    setSelectedContents(contents);
   };
   const handleBatchDownloadClick = () => {
     setBatchDownload(true);
@@ -92,135 +103,121 @@ const ModuleContent: React.FC = () => {
     setBatchDownload(false);
   };
 
-  const openLectureInNewTab = (url: string) => {
+  const openContentInNewTab = (url: string) => {
     window.open(url, "_blank");
   };
+
   return (
-    <div className="flex flex-col h-full   justify-between p-[30px]">
-      <div className="flex flex-col ">
-        <SectionsHeader
-          sectionName="Content"
-          button={
-            <div
-              className={`transition-all duration-500 ease-in-out  flex ${
-                batchDownload ? styles.batchDownload : styles.buttons
-              }`}
-            >
-              {!batchDownload ? (
+    <div className="flex flex-col h-full justify-between p-[30px]">
+      <div className="flex flex-col">
+        <div className="flex h-[75px] text-white items-center px-[15px] py-[15px] w-full rounded-[5px] justify-between bg-[var(--Primary)]">
+          <select
+            id="type"
+            className={`rounded py-[5px] focus:border-none cursor-pointer bg-[var(--Primary)] `}
+            onChange={(e) => setContentType(e.target.value)}
+            value={contentType}
+          >
+            <option value="Lecture">Lectures</option>
+            <option value="Tutorial">Tutorials</option>
+            <option value="Exam">Exams</option>
+            <option value="Project">Projects</option>
+            <option value="ModuleInfo">Module Information</option>
+          </select>
+          <div
+            className={`transition-all duration-500 ease-in-out flex ${
+              batchDownload ? styles.batchDownload : styles.buttons
+            }`}
+          >
+            {!batchDownload ? (
+              <button
+                className="bg-[var(--Secondary)] mr-2 rounded-[10px] flex p-[10px] items-center"
+                onClick={handleBatchDownloadClick}
+              >
+                <DownloadComponentImg fill="var(--Primary)" />
+                <p className="ml-1 text-[color:var(--Primary)]">
+                  Batch Download
+                </p>
+              </button>
+            ) : (
+              <>
                 <button
-                  className="bg-[var(--Secondary)] mr-2 rounded-[10px] flex p-[10px] items-center"
-                  onClick={handleBatchDownloadClick}
+                  className="bg-[#F33950] mr-2 rounded-[10px] p-[10px] flex"
+                  onClick={handleCancelClick}
                 >
+                  <img className="mr-2" src="/Cancel.svg" alt="" />
+                  <p className="text-[color:var(--White)]">Cancel</p>
+                </button>
+                <button className="bg-[var(--White)] mr-2 rounded-[10px] flex p-[10px] items-center">
                   <DownloadComponentImg fill="var(--Primary)" />
-                  <p className="ml-1 text-[color:var(--Primary)] ">
-                    Batch Download
+                  <p className="ml-1 text-[color:var(--Primary)]">
+                    Download Selected
                   </p>
                 </button>
-              ) : (
-                <>
-                  <button
-                    className="bg-[#F33950] mr-2 rounded-[10px] p-[10px] flex"
-                    onClick={handleCancelClick}
-                  >
-                    <img className="mr-2" src="/Cancel.svg" alt="" />
-                    <p className="text-[color:var(--White)] ">Cancel</p>
-                  </button>
-                  <button className="bg-[var(--White)] mr-2 rounded-[10px] flex p-[10px] items-center">
-                    <DownloadComponentImg fill="var(--Primary)" />
-                    <p className="ml-1 text-[color:var(--Primary)] ">
-                      Download Selected
-                    </p>
-                  </button>
-                  <button
-                    className="bg-[var(--White)] rounded-[10px] mr-2 flex p-[10px] items-center"
-                    onClick={() => handleLectureSelectAll()}
-                  >
-                    <SelectAllImg fill="var(--Primary)" />
-                    <p className="ml-1 text-[color:var(--Primary)] ">
-                      Select All
-                    </p>
-                  </button>
-                </>
-              )}
-            </div>
-          }
-        />
-
-        <div className=" h-fit mt-[30px] grid grid-cols-4 gap-[3%] ">
-          {currentLectures.map((lecture) =>
+                <button
+                  className="bg-[var(--White)] rounded-[10px] mr-2 flex p-[10px] items-center"
+                  onClick={handleContentSelectAll}
+                >
+                  <SelectAllImg fill="var(--Primary)" />
+                  <p className="ml-1 text-[color:var(--Primary)]">Select All</p>
+                </button>
+              </>
+            )}
+          </div>
+        </div>
+        <div className="h-fit mt-[30px] grid grid-cols-4 gap-[3%]">
+          {currentContents.map((content) =>
             batchDownload ? (
               <div
-                className={` border-2 rounded-lg p-[8px]  col-span-1 aspect-[153/142] cursor-pointer flex flex-col justify-between
-              ${selectedLectures?.includes(lecture) ? `border-[var(--Primary)]` : ``}
-              `}
-                // onClick={() => openLectureInNewTab(lecture.url)}
+                className={`border-2 rounded-lg p-[8px] col-span-1 aspect-[153/142] cursor-pointer flex flex-col justify-between ${
+                  selectedContents?.includes(content)
+                    ? `border-[var(--Primary)]`
+                    : ``
+                }`}
                 onClick={() => {
-                  selectedLectures?.includes(lecture)
-                    ? handleLectureRemoveFromSelected(lecture)
-                    : handleLectureAddToSelected(lecture);
+                  selectedContents?.includes(content)
+                    ? handleContentRemoveFromSelected(content)
+                    : handleContentAddToSelected(content);
                 }}
               >
-                {/* <motion.div className=" bg-[var(--WDarker)]  rounded-lg relative flex justify-center p-[18px]">
-                <img className=" " src="./LectureIcon.svg" alt="" />
-              </motion.div> */}
-                <motion.div
-                  initial={{ height: "60%" }}
-                  whileHover={{ height: "100%" }}
-                  onMouseEnter={() => setHoveredDiv(lecture.id)}
-                  onMouseLeave={() => setHoveredDiv(null)}
-                  className={`h-[60%]  rounded-lg relative flex justify-center bg-[var(--WDarker)] p-[18px]`}
-                >
-                  <img className=" " src="/lectureIcon.svg" alt="" />
-                </motion.div>
-                <motion.div className="bg-[var(--White)]  rounded-b-lg flex flex-col justify-center">
-                  <p className="text-[#000000] ml-[8px] mb-[5px] font-poppins text-[1vw] font-bold leading-none ">
-                    Lecture {lecture.id}
-                  </p>
-                  <p className="text-[#CCCCCC] ml-[8px] font-poppins text-[0.6vw] font-normal leading-none flex ">
-                    <img src="./Time.svg" alt="" />
-                    {hoveredDiv !== lecture.id && "10/19/2023"}
-                  </p>
-                </motion.div>
+                <ContentComponent
+                  id={content.id}
+                  title={content.title}
+                  date={content.date}
+                  url={content.url}
+                  image={content.image}
+                  setHoveredDiv={setHoveredDiv}
+                  hoveredDiv={hoveredDiv}
+                />
               </div>
             ) : (
               <div
-                className={` border-2 rounded-lg p-[8px]  col-span-1 aspect-[153/142] cursor-pointer flex flex-col justify-between`}
-                onClick={() => openLectureInNewTab(lecture.url)}
+                className="border-[2px] rounded-lg p-2 col-span-1 aspect-[153/142] cursor-pointer flex flex-col  flex-grow-1"
+                onClick={() => openContentInNewTab(content.url)}
               >
-                <motion.div
-                  initial={{ height: "60%" }}
-                  whileHover={{ height: "100%" }}
-                  className=" bg-[var(--WDarker)]  rounded-lg relative flex justify-center p-[18px]"
-                  onMouseEnter={() => setHoveredDiv(lecture.id)}
-                  onMouseLeave={() => setHoveredDiv(null)}
-                >
-                  <img className=" " src="/lectureIcon.svg" alt="" />
-                </motion.div>
-                <motion.div className="bg-[var(--White)]  rounded-b-lg flex flex-col justify-center ">
-                  <p className="text-[#000000] ml-[8px] mb-[5px] font-poppins text-[1vw] font-bold leading-none ">
-                    Lecture {lecture.id}
-                  </p>
-                  <p className="text-[#CCCCCC] ml-[8px] font-poppins text-[0.6vw] font-normal leading-none flex ">
-                    <img src="./Time.svg" alt="" />
-                    {hoveredDiv !== lecture.id && "10/19/2023"}
-                  </p>
-                </motion.div>
+                <ContentComponent
+                  id={content.id}
+                  title={content.title}
+                  date={content.date}
+                  url={content.url}
+                  image={content.image}
+                  setHoveredDiv={setHoveredDiv}
+                  hoveredDiv={hoveredDiv}
+                />
               </div>
             ),
           )}
         </div>
       </div>
-      <div className="w-full flex justify-center  ">
+      <div className="w-full flex justify-center">
         <Pagination
           currentPage={currentPage}
           setCurrentPage={setCurrentPage}
           numOfPages={numOfPages}
-          endIndex={indexOfLastLecture}
-          totalCourses={lectures.length}
+          endIndex={indexOfLastContent}
+          totalCourses={contents.length}
         />
       </div>
     </div>
   );
 };
-
 export default ModuleContent;

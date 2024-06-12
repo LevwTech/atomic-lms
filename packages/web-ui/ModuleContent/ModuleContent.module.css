@@ -5,4 +5,11 @@
 .buttons {
   /* Final state of the buttons */
   transform: translateX(-2%); /* Example transition from left to right */
-} 
+}
+
+/* .select {
+  @apply rounded py-[5px] focus:border-none cursor-pointer;
+  background-blend-mode: multiply;
+  background-color: var(--Primary);
+
+} */
