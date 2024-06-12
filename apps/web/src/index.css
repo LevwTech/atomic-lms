@@ -17,6 +17,7 @@ body {
   --SDarker: #f14900;
   --WDarker: #f3f3f3;
   --Gray: #d9e0f3;
+  --P100: var(--Primary) mix-blend-mode: multiply;
 }
 
 .G1 {
