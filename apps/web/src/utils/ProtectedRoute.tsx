@@ -1,18 +1,33 @@
-// import React from "react";
-// import { Navigate } from "react-router-dom";
-// import { ReactElement } from "react";
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import ReactLoading from "react-loading";
 
-// function ProtectedRoute({
-//   children,
-// }: {
-//   children: React.ReactNode | null;
-// }): React.ReactNode | null {
-//   const session = localStorage.getItem("session");
-//   const { accessToken, role } = session
-//     ? JSON.parse(session)
-//     : { accessToken: null, role: null };
+export default function ProtectedRoute({ children }) {
+  const userInfo = localStorage.getItem("accessToken");
+  const navigate = useNavigate();
 
-//   return accessToken && role === "admin" ? { children } : Navigate("/");
-// }
+  useEffect(() => {
+    if (!userInfo) {
+      setTimeout(() => {
+        navigate("/");
+      }, 3000);
+    }
+  }, [userInfo, navigate]);
 
-// export default ProtectedRoute;
+  return userInfo ? (
+    children
+  ) : (
+    <div className="h-screen w-full flex flex-col gap-5 justify-center items-center ">
+      <p className="text-5xl font-bold"> Please log in first</p>
+      <div className="text-gray-500 flex flex-col items-center gap-5">
+        You now are being redirected to the sign in page
+        <ReactLoading
+          type="spinningBubbles"
+          color="#000000"
+          height={25}
+          width={25}
+        />
+      </div>
+    </div>
+  );
+}

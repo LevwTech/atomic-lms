@@ -49,7 +49,7 @@ export default function Table({ headers, data, refetch }: TableProps) {
       </div>
       <div className="flex flex-col py-2">
         {data.map((item) => (
-          <div className="flex w-full items-center py-6 border-b text-sm">
+          <div className="flex w-full items-center py-5 border-b text-sm">
             {Object.values(item).map((value) => (
               <span className="w-full h-fit pl-4">{value}</span>
             ))}

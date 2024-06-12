@@ -46,21 +46,39 @@ export function SingleCourseGrid({
         />
         <p className="self-end z-10">{courseContent[1].title}</p>
       </div>
-      {courseContent
-        .slice(2, courseContent.length - 2)
-        .map((content, index) => (
-          <div
-            className="p-[20px] bg-[var(--WDarker)] h-full w-full flex rounded-[10px] relative overflow-hidden group cursor-pointer"
-            key={index}
-          >
-            <img
-              alt="icon"
-              className="absolute right-0 top-0 z-0 group-hover:scale-110 transition-all"
-              src={content.img}
-            />
-            <p className="self-end z-10">{content.title}</p>
-          </div>
-        ))}
+      <div className="p-[20px] bg-[var(--WDarker)] h-full w-full flex rounded-[10px] relative overflow-hidden group cursor-pointer">
+        <img
+          alt="icon"
+          className="absolute right-0 top-0 z-0 group-hover:scale-110 transition-all"
+          src="/sheetsIcon.png"
+        />
+        <p className="self-end z-10">{courseContent[2].title}</p>
+      </div>
+      <div className="p-[20px] bg-[var(--WDarker)] h-full w-full flex rounded-[10px] relative overflow-hidden group cursor-pointer">
+        <img
+          alt="icon"
+          className="absolute right-0 top-0 z-0 group-hover:scale-110 transition-all"
+          src="/projectsIcon.png"
+        />
+        <p className="self-end z-10">{courseContent[3].title}</p>
+      </div>
+      <div className="p-[20px] bg-[var(--WDarker)] h-full w-full flex rounded-[10px] relative overflow-hidden group cursor-pointer">
+        <img
+          alt="icon"
+          className="absolute right-0 top-0 z-0 group-hover:scale-110 transition-all"
+          src="/infoIcon.png"
+        />
+        <p className="self-end z-10">{courseContent[4].title}</p>
+      </div>
+      <div className="p-[20px] bg-[var(--WDarker)] h-full w-full flex rounded-[10px] relative overflow-hidden group cursor-pointer">
+        <img
+          alt="icon"
+          className="absolute right-0 top-0 z-0 group-hover:scale-110 transition-all"
+          src="/attendIcon.png"
+        />
+        <p className="self-end z-10">{courseContent[5].title}</p>
+      </div>
+
       <div className={`flex flex-col gap-[30px] ${styles.blueCardTypo}`}>
         <div className="p-[20px] bg-[var(--Primary)] h-full w-full flex rounded-[10px] relative cursor-pointer">
           <img
@@ -68,14 +86,10 @@ export function SingleCourseGrid({
             className="absolute -right-3 -top-3 z-0 group-hover:scale-110 transition-all"
             src="/annoucment.svg"
           />
-          <p className="self-end">
-            {courseContent[courseContent.length - 2].title}
-          </p>
+          <p className="self-end">{courseContent[6].title}</p>
         </div>
         <div className="p-[20px] bg-[var(--Primary)] h-full w-full flex rounded-[10px] relative cursor-pointer">
-          <p className="self-end">
-            {courseContent[courseContent.length - 1].title}
-          </p>
+          <p className="self-end">{courseContent[7].title}</p>
         </div>
       </div>
     </div>
