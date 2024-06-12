@@ -1,0 +1,8 @@
+/* .patchDownload {
+  /* Initial state of the Patch Download button */
+/* } */
+
+.buttons {
+  /* Final state of the buttons */
+  transform: translateX(-2%); /* Example transition from left to right */
+} 

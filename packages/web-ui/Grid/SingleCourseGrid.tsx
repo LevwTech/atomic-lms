@@ -1,3 +1,4 @@
+import { Link, useParams } from "react-router-dom";
 import styles from "./singleCourseGrid.module.css";
 
 interface SingleCourseGridProps {
@@ -11,11 +12,15 @@ interface SingleCourseGridProps {
 export function SingleCourseGrid({
   courseContent,
 }: SingleCourseGridProps): JSX.Element {
+  const { courseName } = useParams();
   return (
     <div
       className={`${styles.grayCardTypo} grid h-full w-full gap-[30px] grid-cols-3 grid-rows-3 pt-[30px] `}
     >
-      <div className="p-[20px] bg-[var(--WDarker)] h-full w-full row-span-2 flex rounded-[10px] relative overflow-hidden group cursor-pointer">
+      <Link
+        className="p-[20px] bg-[var(--WDarker)] h-full w-full row-span-2 flex rounded-[10px] relative overflow-hidden group cursor-pointer"
+        to={`/courses/${courseName}/lectures`}
+      >
         <img
           alt="icon"
           className="absolute top-40 right-8 z-10 w-52 group-hover:scale-110 transition-all"
@@ -27,7 +32,7 @@ export function SingleCourseGrid({
           src="/Exporting/Svg/Styling/Lectures.svg"
         />
         <p className="self-end">{courseContent[0].title}</p>
-      </div>
+      </Link>
       <div className="p-[20px] bg-[var(--WDarker)] h-full w-full col-span-2 flex rounded-[10px] relative overflow-hidden group cursor-pointer">
         <img
           alt="icon"

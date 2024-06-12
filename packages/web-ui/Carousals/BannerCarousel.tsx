@@ -15,7 +15,7 @@ export function BannerCarousal({ images }: { images: Images[] }): JSX.Element {
             alt={images[current].alt}
             key={current}
             animate={{ x: 0, opacity: 1 }}
-            className="h-[250px] w-full rounded-[10px] object-cover"
+            className="h-[225px] w-full rounded-[10px] object-cover"
             exit={{ x: -300, opacity: 0 }}
             initial={{ x: 300, opacity: 0 }}
             src={images[current].src}
