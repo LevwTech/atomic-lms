@@ -23,6 +23,15 @@ usersRouter.post(
   AuthController.createUser,
 );
 
+// get all users
+usersRouter.get(
+  "/get-all",
+  authMiddleware({
+    [USER_TYPES.ADMIN]: [],
+  }),
+  AuthController.getAllUsers,
+);
+
 // takes refresh token and returns new access token and refresh token
 usersRouter.get("/refresh-token", AuthController.refreshToken);
 
@@ -85,6 +94,15 @@ usersRouter.post(
   }),
   validationMiddleware(AuthDTO.editPermissionsGroup),
   AuthController.editPermissionsGroup,
+);
+
+usersRouter.get(
+  "/search",
+  authMiddleware({
+    [USER_TYPES.ADMIN]: [],
+  }),
+  validationMiddleware(AuthDTO.searchUsers),
+  AuthController.searchUsers,
 );
 
 export default usersRouter;

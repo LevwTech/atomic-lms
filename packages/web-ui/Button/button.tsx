@@ -1,5 +1,4 @@
 import type { ComponentProps } from "react";
-import styles from "./button.module.css";
 
 type ButtonProps = ComponentProps<"button"> & {
   onPress: () => void;
@@ -8,7 +7,11 @@ type ButtonProps = ComponentProps<"button"> & {
 
 export function Button({ onPress, children }: ButtonProps): JSX.Element {
   return (
-    <button className={`${styles.button}`} onClick={onPress} type="button">
+    <button
+      className="mt-[10px] p-[10px] rounded-[10px] h-[95px] text-white bg-[#11664f] text-[32px] font-[700] transition-all hover:bg-[#257962]"
+      onClick={onPress}
+      type="button"
+    >
       {children}
     </button>
   );

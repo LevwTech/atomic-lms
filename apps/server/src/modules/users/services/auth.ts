@@ -1,18 +1,18 @@
-import bcrypt from 'bcrypt';
-import { AuthDTO } from '@atomic/dto';
-import jwt from 'jsonwebtoken';
+import bcrypt from "bcrypt";
+import { AuthDTO } from "@atomic/dto";
+import jwt from "jsonwebtoken";
 
-import UserModel from '../models/user/user.model';
-import { DTOBodyType } from '../../../common/types/DTOType';
-import { API_ERROR } from '../../../common/helpers/throwApiError';
-import { API_MESSAGES } from '../../../common/helpers/apiMessages';
+import UserModel from "../models/user/user.model";
+import { DTOBodyType } from "../../../common/types/DTOType";
+import { API_ERROR } from "../../../common/helpers/throwApiError";
+import { API_MESSAGES } from "../../../common/helpers/apiMessages";
 import {
   PERMISSIONS_TYPE,
   USER_TYPES,
   getPermissionsArrayForUserType,
-} from '@atomic/common';
-import { tokenBodyType } from '../../../common/types/jwtPayload';
-import PermissionsGroupModel from '../models/permissionGroup/permissionsGroup.model';
+} from "@atomic/common";
+import { tokenBodyType } from "../../../common/types/jwtPayload";
+import PermissionsGroupModel from "../models/permissionGroup/permissionsGroup.model";
 
 class AuthSerivce {
   public static async createUser(user: DTOBodyType<typeof AuthDTO.createUser>) {
@@ -25,16 +25,24 @@ class AuthSerivce {
     });
   }
 
+  public static async getAllUsers(
+    page: number,
+    limit: number,
+    type?: USER_TYPES,
+  ) {
+    return await UserModel.getAllUsers(page, limit, type);
+  }
+
   static async signTokens(username: string, email: string, type: USER_TYPES) {
     const accessToken = jwt.sign(
       { email, username, type },
       process.env.ACCESS_TOKEN_SECRET!,
-      { expiresIn: process.env.NODE_ENV === 'development' ? '90d' : '15m' }
+      { expiresIn: process.env.NODE_ENV === "development" ? "90d" : "15m" },
     );
     const refreshToken = jwt.sign(
       { email, username, type },
       process.env.REFRESH_TOKEN_SECRET!,
-      { expiresIn: '90d' }
+      { expiresIn: "90d" },
     );
 
     return { accessToken, refreshToken };
@@ -43,7 +51,7 @@ class AuthSerivce {
   public static async refreshToken(refreshToken: string) {
     const jwtPayload = jwt.verify(
       refreshToken,
-      process.env.REFRESH_TOKEN_SECRET!
+      process.env.REFRESH_TOKEN_SECRET!,
     ) as tokenBodyType;
 
     const user = await UserModel.getUserByUsername(jwtPayload.username);
@@ -52,7 +60,7 @@ class AuthSerivce {
       throw new API_ERROR(API_MESSAGES.INVALID_CREDENTIALS);
     }
 
-    if (!user.refreshTokens.includes(refreshToken.split('.')[2])) {
+    if (!user.refreshTokens.includes(refreshToken.split(".")[2])) {
       throw new API_ERROR(API_MESSAGES.INVALID_CREDENTIALS);
     }
 
@@ -61,8 +69,8 @@ class AuthSerivce {
 
     await UserModel.updateUserRefreshToken(
       user.username,
-      newRefreshToken.split('.')[2],
-      refreshToken.split('.')[2]
+      newRefreshToken.split(".")[2],
+      refreshToken.split(".")[2],
     );
 
     return { accessToken, refreshToken: newRefreshToken };
@@ -84,12 +92,12 @@ class AuthSerivce {
     const { accessToken, refreshToken } = await this.signTokens(
       user.username,
       user.email,
-      user.type
+      user.type,
     );
 
     await UserModel.updateUserRefreshToken(
       username,
-      refreshToken.split('.')[2]
+      refreshToken.split(".")[2],
     );
 
     return { accessToken, refreshToken };
@@ -98,7 +106,7 @@ class AuthSerivce {
   public static async logout(refreshToken: string) {
     const jwtPayload = jwt.verify(
       refreshToken,
-      process.env.REFRESH_TOKEN_SECRET!
+      process.env.REFRESH_TOKEN_SECRET!,
     ) as tokenBodyType;
 
     const user = await UserModel.getUserByUsername(jwtPayload.username);
@@ -109,7 +117,7 @@ class AuthSerivce {
 
     await UserModel.removeUserRefreshToken(
       user.username,
-      refreshToken.split('.')[2]
+      refreshToken.split(".")[2],
     );
   }
 
@@ -119,7 +127,7 @@ class AuthSerivce {
 
   public static async addPermissions(
     usernames: string[],
-    permissions: string[]
+    permissions: string[],
   ) {
     const users = await UserModel.getUsersByUsernames(usernames);
 
@@ -139,13 +147,13 @@ class AuthSerivce {
 
   public static async removePermissions(
     usernames: string[],
-    permissions: string[]
+    permissions: string[],
   ) {
     const users = await UserModel.getUsersByUsernames(usernames);
 
     users.forEach((user) => {
       user.permissions = user.permissions.filter(
-        (permission) => !permissions.includes(permission as string)
+        (permission) => !permissions.includes(permission as string),
       );
     });
 
@@ -153,13 +161,13 @@ class AuthSerivce {
   }
 
   public static async createPermissionsGroup(
-    permissionsGroup: DTOBodyType<typeof AuthDTO.createPermissionsGroup>
+    permissionsGroup: DTOBodyType<typeof AuthDTO.createPermissionsGroup>,
   ) {
     await PermissionsGroupModel.createPermissionsGroup(permissionsGroup);
   }
 
   public static async deletePermissionsGroup(
-    permissionGroup: DTOBodyType<typeof AuthDTO.deletePermissionsGroup>
+    permissionGroup: DTOBodyType<typeof AuthDTO.deletePermissionsGroup>,
   ) {
     if (permissionGroup.id) {
       await PermissionsGroupModel.deletePermissionsGroup({
@@ -175,7 +183,7 @@ class AuthSerivce {
   }
 
   public static async editPermissionsGroup(
-    permissionsGroup: DTOBodyType<typeof AuthDTO.editPermissionsGroup>
+    permissionsGroup: DTOBodyType<typeof AuthDTO.editPermissionsGroup>,
   ) {
     const group = await PermissionsGroupModel.getGroupPermission({
       groupId: permissionsGroup.id,
@@ -202,13 +210,13 @@ class AuthSerivce {
     if (permissionsGroup.removePermissions) {
       group.permissions = group.permissions.filter(
         (permission) =>
-          !permissionsGroup.removePermissions?.includes(permission)
+          !permissionsGroup.removePermissions?.includes(permission),
       );
     }
 
     if (permissionsGroup.addUsers) {
       const users = await UserModel.getUsersByUsernames(
-        permissionsGroup.addUsers
+        permissionsGroup.addUsers,
       );
       users.forEach((user) => {
         user.permissionGroups.push(group);
@@ -218,17 +226,21 @@ class AuthSerivce {
 
     if (permissionsGroup.removeUsers) {
       const users = await UserModel.getUsersByUsernames(
-        permissionsGroup.removeUsers
+        permissionsGroup.removeUsers,
       );
       users.forEach((user) => {
         user.permissionGroups = user.permissionGroups.filter(
-          (permissionGroup) => permissionGroup.id !== group.id
+          (permissionGroup) => permissionGroup.id !== group.id,
         );
       });
       await UserModel.saveUsers(users);
     }
 
     await PermissionsGroupModel.savePermissionsGroup(group);
+  }
+
+  public static async searchUsers(search: string, type?: USER_TYPES) {
+    return await UserModel.searchUsers(search, type);
   }
 }
 

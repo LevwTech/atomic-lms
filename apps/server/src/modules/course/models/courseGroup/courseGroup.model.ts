@@ -1,12 +1,26 @@
-import { QueryFailedError, In } from 'typeorm';
-import { PostGresDataSource } from '../../../../app';
-import { CourseGroup } from './courseGroup.entity';
-import { API_ERROR } from '../../../../common/helpers/throwApiError';
-import { API_MESSAGES } from '../../../../common/helpers/apiMessages';
-import CourseModel from '../course/course.model';
+import { QueryFailedError, In, ILike } from "typeorm";
+import { PostGresDataSource } from "../../../../app";
+import { CourseGroup } from "./courseGroup.entity";
+import { API_ERROR } from "../../../../common/helpers/throwApiError";
+import { API_MESSAGES } from "../../../../common/helpers/apiMessages";
+import CourseModel from "../course/course.model";
 
 export class CourseGroupModel {
-  
+  public static async getAllCourseGroups(page: number, limit: number) {
+    const [courseGroups, totalCount] = await PostGresDataSource.getRepository(
+      CourseGroup,
+    ).findAndCount({
+      skip: (page - 1) * limit,
+      take: limit,
+      order: { name: "ASC" },
+      relations: ["courses"],
+    });
+    return {
+      courseGroups: courseGroups,
+      totalPages: Math.ceil(totalCount / limit),
+    };
+  }
+
   public static async getCourseGroup({
     groupId,
     groupName,
@@ -21,7 +35,7 @@ export class CourseGroupModel {
   public static async getCourseGroups(courseGroupIds: string[]) {
     let query = {
       where: { id: In(courseGroupIds) },
-    }
+    };
     return await PostGresDataSource.getRepository(CourseGroup).find(query);
   }
 
@@ -33,16 +47,23 @@ export class CourseGroupModel {
     await PostGresDataSource.getRepository(CourseGroup).save(groups);
   }
 
-  public static async createCourseGroup({ name, courseIds }: { name: string, courseIds?: string[]}) {
+  public static async createCourseGroup({
+    name,
+    courseIds,
+  }: {
+    name: string;
+    courseIds?: string[];
+  }) {
     const group = new CourseGroup();
     group.name = name;
-    if (courseIds && courseIds.length) group.courses =  Promise.resolve(await CourseModel.getCourses(courseIds));
+    if (courseIds && courseIds.length)
+      group.courses = Promise.resolve(await CourseModel.getCourses(courseIds));
     try {
       await this.saveCourseGroup(group);
     } catch (err) {
       if (
         err instanceof QueryFailedError &&
-        err.message.includes('duplicate key')
+        err.message.includes("duplicate key")
       ) {
         throw new API_ERROR(API_MESSAGES.GROUP_ALREADY_EXISTS);
       }
@@ -74,15 +95,20 @@ export class CourseGroupModel {
     if (groupIds && groupIds.length) {
       query = {
         where: { id: In(groupIds) },
-      }
+      };
     } else if (groupNames && groupNames.length) {
       query = {
         where: { id: In(groupNames) },
-      }
+      };
     }
     await PostGresDataSource.getRepository(CourseGroup).delete(query);
   }
 
+  public static async searchCourseGroupByName(name: string) {
+    return await PostGresDataSource.getRepository(CourseGroup).find({
+      where: { name: ILike(`%${name}%`) },
+    });
+  }
 }
 
 export default CourseGroupModel;

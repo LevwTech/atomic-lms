@@ -1,7 +1,9 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { CoursesGrid } from "@atomic/web-ui";
 import { BannerCarousal } from "@atomic/web-ui";
 import { Pagination } from "@atomic/web-ui";
+import { useLocation } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
 
 export default function CoursesPage() {
   const images = [
@@ -19,62 +21,49 @@ export default function CoursesPage() {
     },
   ];
 
-  const courses = [
-    {
-      name: "Algebra",
-      semester: 1,
-      id: "1",
-    },
-    {
-      name: "Geometry",
-      semester: 1,
-      id: "2",
-    },
-    {
-      name: "Math",
-      semester: 1,
-      id: "3",
-    },
-    {
-      name: "Arabic",
-      semester: 1,
-      id: "4",
-    },
-    {
-      name: "Physics",
-      semester: 1,
-      id: "5",
-    },
-    {
-      name: "Chemistry",
-      semester: 1,
-      id: "6",
-    },
-    {
-      name: "Biology",
-      semester: 1,
-      id: "7",
-    },
-    {
-      name: "Embryology",
-      semester: 1,
-      id: "8",
-    },
-    {
-      name: "Anatomy",
-      semester: 1,
-      id: "9",
-    },
-    {
-      name: "Physiology",
-      semester: 1,
-      id: "10",
-    },
-  ];
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+
+  const [page, setPage] = useState<number>(
+    parseInt(searchParams.get("page") || "1"),
+  );
+
+  const [type, setType] = useState<string | null>(
+    searchParams.get("type") || null,
+  );
+
+  const [limit, setLimit] = useState<number>(
+    parseInt(searchParams.get("limit") || "5"),
+  );
+
+  useEffect(() => {
+    searchParams.set("page", page.toString());
+    searchParams.set("limit", limit.toString());
+    if (type) {
+      searchParams.set("type", type);
+    } else {
+      searchParams.delete("type");
+    }
+    window.history.replaceState(
+      null,
+      "",
+      `${location.pathname}?${searchParams.toString()}`,
+    );
+  }, [page, limit, location.pathname, searchParams, type]);
+
+  const { isLoading, data: courses } = useQuery({
+    queryKey: ["users", { page }],
+    queryFn: () =>
+      fetch(`http://localhost:3000/course/course?option=ENROLLED`, {
+        headers: {
+          authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+        },
+      }).then((res) => res.json()),
+  });
 
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 8;
-  const totalCourses = courses.length;
+  const totalCourses = courses?.courses.length;
   const numOfPages = totalCourses / 8;
 
   // Calculate start and end index based on currentPage
@@ -82,7 +71,12 @@ export default function CoursesPage() {
   const endIndex = startIndex + itemsPerPage;
 
   // Slice the array to display only the relevant portion
-  const displayedCourses = courses.slice(startIndex, endIndex);
+  const displayedCourses = courses?.courses.slice(startIndex, endIndex);
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
   return (
     <div className="h-screen p-[30px] flex justify-between gap-[30px]">
       <div className="h-full w-[50vw] rounded-[14px] items-center justify-between flex flex-col bg-white p-[30px] overflow-hidden">

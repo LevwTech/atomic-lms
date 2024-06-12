@@ -1,14 +1,15 @@
-import { Request, Response } from 'express';
-import { AuthDTO } from '@atomic/dto';
-import { StatusCodes, getReasonPhrase } from 'http-status-codes';
+import { Request, Response } from "express";
+import { AuthDTO } from "@atomic/dto";
+import { StatusCodes, getReasonPhrase } from "http-status-codes";
 
-import AuthSerivce from '../services/auth';
-import { ValidatedRequest } from '../../../common/middlewares/validationMiddleware';
+import AuthSerivce from "../services/auth";
+import { ValidatedRequest } from "../../../common/middlewares/validationMiddleware";
+import { USER_TYPES } from "@atomic/common";
 
 class AuthController {
   public static async login(
     req: ValidatedRequest<typeof AuthDTO.login>,
-    res: Response
+    res: Response,
   ) {
     const { username, password } = req.body;
 
@@ -17,9 +18,18 @@ class AuthController {
     return res.status(StatusCodes.OK).json(tokens);
   }
 
+  public static async getAllUsers(req: Request, res: Response) {
+    const page = req.query.page ? parseInt(req.query.page as string) : 1;
+    const limit = req.query.limit ? parseInt(req.query.limit as string) : 10;
+    const type = req.query.type as USER_TYPES | undefined;
+
+    const users = await AuthSerivce.getAllUsers(page, limit, type);
+    return res.status(StatusCodes.OK).json(users);
+  }
+
   public static async createUser(
     req: ValidatedRequest<typeof AuthDTO.createUser>,
-    res: Response
+    res: Response,
   ) {
     const userData = req.body;
 
@@ -33,7 +43,7 @@ class AuthController {
   public static async refreshToken(req: Request, res: Response) {
     const authToken = req.headers.authorization;
 
-    const tokens = await AuthSerivce.refreshToken(authToken!.split(' ')[1]);
+    const tokens = await AuthSerivce.refreshToken(authToken!.split(" ")[1]);
 
     return res.status(StatusCodes.OK).json(tokens);
   }
@@ -41,7 +51,7 @@ class AuthController {
   public static async logout(req: Request, res: Response) {
     const authToken = req.headers.authorization;
 
-    await AuthSerivce.logout(authToken!.split(' ')[1]);
+    await AuthSerivce.logout(authToken!.split(" ")[1]);
 
     return res
       .status(StatusCodes.OK)
@@ -50,7 +60,7 @@ class AuthController {
 
   public static async deleteUser(
     req: ValidatedRequest<typeof AuthDTO.deleteUser>,
-    res: Response
+    res: Response,
   ) {
     const { username } = req.body;
 
@@ -63,7 +73,7 @@ class AuthController {
 
   public static async addPermissions(
     req: ValidatedRequest<typeof AuthDTO.addPermissions>,
-    res: Response
+    res: Response,
   ) {
     const { usernames, permissions } = req.body;
 
@@ -76,7 +86,7 @@ class AuthController {
 
   public static async removePermissions(
     req: ValidatedRequest<typeof AuthDTO.addPermissions>,
-    res: Response
+    res: Response,
   ) {
     const { usernames, permissions } = req.body;
 
@@ -89,7 +99,7 @@ class AuthController {
 
   public static async createPermissionsGroup(
     req: ValidatedRequest<typeof AuthDTO.createPermissionsGroup>,
-    res: Response
+    res: Response,
   ) {
     const group = req.body;
 
@@ -102,7 +112,7 @@ class AuthController {
 
   public static async deletePermissionsGroup(
     req: ValidatedRequest<typeof AuthDTO.deletePermissionsGroup>,
-    res: Response
+    res: Response,
   ) {
     const body = req.body;
 
@@ -115,7 +125,7 @@ class AuthController {
 
   public static async editPermissionsGroup(
     req: ValidatedRequest<typeof AuthDTO.editPermissionsGroup>,
-    res: Response
+    res: Response,
   ) {
     const group = req.body;
 
@@ -124,6 +134,17 @@ class AuthController {
     return res
       .status(StatusCodes.OK)
       .json({ message: getReasonPhrase(StatusCodes.OK) });
+  }
+
+  public static async searchUsers(
+    req: ValidatedRequest<typeof AuthDTO.searchUsers>,
+    res: Response,
+  ) {
+    const { q, type } = req.query;
+
+    const users = await AuthSerivce.searchUsers(q, type);
+
+    return res.status(StatusCodes.OK).json(users);
   }
 }
 
