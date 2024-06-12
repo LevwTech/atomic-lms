@@ -25,11 +25,12 @@ export function CoursesGrid({
     >
       {displayedCourses.map((course, index) => (
         <CoursesCard
+          id={course.id}
+          academicDuration={course.academicDuration}
           courseName={course.name}
           img={`/Asset${index + 1}.png`}
           index={index}
           key={index}
-          semester={course.semester}
         />
       ))}
     </motion.div>

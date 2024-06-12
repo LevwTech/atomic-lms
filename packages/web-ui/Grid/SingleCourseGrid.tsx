@@ -2,7 +2,7 @@ import styles from "./singleCourseGrid.module.css";
 
 interface SingleCourseGridProps {
   courseContent: {
-    header: string;
+    title: string;
     img: string;
     icon: string;
   }[];
@@ -26,7 +26,7 @@ export function SingleCourseGrid({
           className="absolute left-0 top-0 w-52 group-hover:scale-110 transition-all"
           src="/Exporting/Svg/Styling/Lectures.svg"
         />
-        <p className="self-end">{courseContent[0].header}</p>
+        <p className="self-end">{courseContent[0].title}</p>
       </div>
       <div className="p-[20px] bg-[var(--WDarker)] h-full w-full col-span-2 flex rounded-[10px] relative overflow-hidden group cursor-pointer">
         <img
@@ -39,7 +39,7 @@ export function SingleCourseGrid({
           className="absolute right-0 bottom-0 z-0 w-52 group-hover:scale-110 transition-all"
           src="/Exporting/Svg/Styling/Exams.svg"
         />
-        <p className="self-end z-10">{courseContent[1].header}</p>
+        <p className="self-end z-10">{courseContent[1].title}</p>
       </div>
       {courseContent
         .slice(2, courseContent.length - 2)
@@ -53,7 +53,7 @@ export function SingleCourseGrid({
               className="absolute right-0 top-0 z-0 group-hover:scale-110 transition-all"
               src={content.img}
             />
-            <p className="self-end z-10">{content.header}</p>
+            <p className="self-end z-10">{content.title}</p>
           </div>
         ))}
       <div className={`flex flex-col gap-[30px] ${styles.blueCardTypo}`}>
@@ -64,12 +64,12 @@ export function SingleCourseGrid({
             src="/annoucment.svg"
           />
           <p className="self-end">
-            {courseContent[courseContent.length - 2].header}
+            {courseContent[courseContent.length - 2].title}
           </p>
         </div>
         <div className="p-[20px] bg-[var(--Primary)] h-full w-full flex rounded-[10px] relative cursor-pointer">
           <p className="self-end">
-            {courseContent[courseContent.length - 1].header}
+            {courseContent[courseContent.length - 1].title}
           </p>
         </div>
       </div>

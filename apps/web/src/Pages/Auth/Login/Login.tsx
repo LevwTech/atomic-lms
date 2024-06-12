@@ -1,5 +1,6 @@
-import { Carousal, LoginForm } from "@atomic/web-ui";
+import { Carousal } from "@atomic/web-ui";
 import styles from "./Login.module.css";
+import { LoginForm } from "../../../components/forms/LoginForm";
 function LoginPage() {
   const images = [
     {
@@ -15,6 +16,7 @@ function LoginPage() {
       alt: "image3",
     },
   ];
+
   return (
     <div className={styles.LoginPage}>
       <img

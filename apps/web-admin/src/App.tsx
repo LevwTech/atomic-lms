@@ -1,32 +1,97 @@
-import { useState } from "react";
-import reactLogo from "./assets/react.svg";
-import viteLogo from "/vite.svg";
+import { Route, Routes } from "react-router-dom";
+import Courses from "./pages/Courses";
+import Users from "./pages/Users";
+import Permissions from "./pages/Permissions";
+import Permission from "./pages/Permission";
+import NewPermission from "./pages/NewPermission";
+import NewUser from "./pages/NewUser";
+import NewCourse from "./pages/NewCourse";
+import Course from "./pages/Course";
+import NewGroup from "./pages/NewGroup";
+import Login from "./pages/Login";
+import ProtectedRoute from "./utils/ProtectedRoute";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function App() {
-  const [count, setCount] = useState(0);
-
   return (
     <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      <Routes>
+        <Route path="/" element={<Login />} />
+        <Route
+          path="/courses"
+          element={
+            <ProtectedRoute>
+              <Courses />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/courses/new"
+          element={
+            <ProtectedRoute>
+              <NewCourse />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/groups/new"
+          element={
+            <ProtectedRoute>
+              <NewGroup />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/courses/edit/:id"
+          element={
+            <ProtectedRoute>
+              <Course />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/users"
+          element={
+            <ProtectedRoute>
+              <Users />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/users/new"
+          element={
+            <ProtectedRoute>
+              <NewUser />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/permissions"
+          element={
+            <ProtectedRoute>
+              <Permissions />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/permissions/new"
+          element={
+            <ProtectedRoute>
+              <NewPermission />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/permissions/edit/:id"
+          element={
+            <ProtectedRoute>
+              <Permission />
+            </ProtectedRoute>
+          }
+        />
+      </Routes>
+      <ToastContainer position="bottom-center" limit={1} autoClose={2000} />
     </>
   );
 }

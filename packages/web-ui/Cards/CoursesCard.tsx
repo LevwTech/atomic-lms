@@ -2,22 +2,32 @@ import styles from "./CoursesCard.module.css";
 import { Link } from "react-router-dom";
 
 interface CoursesCardProps {
+  id: string;
   img: string;
   courseName: string;
-  semester: number;
+  academicDuration: string;
   index: number;
 }
 
 export function CoursesCard({
+  id,
   img,
   courseName,
-  semester,
+  academicDuration,
   index,
 }: CoursesCardProps): JSX.Element {
   return (
-    <Link className={styles.card} to={`/courses/${courseName}`}>
+    <Link
+      className={styles.card}
+      to={{
+        pathname: `/courses/${id}`,
+        state: {
+          courseName,
+        },
+      }}
+    >
       <div
-        className={`w-full h-[135px] flex justify-center items-center rounded-[5px] G${
+        className={`w-full h-[105px] flex justify-center items-center rounded-[5px] G${
           index + 1
         }`}
       >
@@ -25,7 +35,7 @@ export function CoursesCard({
       </div>
       <div className="flex flex-col">
         <p className={styles.cardTypographyHeader}>{courseName}</p>
-        <p className={styles.cardTypographySubHeader}>Semester {semester}</p>
+        <p className={styles.cardTypographySubHeader}>{academicDuration}</p>
       </div>
     </Link>
   );

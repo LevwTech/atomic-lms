@@ -7,6 +7,23 @@ import getUserFromRequest from "../../../common/helpers/getUserFromRequest";
 import { studentCoursesOptions } from "@atomic/common";
 
 export default class CourseController {
+  public static async getAllCourses(req: Request, res: Response) {
+    const page = req.query.page ? parseInt(req.query.page as string) : 1;
+    const limit = req.query.limit ? parseInt(req.query.limit as string) : 10;
+    const isBase = req.query.isBase as string | undefined;
+
+    const courses = await CourseService.getAllCourses(page, limit, isBase);
+    return res.status(StatusCodes.OK).json(courses);
+  }
+
+  public static async getAllCourseGroups(req: Request, res: Response) {
+    const page = req.query.page ? parseInt(req.query.page as string) : 1;
+    const limit = req.query.limit ? parseInt(req.query.limit as string) : 10;
+
+    const courseGroups = await CourseService.getAllCourseGroups(page, limit);
+    return res.status(StatusCodes.OK).json(courseGroups);
+  }
+
   public static async createCourse(
     req: ValidatedRequest<typeof CourseDTO.createCourse>,
     res: Response,
@@ -187,5 +204,26 @@ export default class CourseController {
     const user = getUserFromRequest(req);
     const courses = await CourseService.getUserTeachingCourses(user.username);
     return res.status(StatusCodes.OK).json({ courses });
+  }
+
+  public static async searchCourseByName(
+    req: ValidatedRequest<typeof CourseDTO.searchCourseByName>,
+    res: Response,
+  ) {
+    const { name, isbase } = req.query;
+    const isBase = isbase === "true";
+
+    const courses = await CourseService.searchCourseByName(name, isBase);
+    return res.status(StatusCodes.OK).json({ courses });
+  }
+
+  public static async searchCourseGroupByName(
+    req: ValidatedRequest<typeof CourseDTO.searchCourseGroupByName>,
+    res: Response,
+  ) {
+    const { name } = req.query;
+
+    const courseGroups = await CourseService.searchCourseGroupByName(name);
+    return res.status(StatusCodes.OK).json({ courseGroups });
   }
 }
