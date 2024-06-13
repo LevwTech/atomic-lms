@@ -65,7 +65,7 @@ export default function Courses(): JSX.Element {
   if (selection === "Courses") {
     headers.push("Name", "Code", "Start Date", "End Date");
   } else {
-    headers.push("Name", "Number of Groups");
+    headers.push("Name", "Number of Courses");
   }
 
   let updatesTable = [];

@@ -1,6 +1,8 @@
 import { Carousal } from "@atomic/web-ui";
 import styles from "./Login.module.css";
 import { LoginForm } from "../../../components/forms/LoginForm";
+import { useNavigate } from "react-router-dom";
+import React from "react";
 function LoginPage() {
   const images = [
     {
@@ -16,6 +18,15 @@ function LoginPage() {
       alt: "image3",
     },
   ];
+
+  const navigate = useNavigate();
+
+  React.useEffect(() => {
+    const token = localStorage.getItem("accessToken");
+    if (token) {
+      navigate("/courses");
+    }
+  }, [navigate]);
 
   return (
     <div className={styles.LoginPage}>

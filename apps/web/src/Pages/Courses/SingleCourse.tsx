@@ -6,6 +6,7 @@ import { useQuery } from "@tanstack/react-query";
 import Announcements from "@atomic/web-ui/Announcements/Announcements";
 import SideBar from "@atomic/web-ui/SideBar/sideBar";
 import { useParams } from "react-router-dom";
+import ReactLoading from "react-loading";
 // import Sidebar from "@atomic/web-ui/SideBar/sideBar";
 export default function SingleCoursePage() {
   const { id } = useParams();
@@ -21,7 +22,11 @@ export default function SingleCoursePage() {
   });
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return (
+      <div className="h-screen p-[40px] flex items-center justify-center gap-[40px]">
+        <ReactLoading type="spinningBubbles" color="#11664F" />
+      </div>
+    );
   }
 
   return (
