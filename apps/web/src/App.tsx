@@ -9,6 +9,7 @@ import ProtectedRoute from "./utils/ProtectedRoute";
 import { useEffect, useState } from "react";
 import { useUserStore } from "./store/user.store";
 import ReactLoading from "react-loading";
+import Uplaod from "./Pages/Courses/Upload";
 
 function App() {
   const [loading, setLoading] = useState(true);
@@ -96,6 +97,14 @@ function App() {
         element={
           <ProtectedRoute>
             <ModuleContentPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/upload"
+        element={
+          <ProtectedRoute>
+            <Uplaod />
           </ProtectedRoute>
         }
       />
