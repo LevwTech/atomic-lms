@@ -146,7 +146,7 @@ courseRouter.get(
 courseRouter.get(
   "/course-teacher",
   authMiddleware({
-    [USER_TYPES.TEACHER]: [TEACHER_PERMISSIONS.GET_COURSE],
+    [USER_TYPES.TEACHER]: [],
   }),
   CourseController.getUserTeachingCourses,
 );

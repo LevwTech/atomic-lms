@@ -5,6 +5,7 @@ import { StatusCodes, getReasonPhrase } from "http-status-codes";
 import AuthSerivce from "../services/auth";
 import { ValidatedRequest } from "../../../common/middlewares/validationMiddleware";
 import { USER_TYPES } from "@atomic/common";
+import getUserFromRequest from "../../../common/helpers/getUserFromRequest";
 
 class AuthController {
   public static async login(
@@ -145,6 +146,18 @@ class AuthController {
     const users = await AuthSerivce.searchUsers(q, type);
 
     return res.status(StatusCodes.OK).json(users);
+  }
+
+  public static async me(req: Request, res: Response) {
+    const user = getUserFromRequest(req);
+
+    return res.status(StatusCodes.OK).json({
+      name: user.firstName + " " + user.lastName,
+      type: user.type,
+      id: user.id,
+      email: user.email,
+      username: user.username,
+    });
   }
 }
 

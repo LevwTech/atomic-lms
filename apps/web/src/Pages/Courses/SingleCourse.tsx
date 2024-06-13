@@ -9,17 +9,19 @@ import { useParams } from "react-router-dom";
 import ReactLoading from "react-loading";
 // import Sidebar from "@atomic/web-ui/SideBar/sideBar";
 export default function SingleCoursePage() {
-  const { id } = useParams();
+  const { courseId } = useParams();
 
   const { isLoading, data: courseContent } = useQuery({
-    queryKey: ["users", { id }],
+    queryKey: ["users", { id: courseId }],
     queryFn: () =>
-      fetch(`http://localhost:3000/course-marerial/${id}`, {
+      fetch(`http://localhost:3000/course-marerial/${courseId}`, {
         headers: {
           authorization: `Bearer ${localStorage.getItem("accessToken")}`,
         },
       }).then((res) => res.json()),
   });
+
+  console.log(courseContent);
 
   if (isLoading) {
     return (
@@ -39,7 +41,10 @@ export default function SingleCoursePage() {
       {/* <div className=" h-full w-[55vw]  rounded-[13.6px] relative"></div> */}
       <div className="h-full w-[50vw] rounded-[14px] items-center justify-between flex flex-col bg-white p-[30px]">
         <SectionsHeader sectionName={courseContent.course.name} />
-        <SingleCourseGrid courseContent={courseContent.material.sections} />
+        <SingleCourseGrid
+          courseContent={courseContent.material.sections}
+          courseId={courseId!}
+        />
       </div>
       <div className="bg-[var(--White)] h-full w-[30vw] rounded-[14px]">
         <Announcements />

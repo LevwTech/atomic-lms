@@ -105,4 +105,6 @@ usersRouter.get(
   AuthController.searchUsers,
 );
 
+usersRouter.get("/me", authMiddleware(), AuthController.me);
+
 export default usersRouter;

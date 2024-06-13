@@ -1,12 +1,14 @@
 import { create } from "zustand";
 
-type CourseMaterial = {
+export type CourseMaterialSection = {
+  _id: string;
+  title: string;
+  description?: string;
+}[];
+
+export type CourseMaterial = {
   courseId: string;
-  sections: {
-    _id: string;
-    title: string;
-    description?: string;
-  }[];
+  sections: CourseMaterialSection;
 };
 
 interface CourseStore {

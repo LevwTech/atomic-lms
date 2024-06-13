@@ -3,16 +3,22 @@ import Sidebar from "@atomic/web-ui/SideBar/sideBar";
 import Courses from "./Courses";
 import ReactLoading from "react-loading";
 import { useQuery } from "@tanstack/react-query";
+import { USER_TYPES, useUserStore } from "../../store/user.store";
 
 function CoursesPage() {
+  const user = useUserStore();
+
   const { isLoading, data: courses } = useQuery({
     queryKey: ["users"],
     queryFn: () =>
-      fetch(`http://localhost:3000/course/course?option=ENROLLED`, {
-        headers: {
-          authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+      fetch(
+        `http://localhost:3000/course/${user.type === USER_TYPES.STUDENT ? "course" : "course-teacher"}?option=ENROLLED`,
+        {
+          headers: {
+            authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+          },
         },
-      }).then((res) => res.json()),
+      ).then((res) => res.json()),
   });
 
   if (isLoading) {
