@@ -1,8 +1,5 @@
-import React, { useState, useEffect, useRef } from "react";
-import { motion } from "framer-motion";
+import React, { useState, useEffect } from "react";
 import { Pagination } from "../Pagination/Pagination";
-import { SectionsHeader } from "../headers/SectionsHeader";
-import LectureComponent from "../contentComponent/LectureComponent";
 import ContentComponent from "../contentComponent/ContentComponent";
 import styles from "./ModuleContent.module.css";
 
@@ -49,39 +46,48 @@ const SelectAllImg: React.FC<SelectAllProps> = (props) => (
 //   url: string;
 // }
 interface Content {
-  id: number;
+  _id: string;
   title: string;
-  date: string;
+  fileName: string;
+  key: string;
   url: string;
-  image: string;
+  contentType: string;
 }
-const ModuleContent: React.FC = () => {
+
+const ModuleContent: React.FC<{
+  type: string;
+  files: Content[];
+  changeSection: (sectionTitle: string) => void;
+}> = ({ type, files, changeSection }) => {
   const [batchDownload, setBatchDownload] = useState(false);
   const [selectedContents, setSelectedContents] = useState<Content[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [contentType, setContentType] = useState("Lecture");
+  const [contentType, setContentType] = useState(type);
   const itemsPerPage = 12;
   const [hoveredDiv, setHoveredDiv] = useState<number | null>(null);
   const [contents, setContents] = useState<Content[]>([]);
 
   useEffect(() => {
-    const newContents = Array.from({ length: 20 }, (_, index) => ({
-      id: index + 1,
-      title: `${contentType} ${index + 1}`,
-      date: "10/19/2023",
-      url: `https://example.com/${contentType.toLowerCase()}/${index + 1}`,
-      image: `/${contentType.toLowerCase()}Icon.svg`,
-    }));
-    {
-      console.log(`${contentType.toLowerCase()}Icon.svg`);
-    }
-    setContents(newContents);
-  }, [contentType]);
+    // const newContents = Array.from({ length: 20 }, (_, index) => ({
+    //   id: index + 1,
+    //   title: `${contentType} ${index + 1}`,
+    //   date: "10/19/2023",
+    //   url: `https://example.com/${contentType.toLowerCase()}/${index + 1}`,
+    //   image: `/${contentType.toLowerCase()}Icon.svg`,
+    // }));
+    // {
+    //   console.log(`${contentType.toLowerCase()}Icon.svg`);
+    // }
+    setContents(files);
+    setContentType(type);
+  }, [contentType, files]);
 
-  const numOfPages = Math.ceil(contents.length / itemsPerPage);
+  console.log(contentType);
+
+  const numOfPages = Math.ceil(contents?.length / itemsPerPage);
   const indexOfLastContent = currentPage * itemsPerPage;
   const indexOfFirstContent = indexOfLastContent - itemsPerPage;
-  const currentContents = contents.slice(
+  const currentContents = contents?.slice(
     indexOfFirstContent,
     indexOfLastContent,
   );
@@ -107,6 +113,8 @@ const ModuleContent: React.FC = () => {
     window.open(url, "_blank");
   };
 
+  if (!contents) return null;
+
   return (
     <div className="flex flex-col h-full justify-between p-[30px]">
       <div className="flex flex-col">
@@ -115,15 +123,17 @@ const ModuleContent: React.FC = () => {
             className={`rounded py-[5px] focus:border-none cursor-pointer bg-[var(--Primary)] `}
             id="type"
             onChange={(e) => {
-              setContentType(e.target.value);
+              // setContentType(e.target.value);
+              changeSection(e.target.value);
             }}
             value={contentType}
           >
-            <option value="Lecture">Lectures</option>
-            <option value="Tutorial">Tutorials</option>
-            <option value="Exam">Exams</option>
-            <option value="Project">Projects</option>
-            <option value="ModuleInfo">Module Information</option>
+            <option value="Lectures">Lectures</option>
+            <option value="Sheets">Sheets</option>
+            <option value="Module information">Module Information</option>
+            <option value="Exams">Exams</option>
+            <option value="Projects">Projects</option>
+            <option value="Grades">Grades</option>
           </select>
           <div
             className={`transition-all duration-500 ease-in-out flex ${
@@ -167,9 +177,10 @@ const ModuleContent: React.FC = () => {
           </div>
         </div>
         <div className="h-fit mt-[30px] grid grid-cols-4 gap-[3%]">
-          {currentContents.map((content) =>
+          {currentContents?.map((content, index) =>
             batchDownload ? (
               <div
+                key={index}
                 className={`border-2 rounded-lg p-[8px] col-span-1 aspect-[153/142] cursor-pointer flex flex-col justify-between ${
                   selectedContents.includes(content)
                     ? `border-[var(--Primary)]`
@@ -182,10 +193,10 @@ const ModuleContent: React.FC = () => {
                 }}
               >
                 <ContentComponent
-                  date={content.date}
+                  date={"10/19/2023"}
                   hoveredDiv={hoveredDiv}
-                  id={content.id}
-                  image={content.image}
+                  id={index}
+                  image={`/${contentType.slice(0, contentType.length - 1).toLowerCase()}Icon.svg`}
                   setHoveredDiv={setHoveredDiv}
                   title={content.title}
                   url={content.url}
@@ -193,16 +204,17 @@ const ModuleContent: React.FC = () => {
               </div>
             ) : (
               <div
+                key={index}
                 className="border-[2px] rounded-lg p-2 col-span-1 aspect-[153/142] cursor-pointer flex flex-col  flex-grow-1"
                 onClick={() => {
                   openContentInNewTab(content.url);
                 }}
               >
                 <ContentComponent
-                  date={content.date}
+                  date={"10/19/2023"}
                   hoveredDiv={hoveredDiv}
-                  id={content.id}
-                  image={content.image}
+                  id={index}
+                  image={`/${contentType.slice(0, contentType.length - 1).toLowerCase()}Icon.svg`}
                   setHoveredDiv={setHoveredDiv}
                   title={content.title}
                   url={content.url}

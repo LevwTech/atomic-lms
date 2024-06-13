@@ -6,9 +6,49 @@ import Grades from "./Pages/Courses/Grades";
 import SingleCoursePage from "./Pages/Courses/SingleCourse";
 import ModuleContentPage from "./Pages/Courses/ModuleContent";
 import ProtectedRoute from "./utils/ProtectedRoute";
+import { useEffect, useState } from "react";
+import { useUserStore } from "./store/user.store";
+import ReactLoading from "react-loading";
 import Uplaod from "./Pages/Courses/Upload";
 
 function App() {
+  const [loading, setLoading] = useState(true);
+
+  const setUser = useUserStore((state) => state.setUser);
+
+  const getUser = async () => {
+    setLoading(true);
+
+    const user = await fetch(`http://localhost:3000/users/me`, {
+      headers: {
+        authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+      },
+    }).then((res) => res.json());
+
+    console.log(user);
+
+    setUser(user);
+    setLoading(false);
+  };
+
+  useEffect(() => {
+    const token = localStorage.getItem("accessToken");
+
+    if (token) {
+      getUser();
+    } else {
+      setLoading(false);
+    }
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="h-screen p-[40px] flex justify-center items-center gap-[40px]">
+        <ReactLoading type="spinningBubbles" color="#11664F" />
+      </div>
+    );
+  }
+
   return (
     <Routes>
       <Route path="/" element={<LoginPage />} />
@@ -37,7 +77,7 @@ function App() {
         }
       />
       <Route
-        path="/courses/:id"
+        path="/courses/:courseId"
         element={
           <ProtectedRoute>
             <SingleCoursePage />
@@ -53,7 +93,7 @@ function App() {
         }
       />
       <Route
-        path="/courses/:id/:sectionId"
+        path="/courses/:courseId/:sectionId"
         element={
           <ProtectedRoute>
             <ModuleContentPage />
