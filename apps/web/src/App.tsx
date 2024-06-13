@@ -6,18 +6,12 @@ import Grades from "./Pages/Courses/Grades";
 import SingleCoursePage from "./Pages/Courses/SingleCourse";
 import ModuleContentPage from "./Pages/Courses/ModuleContent";
 import ProtectedRoute from "./utils/ProtectedRoute";
+import Uplaod from "./Pages/Courses/Upload";
 
 function App() {
   return (
     <Routes>
-      <Route
-        path="/"
-        element={
-          <ProtectedRoute>
-            <LoginPage />
-          </ProtectedRoute>
-        }
-      />
+      <Route path="/" element={<LoginPage />} />
       <Route
         path="/courses"
         element={
@@ -63,6 +57,14 @@ function App() {
         element={
           <ProtectedRoute>
             <ModuleContentPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/upload"
+        element={
+          <ProtectedRoute>
+            <Uplaod />
           </ProtectedRoute>
         }
       />
