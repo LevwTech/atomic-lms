@@ -153,7 +153,7 @@ const ModuleContent: React.FC<{
             ) : (
               <>
                 <button
-                  className="bg-[#F33950] mr-2 rounded-[10px] p-[10px] flex"
+                  className="bg-[#F33950] mr-2 rounded-[10px] p-[10px] flex items-center"
                   onClick={handleCancelClick}
                 >
                   <img alt="" className="mr-2" src="/Cancel.svg" />
@@ -205,7 +205,7 @@ const ModuleContent: React.FC<{
             ) : (
               <div
                 key={index}
-                className="border-[2px] rounded-lg p-2 col-span-1 aspect-[153/142] cursor-pointer flex flex-col  flex-grow-1"
+                className="border-2 rounded-lg p-[8px] col-span-1 aspect-[153/142] cursor-pointer flex flex-col justify-between"
                 onClick={() => {
                   openContentInNewTab(content.url);
                 }}

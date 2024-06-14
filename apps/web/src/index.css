@@ -8,12 +8,12 @@ body {
   background-color: var(--BG);
 }
 :root {
-  --Primary: #35383f;
-  --Secondary: #f88808;
+  --Primary: #11664F;
+  --Secondary: #B7ED3F;
   --White: #f9f9f9;
   --Black: #000000;
   --BG: #eff2fb;
-  --PDarker: #0e0ecc;
+  --PDarker: #125240;
   --SDarker: #f14900;
   --WDarker: #f3f3f3;
   --Gray: #d9e0f3;

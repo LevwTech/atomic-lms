@@ -53,7 +53,7 @@
   font-family: Poppins;
   font-size: 10px;
   font-style: normal;
-  font-weight: 300;
+  font-weight: 800;
   line-height: normal;
 }
 
@@ -77,7 +77,7 @@
   fill: var(--Primary);
 }
 .AIButton:hover {
-  fill: #1919dd;
+  fill: var(--PDarker);
 }
 
 @media (max-width: 1199px) {

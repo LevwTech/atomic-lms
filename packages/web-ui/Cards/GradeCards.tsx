@@ -27,7 +27,7 @@ export function GradeCardClosed({
     >
       <img
         alt="Grade Card Pattern"
-        className="absolute h-[350px] w-full object-cover mix-blend-overlay group-hover:h-[400px] transition-all duration-300 ease-in-out -z-10"
+        className="absolute h-[350px] w-full object-cover mix-blend-multiply group-hover:h-[400px] transition-all duration-300 ease-in-out -z-10 opacity-40"
         src="/Exporting/Patterns/Grade Card.png"
       />
       <span
@@ -79,7 +79,7 @@ export function GradeCardOpened({
       <div className="h-[450px] w-full flex flex-col items-center justify-center gap-[10px] py-[10px] px-[30px] relative bg-[var(--White)] z-0">
         <img
           alt="Grade Card Pattern"
-          className="absolute h-[450px] w-full mix-blend-overlay object-cover -z-10"
+          className="absolute h-[450px] w-full mix-blend-multiply object-cover -z-10 opacity-40"
           src="/Exporting/Patterns/Grade Card.png"
         />
         <div className="flex relative group">
@@ -94,7 +94,7 @@ export function GradeCardOpened({
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             initial={{ opacity: 0 }}
-            transition={{ duration: 1, type: "tween" }}
+            transition={{ duration: 1, type: "spring", stiffness: 200,damping: 20,}}
             src={`/Asset${currentGrade + 1}.png`}
             className="w-[80px] absolute h-[80px] top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 group-hover:scale-[1.3] transition-all duration-300 ease-in-out"
           />

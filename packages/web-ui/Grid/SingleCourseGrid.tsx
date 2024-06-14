@@ -24,7 +24,7 @@ export function SingleCourseGrid({
       >
         <img
           alt="icon"
-          className="absolute top-40 right-8 z-10 w-52 group-hover:scale-110 transition-all"
+          className="absolute top-36 right-0 z-10 w-52 group-hover:scale-105 transition-all"
           src="/Asset 16.png"
         />
         <img
@@ -40,7 +40,7 @@ export function SingleCourseGrid({
       >
         <img
           alt="icon"
-          className="absolute right-44 bottom-4 z-10 w-44 group-hover:scale-110 transition-all"
+          className="absolute right-16 bottom-0 z-10 w-44 group-hover:scale-105 transition-all"
           src="/Asset 15.png"
         />
         <img
@@ -102,7 +102,7 @@ export function SingleCourseGrid({
         >
           <img
             alt="icon"
-            className="absolute -right-3 -top-3 z-0 group-hover:scale-110 transition-all"
+            className="absolute -right-3 -top-3 z-0 group-hover:scale-125 transition-all bg-[var(--Secondary)] p-2 rounded-full"
             src="/annoucment.svg"
           />
           <p className="self-end">{courseContent[6].title}</p>
