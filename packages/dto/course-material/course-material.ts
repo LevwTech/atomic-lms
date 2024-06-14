@@ -1,6 +1,6 @@
-import { z } from 'zod';
-import { Types } from 'mongoose';
-import { ObjectIdString, UUIDString } from '../commonSchemas';
+import { z } from "zod";
+import { Types } from "mongoose";
+import { ObjectIdString, UUIDString } from "../commonSchemas";
 
 export class CourseMaterialDTO {
   private static section = z.object({
@@ -67,6 +67,14 @@ export class CourseMaterialDTO {
     params: z.object({
       courseId: UUIDString,
       sectionId: ObjectIdString,
+    }),
+  };
+
+  public static getAttachment = {
+    params: z.object({
+      courseId: UUIDString,
+      sectionId: ObjectIdString,
+      attachmentId: ObjectIdString,
     }),
   };
 

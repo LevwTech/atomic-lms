@@ -89,6 +89,24 @@ class CourseMaterialService {
     return CourseMaterialModel.addAttachment(courseId, sectionId, attachment);
   }
 
+  public static async getAttachment(
+    courseId: string,
+    sectionId: string,
+    attachmentId: string,
+  ) {
+    const attachment = await CourseMaterialModel.getAttachment(
+      courseId,
+      sectionId,
+      attachmentId,
+    );
+
+    if (!attachment) {
+      throw new API_ERROR(API_MESSAGES.DOESNT_EXIST);
+    }
+
+    return attachment;
+  }
+
   public static async editAttachment(
     courseId: string,
     sectionId: string,

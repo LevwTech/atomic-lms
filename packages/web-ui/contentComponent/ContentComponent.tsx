@@ -31,17 +31,9 @@ const ContentComponent: React.FC<ContentProps> = ({
       >
         <img src={image} alt={title} />
       </motion.div>
-      <motion.div className="bg-[var(--White)] rounded-b-lg flex flex-col justify-center ">
+      <motion.div className="bg-[var(--White)] rounded-b-lg flex flex-col justify-center">
         <p className="text-black ml-2 mb-1 font-poppins text-[1vw] font-bold leading-none">
           {title}
-        </p>
-        <p className="text-[#CCCCCC] ml-2 font-poppins text-[0.6vw] font-normal leading-none flex">
-          {hoveredDiv !== id && (
-            <>
-              <img src="/Time.svg" alt="" className="mr-1" />
-              {date}
-            </>
-          )}
         </p>
       </motion.div>
     </>
