@@ -10,6 +10,7 @@ import { useEffect, useState } from "react";
 import { useUserStore } from "./store/user.store";
 import ReactLoading from "react-loading";
 import Uplaod from "./Pages/Courses/Upload";
+import PdfViewerPage from "./Pages/Courses/pdfViewer";
 
 function App() {
   const [loading, setLoading] = useState(true);
@@ -92,6 +93,15 @@ function App() {
           </ProtectedRoute>
         }
       />
+
+      <Route
+        path="/courses/:courseId/upload"
+        element={
+          <ProtectedRoute>
+            <Uplaod />
+          </ProtectedRoute>
+        }
+      />
       <Route
         path="/courses/:courseId/:sectionId"
         element={
@@ -101,10 +111,10 @@ function App() {
         }
       />
       <Route
-        path="/upload"
+        path="/courses/:courseId/:sectionId/:attachmentId/pdf"
         element={
           <ProtectedRoute>
-            <Uplaod />
+            <PdfViewerPage />
           </ProtectedRoute>
         }
       />

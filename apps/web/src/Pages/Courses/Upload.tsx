@@ -1,8 +1,18 @@
 import { SectionsHeader } from "@atomic/web-ui";
 import Announcements from "@atomic/web-ui/Announcements/Announcements";
 import Sidebar from "@atomic/web-ui/SideBar/sideBar";
+import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import ReactLoading from "react-loading";
+import { useParams } from "react-router-dom";
+
+const icons = {
+  Lectures: "/lectureIcon.svg",
+  Sheets: "/tutorialIcon.svg",
+  "Module information": "/moduleinfoIcon.svg",
+  Exams: "/examIcon.svg",
+  Projects: "/projectIcon.svg",
+};
 
 function SubmittingUploads({
   uploadedFiles,
@@ -10,6 +20,7 @@ function SubmittingUploads({
   selectedFile,
   setSelectedFile,
   uploadFiles,
+  sections,
 }) {
   return (
     <div className="flex flex-col h-full w-full bg-[#F3F3F3] justify-between rounded-[10px] p-[10px]">
@@ -27,7 +38,7 @@ function SubmittingUploads({
                 }}
                 className={`flex flex-col gap-[10px] p-2 ${index === selectedFile ? "" : "opacity-20"}`}
               >
-                <img src={`/${file.type}Icon.svg`} />
+                <img src={icons[uploadedFiles[selectedFile].type]} />
               </div>
             ))}
           </div>
@@ -62,11 +73,9 @@ function SubmittingUploads({
             value={uploadedFiles[selectedFile]?.type || ""}
             className="border border-gray-300 rounded-[5px]  px-3 py-2"
           >
-            <option value="lecture">Lecture</option>
-            <option value="sheet">Tutorial</option>
-            <option value="moduleinfo">Module Info</option>
-            <option value="exam">Exam</option>
-            <option value="project">Project</option>
+            {sections.map((section) => (
+              <option value={section.title}>{section.title}</option>
+            ))}
           </select>
         </div>
       </div>
@@ -107,7 +116,7 @@ function UploadedFiles({ submittedFiles }) {
               <div className="flex items-center  gap-[10px]">
                 <img
                   className="w-12 h-12 object-contain"
-                  src={`/${file.file.type}Icon.svg`}
+                  src={icons[file.file.type]}
                 />
               </div>
               <div className="flex flex-col">
@@ -175,7 +184,7 @@ function UploadWidget({ uploadedFiles, setUploadedFiles }) {
               files.push({
                 file: e.target.files[i],
                 title: e.target.files[i].name.replace(/.[^/.]+$/, ""),
-                type: "lecture",
+                type: "Lectures",
               });
             }
             setUploadedFiles([...uploadedFiles, ...files]);
@@ -196,9 +205,26 @@ function Uplaod() {
   const [selectedFile, setSelectedFile] = useState(0);
   const [submittedFiles, setSubmittedFiles] = useState([]);
 
+  const { courseId } = useParams();
+
+  const { isLoading: isLoadingSections, data: courseContent } = useQuery({
+    queryKey: ["users", { id: courseId }],
+    queryFn: () =>
+      fetch(`http://localhost:3000/course-marerial/${courseId}`, {
+        headers: {
+          authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+        },
+      }).then((res) => res.json()),
+  });
+
   const uploadFiles = async (selected) => {
     const file = { ...uploadedFiles[selected] };
     const fileId = Date.now();
+
+    const sectionId = courseContent.material.sections.find(
+      (section) => section.title.toLowerCase() === file.type.toLowerCase(),
+    )?._id;
+
     setSubmittedFiles([
       ...submittedFiles,
       {
@@ -213,7 +239,7 @@ function Uplaod() {
     formData.append("attachment", file.file);
     formData.append("type", file.type);
     const response = await fetch(
-      "http://localhost:3000/course-marerial/970ccef5-4073-4443-a104-4ff942e2a3b1/section/66646743d2444ddf383010d6/attachment",
+      `http://localhost:3000/course-marerial/${courseId}/section/${sectionId}/attachment`,
       {
         method: "POST",
         headers: {
@@ -236,6 +262,14 @@ function Uplaod() {
     }
   };
 
+  if (isLoadingSections) {
+    return (
+      <div className="h-screen p-[40px] flex justify-center items-center gap-[40px]">
+        <ReactLoading type="spinningBubbles" color="#11664F" />
+      </div>
+    );
+  }
+
   return (
     <div className="h-screen p-[40px] flex justify-between gap-[40px]">
       <Sidebar
@@ -257,6 +291,7 @@ function Uplaod() {
             setSelectedFile={setSelectedFile}
             uploadFiles={uploadFiles}
             submittedFiles={submittedFiles}
+            sections={courseContent.material.sections}
           />
           <UploadedFiles submittedFiles={submittedFiles} />
         </div>

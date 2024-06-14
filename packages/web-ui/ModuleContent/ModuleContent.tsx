@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Pagination } from "../Pagination/Pagination";
 import ContentComponent from "../contentComponent/ContentComponent";
 import styles from "./ModuleContent.module.css";
+import { useNavigate } from "react-router-dom";
 
 interface DownloadComponentProps extends React.SVGProps<SVGSVGElement> {
   fill?: string;
@@ -57,8 +58,10 @@ interface Content {
 const ModuleContent: React.FC<{
   type: string;
   files: Content[];
+  userType: "STUDENT" | "TEACHER";
   changeSection: (sectionTitle: string) => void;
-}> = ({ type, files, changeSection }) => {
+  goToUpload: () => void;
+}> = ({ type, files, changeSection, userType, goToUpload }) => {
   const [batchDownload, setBatchDownload] = useState(false);
   const [selectedContents, setSelectedContents] = useState<Content[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
@@ -66,7 +69,6 @@ const ModuleContent: React.FC<{
   const itemsPerPage = 12;
   const [hoveredDiv, setHoveredDiv] = useState<number | null>(null);
   const [contents, setContents] = useState<Content[]>([]);
-
   useEffect(() => {
     // const newContents = Array.from({ length: 20 }, (_, index) => ({
     //   id: index + 1,
@@ -135,46 +137,59 @@ const ModuleContent: React.FC<{
             <option value="Projects">Projects</option>
             <option value="Grades">Grades</option>
           </select>
-          <div
-            className={`transition-all duration-500 ease-in-out flex ${
-              batchDownload ? styles.batchDownload : styles.buttons
-            }`}
-          >
-            {!batchDownload ? (
-              <button
-                className="bg-[var(--Secondary)] mr-2 rounded-[10px] flex p-[10px] items-center"
-                onClick={handleBatchDownloadClick}
-              >
-                <DownloadComponentImg fill="var(--Primary)" />
-                <p className="ml-1 text-[color:var(--Primary)]">
-                  Batch Download
-                </p>
-              </button>
-            ) : (
-              <>
+          {userType === "STUDENT" && (
+            <div
+              className={`transition-all duration-500 ease-in-out flex ${
+                batchDownload ? styles.batchDownload : styles.buttons
+              }`}
+            >
+              {!batchDownload ? (
                 <button
                   className="bg-[#F33950] mr-2 rounded-[10px] p-[10px] flex items-center"
                   onClick={handleCancelClick}
                 >
-                  <img alt="" className="mr-2" src="/Cancel.svg" />
-                  <p className="text-[color:var(--White)]">Cancel</p>
-                </button>
-                <button className="bg-[var(--White)] mr-2 rounded-[10px] flex p-[10px] items-center">
                   <DownloadComponentImg fill="var(--Primary)" />
                   <p className="ml-1 text-[color:var(--Primary)]">
-                    Download Selected
+                    Batch Download
                   </p>
                 </button>
-                <button
-                  className="bg-[var(--White)] rounded-[10px] mr-2 flex p-[10px] items-center"
-                  onClick={handleContentSelectAll}
-                >
-                  <SelectAllImg fill="var(--Primary)" />
-                  <p className="ml-1 text-[color:var(--Primary)]">Select All</p>
-                </button>
-              </>
-            )}
-          </div>
+              ) : (
+                <>
+                  <button
+                    className="bg-[#F33950] mr-2 rounded-[10px] p-[10px] flex"
+                    onClick={handleCancelClick}
+                  >
+                    <img alt="" className="mr-2" src="/Cancel.svg" />
+                    <p className="text-[color:var(--White)]">Cancel</p>
+                  </button>
+                  <button className="bg-[var(--White)] mr-2 rounded-[10px] flex p-[10px] items-center">
+                    <DownloadComponentImg fill="var(--Primary)" />
+                    <p className="ml-1 text-[color:var(--Primary)]">
+                      Download Selected
+                    </p>
+                  </button>
+                  <button
+                    className="bg-[var(--White)] rounded-[10px] mr-2 flex p-[10px] items-center"
+                    onClick={handleContentSelectAll}
+                  >
+                    <SelectAllImg fill="var(--Primary)" />
+                    <p className="ml-1 text-[color:var(--Primary)]">
+                      Select All
+                    </p>
+                  </button>
+                </>
+              )}
+            </div>
+          )}
+          {userType === "TEACHER" && (
+            <button
+              className="bg-[#B7ED3F] text-[#11664F] px-4 py-2 rounded-md flex justify-center items-center"
+              onClick={goToUpload}
+            >
+              <img alt="" className="mr-2" src="/uploadIcon.svg" />
+              Upload
+            </button>
+          )}
         </div>
         <div className="h-fit mt-[30px] grid grid-cols-4 gap-[3%]">
           {currentContents?.map((content, index) =>
