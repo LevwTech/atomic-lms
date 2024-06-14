@@ -73,11 +73,6 @@ function SubmittingUploads({
             value={uploadedFiles[selectedFile]?.type || ""}
             className="border border-gray-300 rounded-[5px]  px-3 py-2"
           >
-            {/* <option value="lecture">Lecture</option>
-            <option value="tutorial">Tutorial</option>
-            <option value="moduleinfo">Module Info</option>
-            <option value="exam">Exam</option>
-            <option value="project">Project</option> */}
             {sections.map((section) => (
               <option value={section.title}>{section.title}</option>
             ))}
