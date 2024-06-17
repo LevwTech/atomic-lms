@@ -106,56 +106,60 @@ function SideBar({ primaryLogo, secondaryLogo, user }: SideBarProps) {
             </div>
 
             {isSidebarOpen ? (
-              <button className={styles.custom_button}>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="100%"
-                  height="100%"
-                  fill="none"
-                  className={styles.AIButton}
-                  viewBox="0 0 200 60"
-                  preserveAspectRatio="xMidYMid meet"
-                >
-                  <path d="M170.637 0H24.557A17.124 17.124 0 0 0 9.73 8.562L2.294 21.438a17.128 17.128 0 0 0 0 17.124l7.435 12.876A17.123 17.123 0 0 0 24.558 60h146.079a17.125 17.125 0 0 0 14.83-8.562l7.434-12.876a17.123 17.123 0 0 0 0-17.124l-7.434-12.876A17.127 17.127 0 0 0 170.637 0Z" />
-                  <image
-                    href="/Atomic Logo.svg"
-                    x="10%"
-                    y="25%"
-                    width="50%"
-                    height="50%"
-                    className=""
-                  />
-                  <foreignObject x="20%" y="30%" width="150" height="40">
-                    <p
-                      style={{
-                        color: "var(--White, #F9F9F9)",
-                        fontFamily: "Poppins",
-                        fontSize: "14px",
-                        fontStyle: "normal",
-                        fontWeight: 700,
-                        lineHeight: "normal",
-                      }}
-                    >
-                      AI Bot
-                    </p>
-                  </foreignObject>
-                </svg>
-              </button>
+              <Link to="/chatbot">
+                <button className={styles.custom_button}>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="100%"
+                    height="100%"
+                    fill="none"
+                    className={styles.AIButton}
+                    viewBox="0 0 200 60"
+                    preserveAspectRatio="xMidYMid meet"
+                  >
+                    <path d="M170.637 0H24.557A17.124 17.124 0 0 0 9.73 8.562L2.294 21.438a17.128 17.128 0 0 0 0 17.124l7.435 12.876A17.123 17.123 0 0 0 24.558 60h146.079a17.125 17.125 0 0 0 14.83-8.562l7.434-12.876a17.123 17.123 0 0 0 0-17.124l-7.434-12.876A17.127 17.127 0 0 0 170.637 0Z" />
+                    <image
+                      href="/Atomic Logo.svg"
+                      x="10%"
+                      y="25%"
+                      width="50%"
+                      height="50%"
+                      className=""
+                    />
+                    <foreignObject x="20%" y="30%" width="150" height="40">
+                      <p
+                        style={{
+                          color: "var(--White, #F9F9F9)",
+                          fontFamily: "Poppins",
+                          fontSize: "14px",
+                          fontStyle: "normal",
+                          fontWeight: 700,
+                          lineHeight: "normal",
+                        }}
+                      >
+                        AI Bot
+                      </p>
+                    </foreignObject>
+                  </svg>
+                </button>
+              </Link>
             ) : (
-              <button
-                className={`rounded-full w-[3vw] h-[3vw] bg-[var(--Primary)] hover:bg-[#1919dd] ${styles.custom_button}`}
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                }}
-              >
-                <img
-                  className="mx-auto w-[1.5vw] h-[1.5vw]  object-contain"
-                  src="/Atomic Logo.svg"
-                  alt="AI button"
-                />
-              </button>
+              <Link to="/chatbot">
+                <button
+                  className={`rounded-full w-[3vw] h-[3vw] bg-[var(--Primary)] hover:bg-[#1919dd] ${styles.custom_button}`}
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                >
+                  <img
+                    className="mx-auto w-[1.5vw] h-[1.5vw]  object-contain"
+                    src="/Atomic Logo.svg"
+                    alt="AI button"
+                  />
+                </button>
+              </Link>
             )}
           </div>
         </div>

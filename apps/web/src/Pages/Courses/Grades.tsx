@@ -44,8 +44,8 @@ export default function Grades() {
         secondaryLogo="./miniUniLogo.svg"
         user={{ name: "Abdelrahman", id: "Abdelrahman192222" }}
       />
-      <div className="h-full  flex justify-between gap-[50px]">
-        <div className="h-full w-[50vw] rounded-[14px] items-center flex flex-col bg-white p-[30px]">
+      <div className="h-full flex justify-between gap-[50px]">
+        <div className="h-full w-[55vw] rounded-[14px] items-center flex flex-col bg-white p-[30px]">
           <SectionsHeader sectionName={"Grades"} />
           <div className="flex items-center justify-center h-full w-full gap-[60px]">
             <GradeCardClosed
