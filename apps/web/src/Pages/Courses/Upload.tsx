@@ -277,7 +277,7 @@ function Uplaod() {
         secondaryLogo="/miniUniLogo.svg"
         user={{ name: "Abdelrahman", id: "Abdelrahman192222" }}
       />
-      <div className="h-full w-[50vw] rounded-[14px] items-center flex flex-col bg-white p-[30px] gap-[30px]">
+      <div className="h-full w-[55vw] rounded-[14px] items-center flex flex-col bg-white p-[30px] gap-[30px]">
         <SectionsHeader sectionName={"Upload"} />
         <UploadWidget
           uploadedFiles={uploadedFiles}

@@ -5,6 +5,26 @@ import ReactLoading from "react-loading";
 import { useQuery } from "@tanstack/react-query";
 import { USER_TYPES, useUserStore } from "../../store/user.store";
 import { useParams } from "react-router-dom";
+import {
+  Page,
+  Text,
+  View,
+  Document,
+  StyleSheet,
+  PDFViewer,
+} from "@react-pdf/renderer";
+
+const styles = StyleSheet.create({
+  page: {
+    flexDirection: "row",
+    backgroundColor: "#E4E4E4",
+  },
+  section: {
+    margin: 10,
+    padding: 10,
+    flexGrow: 1,
+  },
+});
 
 function PdfViewerPage() {
   const user = useUserStore();
@@ -37,10 +57,20 @@ function PdfViewerPage() {
         secondaryLogo="./miniUniLogo.svg"
         user={{ name: "Abdelrahman", id: "Abdelrahman192222" }}
       />
-      <div className=" h-full w-full rounded-[13.6px] relative bg-[#f9f9f9]"></div>
-      {/* <div className="bg-[var(--White)] h-full w-[30vw] rounded-[13.6px]">
-        <Announcements />
-      </div> */}
+      <div className="h-full w-[85vw] rounded-[14px] items-center flex flex-col bg-white p-[30px] gap-[30px]">
+        <PDFViewer>
+          <Document>
+            <Page size="A4" style={styles.page}>
+              <View style={styles.section}>
+                <Text>Section #1</Text>
+              </View>
+              <View style={styles.section}>
+                <Text>Section #2</Text>
+              </View>
+            </Page>
+          </Document>
+        </PDFViewer>
+      </div>
     </div>
   );
 }

@@ -39,7 +39,7 @@ export default function SingleCoursePage() {
         user={{ name: "Abdelrahman", id: "Abdelrahman192222" }}
       />
       {/* <div className=" h-full w-[55vw]  rounded-[13.6px] relative"></div> */}
-      <div className="h-full w-[50vw] rounded-[14px] items-center justify-between flex flex-col bg-white p-[30px]">
+      <div className="h-full w-[55vw] rounded-[14px] items-center justify-between flex flex-col bg-white p-[30px]">
         <SectionsHeader sectionName={courseContent.course.name} />
         <SingleCourseGrid
           courseContent={courseContent.material.sections}
