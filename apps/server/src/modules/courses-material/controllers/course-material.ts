@@ -107,13 +107,12 @@ class CourseMaterialController {
       return res.status(400).json({ message: "No attachment provided" });
     }
 
-    await CourseMaterialService.addAttachment(courseId, sectionId, {
-      title: title || attachment.originalname,
-      fileName: attachment.originalname,
-      key: attachment.key,
-      url: attachment.location,
-      contentType: attachment.mimetype,
-    });
+    await CourseMaterialService.addAttachment(
+      courseId,
+      sectionId,
+      title,
+      attachment,
+    );
 
     return res.status(200).json({ message: "Attachment added" });
   }
