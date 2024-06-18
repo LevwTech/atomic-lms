@@ -61,7 +61,8 @@ const ModuleContent: React.FC<{
   userType: "STUDENT" | "TEACHER";
   changeSection: (sectionTitle: string) => void;
   goToUpload: () => void;
-}> = ({ type, files, changeSection, userType, goToUpload }) => {
+  openFile: (_id: string) => void;
+}> = ({ type, files, changeSection, userType, goToUpload, openFile }) => {
   const [batchDownload, setBatchDownload] = useState(false);
   const [selectedContents, setSelectedContents] = useState<Content[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
@@ -222,7 +223,7 @@ const ModuleContent: React.FC<{
                 key={index}
                 className="border-2 rounded-lg p-[8px] col-span-1 aspect-[153/142] cursor-pointer flex flex-col justify-between"
                 onClick={() => {
-                  openContentInNewTab(content.url);
+                  openFile(content._id);
                 }}
               >
                 <ContentComponent

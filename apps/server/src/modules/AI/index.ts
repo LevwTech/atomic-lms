@@ -27,4 +27,13 @@ aiRouter.post(
   AIController.answerFlashcard,
 );
 
+aiRouter.get("/chat/history", authMiddleware(), AIController.getChatsByUserId);
+
+aiRouter.get(
+  "/chat/:chatId",
+  authMiddleware(),
+  validationMiddleware(AIDto.getChat),
+  AIController.getChat,
+);
+
 export default aiRouter;

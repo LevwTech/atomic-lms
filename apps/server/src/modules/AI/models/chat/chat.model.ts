@@ -1,5 +1,5 @@
 import { ReturnModelType, getModelForClass } from "@typegoose/typegoose";
-import ChatSchema, { MessageSchema } from "./chat.schema";
+import ChatSchema, { ChatType, MessageSchema } from "./chat.schema";
 import { ObjectId } from "mongodb";
 
 class ChatMethods extends ChatSchema {
@@ -11,6 +11,9 @@ class ChatMethods extends ChatSchema {
     attachmentId?: string,
   ) {
     const id = new ObjectId();
+
+    const type = sectionId && attachmentId ? ChatType.FILE : ChatType.COURSE;
+
     const newChat = new this({
       _id: id,
       sessionId: id.toHexString(),
@@ -18,6 +21,8 @@ class ChatMethods extends ChatSchema {
       courseId,
       sectionId,
       attachmentId,
+      type,
+      title: "",
     });
     await newChat.save();
     return newChat;
@@ -34,7 +39,7 @@ class ChatMethods extends ChatSchema {
     this: ReturnModelType<typeof ChatSchema>,
     userId: string,
   ) {
-    return this.findOne({ userId });
+    return this.find({ userId, type: ChatType.COURSE }).select("-messages");
   }
 
   public static async addMessage(
@@ -43,6 +48,14 @@ class ChatMethods extends ChatSchema {
     message: MessageSchema,
   ) {
     return this.updateOne({ _id: chatId }, { $push: { messages: message } });
+  }
+
+  public static async updateChatTitle(
+    this: ReturnModelType<typeof ChatSchema>,
+    chatId: string,
+    title: string,
+  ) {
+    return this.updateOne({ _id: chatId }, { title });
   }
 }
 

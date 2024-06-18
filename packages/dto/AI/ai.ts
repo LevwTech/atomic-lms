@@ -33,4 +33,10 @@ export class AIDto {
       answer: z.string().min(1).max(1000),
     }),
   };
+
+  public static getChat = {
+    params: z.object({
+      chatId: ObjectIdString,
+    }),
+  };
 }

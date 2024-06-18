@@ -1,6 +1,11 @@
 import { Prop } from "@typegoose/typegoose";
 import { TimeStamps } from "@typegoose/typegoose/lib/defaultClasses";
 
+export enum ChatType {
+  COURSE = "COURSE",
+  FILE = "FILE",
+}
+
 export class MessageContentSchema {
   @Prop({ required: true })
   public content: string;
@@ -29,6 +34,9 @@ class ChatSchema extends TimeStamps {
 
   @Prop({ required: false })
   public attachmentId?: string;
+
+  @Prop({ required: true, enum: [ChatType.COURSE, ChatType.FILE] })
+  public type!: ChatType;
 
   @Prop({ type: [MessageSchema], default: [] })
   public messages!: MessageSchema[];

@@ -171,6 +171,14 @@ export default class AIService {
     return ChatModel.createChat(userId, courseId, sectionId, attachmentId);
   }
 
+  public static async getChat(chatId: string) {
+    return ChatModel.getChat(chatId);
+  }
+
+  public static async getChatsByUserId(userId: string) {
+    return ChatModel.getChatsByUserId(userId);
+  }
+
   public static async sendMessageToChatbot(chatId: string, question: string) {
     const chat = await ChatModel.getChat(chatId);
 
@@ -219,7 +227,12 @@ export default class AIService {
         answer: z
           .string()
           .describe(
-            "The answer to the user question, which is based only on the given sources.",
+            "The answer to the user question in markdown format, which is based only on the given sources.",
+          ),
+        newChatTitle: z
+          .string()
+          .describe(
+            "updated chat title if needed based on the context of the chat",
           ),
         citations: z
           .array(
@@ -315,6 +328,7 @@ export default class AIService {
     const response = await ragChain.invoke({
       chat_history: await chatHistory.getMessages(),
       input: question,
+      chat_title: chat.title,
     });
 
     const course =
@@ -325,6 +339,7 @@ export default class AIService {
       pageNumber: number;
       sectionId: string;
       attachmentId: string;
+      courseId: string;
     }[] = [];
 
     response.answer.citations.forEach((citation) => {
@@ -338,12 +353,13 @@ export default class AIService {
             pageNumber: citation.pageNumber,
             sectionId: (section as any)._id,
             attachmentId: doc._id,
+            courseId,
           });
         }
       });
     });
 
-    await chatHistory.addMessages([
+    const updateChatHistory = chatHistory.addMessages([
       new HumanMessage(question),
       new AIMessage({
         content: response.answer.answer,
@@ -353,9 +369,17 @@ export default class AIService {
       }),
     ]);
 
+    const updateTitle = ChatModel.updateChatTitle(
+      chatId,
+      response.answer.newChatTitle,
+    );
+
+    await Promise.all([updateChatHistory, updateTitle]);
+
     return {
       answer: response.answer.answer,
       citations: citationsWithFileName,
+      newChatTitle: response.answer.newChatTitle,
     };
   }
 

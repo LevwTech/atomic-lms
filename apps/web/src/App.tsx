@@ -12,6 +12,13 @@ import ReactLoading from "react-loading";
 import Uplaod from "./Pages/Courses/Upload";
 import PdfViewerPage from "./Pages/Courses/pdfViewer";
 import AiChatbot from "./Pages/Courses/AiChatbot";
+import { pdfjs } from "react-pdf";
+import SummaryPage from "./Pages/Courses/summary";
+
+pdfjs.GlobalWorkerOptions.workerSrc = new URL(
+  "pdfjs-dist/build/pdf.worker.min.mjs",
+  import.meta.url,
+).toString();
 
 function App() {
   const [loading, setLoading] = useState(true);
@@ -116,6 +123,14 @@ function App() {
         element={
           <ProtectedRoute>
             <PdfViewerPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/courses/:courseId/:sectionId/:attachmentId/summary"
+        element={
+          <ProtectedRoute>
+            <SummaryPage />
           </ProtectedRoute>
         }
       />

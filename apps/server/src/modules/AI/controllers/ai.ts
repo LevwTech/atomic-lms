@@ -1,6 +1,6 @@
 import { AIDto } from "@atomic/dto";
 import { ValidatedRequest } from "../../../common/middlewares/validationMiddleware";
-import { Response } from "express";
+import { Request, Response } from "express";
 import AIService from "../services/ai";
 import getUserFromRequest from "../../../common/helpers/getUserFromRequest";
 
@@ -49,5 +49,24 @@ export default class AIController {
     );
 
     res.status(200).json(aiResponse);
+  }
+
+  public static async getChat(
+    req: ValidatedRequest<typeof AIDto.getChat>,
+    res: Response,
+  ) {
+    const { chatId } = req.params;
+
+    const chat = await AIService.getChat(chatId);
+
+    res.status(200).json(chat);
+  }
+
+  public static async getChatsByUserId(req: Request, res: Response) {
+    const user = getUserFromRequest(req);
+
+    const chats = await AIService.getChatsByUserId(user.id);
+
+    res.status(200).json(chats);
   }
 }
