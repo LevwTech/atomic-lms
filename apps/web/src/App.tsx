@@ -1,6 +1,6 @@
 import LoginPage from "./Pages/Auth/Login/Login";
 import CoursesPage from "./Pages/Courses/CoursesPage";
-import { Route, Routes } from "react-router-dom";
+import { Link, Route, Routes } from "react-router-dom";
 import Announcements from "./Pages/Courses/Announcements";
 import Grades from "./Pages/Courses/Grades";
 import SingleCoursePage from "./Pages/Courses/SingleCourse";
@@ -12,6 +12,16 @@ import ReactLoading from "react-loading";
 import Uplaod from "./Pages/Courses/Upload";
 import Flashcards from "./Pages/Courses/FlashcardsPage";
 import Answer from "./Pages/Courses/Answer";
+import PdfViewerPage from "./Pages/Courses/pdfViewer";
+import AiChatbot from "./Pages/Courses/AiChatbot";
+import { pdfjs } from "react-pdf";
+import SummaryPage from "./Pages/Courses/summary";
+
+pdfjs.GlobalWorkerOptions.workerSrc = new URL(
+  "pdfjs-dist/build/pdf.worker.min.mjs",
+  import.meta.url,
+).toString();
+
 function App() {
   const [loading, setLoading] = useState(true);
 
@@ -93,6 +103,15 @@ function App() {
           </ProtectedRoute>
         }
       />
+
+      <Route
+        path="/courses/:courseId/upload"
+        element={
+          <ProtectedRoute>
+            <Uplaod />
+          </ProtectedRoute>
+        }
+      />
       <Route
         path="/courses/:courseId/:sectionId"
         element={
@@ -102,10 +121,47 @@ function App() {
         }
       />
       <Route
-        path="/upload"
+        path="/courses/:courseId/:sectionId/:attachmentId/pdf"
         element={
           <ProtectedRoute>
-            <Uplaod />
+            <PdfViewerPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/courses/:courseId/:sectionId/:attachmentId/summary"
+        element={
+          <ProtectedRoute>
+            <SummaryPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/chatbot"
+        element={
+          <ProtectedRoute>
+            <AiChatbot />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/pdf"
+        element={
+          <ProtectedRoute>
+            <PdfViewerPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="*"
+        element={
+          <ProtectedRoute>
+            <div className="h-screen w-full flex flex-col justify-center items-center ">
+              <p className="text-7xl font-bold"> 404</p>
+              <div className="text-gray-500 flex flex-col items-center gap-5">
+                Sorry, the page was not found!
+              </div>
+            </div>
           </ProtectedRoute>
         }
       />

@@ -3,13 +3,18 @@ import Sidebar from "@atomic/web-ui/SideBar/sideBar";
 import ModuleContent from "@atomic/web-ui/ModuleContent/ModuleContent";
 import ReactLoading from "react-loading";
 import { useQuery } from "@tanstack/react-query";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
+import { useUserStore } from "../../store/user.store";
 
 function ModuleContentPage() {
   const { courseId, sectionId: sId } = useParams();
 
   const [sectionId, setSectionId] = useState(sId!);
+
+  const user = useUserStore();
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     const newUrl = `/courses/${courseId}/${sectionId}`;
@@ -54,6 +59,14 @@ function ModuleContentPage() {
     setSectionId(section);
   };
 
+  const goToUpload = () => {
+    navigate(`/courses/${courseId}/upload`);
+  };
+
+  const openFile = (_id: string) => {
+    navigate(`/courses/${courseId}/${sectionId}/${_id}/pdf`);
+  };
+
   if (isLoading || isLoadingSections) {
     return (
       <div className="h-screen p-[40px] flex justify-center items-center gap-[40px]">
@@ -73,6 +86,9 @@ function ModuleContentPage() {
           type={sectionData.title}
           files={sectionData.content}
           changeSection={changeSection}
+          userType={user.type! as any}
+          goToUpload={goToUpload}
+          openFile={openFile}
         />
       </div>
       <div className="bg-[var(--White)] h-full w-[30vw] rounded-[13.6px]">

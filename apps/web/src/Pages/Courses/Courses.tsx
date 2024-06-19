@@ -32,8 +32,7 @@ export default function CoursesPage1({ courses }) {
   const displayedCourses = courses?.courses.slice(startIndex, endIndex);
 
   return (
-    // <div className="h-full  flex justify-between gap-[30px]">
-    <div className="h-full w-[50vw] rounded-[14px] items-center justify-between flex flex-col overflow-hidden">
+    <div className="h-full w-[55vw] rounded-[14px] items-center justify-between flex flex-col overflow-hidden">
       <div className="flex flex-col gap-[30px]">
         <BannerCarousal images={images} />
         <CoursesGrid
@@ -49,6 +48,5 @@ export default function CoursesPage1({ courses }) {
         totalCourses={totalCourses}
       />
     </div>
-    // </div>
   );
 }

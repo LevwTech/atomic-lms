@@ -2,12 +2,17 @@ import CourseMaterialModel from "../models/course-material/course-material.model
 import {
   AttachmentSchema,
   CourseSectionSchema,
+  FlashCardSchema,
+  MCQQuestionSchema,
+  TFQuestionSchema,
 } from "../models/course-material/course-material.schema";
 import { DTOBodyType } from "../../../common/types/DTOType";
 import { CourseMaterialDTO } from "@atomic/dto";
 import { API_ERROR } from "../../../common/helpers/throwApiError";
 import { API_MESSAGES } from "../../../common/helpers/apiMessages";
 import CourseService from "../../../modules/course/services/course";
+import AIService from "../../AI/services/ai";
+import mongoose from "mongoose";
 
 class CourseMaterialService {
   public static async createCourseMaterial(
@@ -44,6 +49,17 @@ class CourseMaterialService {
       course,
       material,
     };
+  }
+
+  public static async getCourseMaterialWithContent(courseId: string) {
+    const material =
+      await CourseMaterialModel.getCourseMaterialWithContent(courseId);
+
+    if (!material) {
+      throw new API_ERROR(API_MESSAGES.DOESNT_EXIST);
+    }
+
+    return material;
   }
 
   public static async getSection(courseId: string, sectionId: string) {
@@ -84,9 +100,159 @@ class CourseMaterialService {
   public static async addAttachment(
     courseId: string,
     sectionId: string,
-    attachment: AttachmentSchema,
+    title: string | undefined,
+    attachment: Express.MulterS3.File,
   ) {
-    return CourseMaterialModel.addAttachment(courseId, sectionId, attachment);
+    const attachmentId = await CourseMaterialModel.addAttachment(
+      courseId,
+      sectionId,
+      {
+        _id: new mongoose.Types.ObjectId().toHexString(),
+        title: title || attachment.originalname,
+        fileName: attachment.originalname,
+        key: attachment.key,
+        url: attachment.location,
+        contentType: attachment.mimetype,
+        doesHaveChatBot: false,
+        docIds: [],
+        isSummarized: false,
+        summary: "",
+        doesHaveFlashCards: false,
+        flashCards: [],
+        doesHaveMCQs: false,
+        mcqQuestions: [],
+        doesHaveTFs: false,
+        tfQuestions: [],
+      },
+    );
+
+    AIService.ingestFile(attachment, courseId, sectionId, attachmentId, title);
+  }
+
+  public static async addAttachmentDocIds(
+    courseId: string,
+    sectionId: string,
+    attachmentId: string,
+    docIds: string[],
+  ) {
+    return CourseMaterialModel.addAttachmentDocIds(
+      courseId,
+      sectionId,
+      attachmentId,
+      docIds,
+    );
+  }
+
+  public static async addAttachmentSummary(
+    courseId: string,
+    sectionId: string,
+    attachmentId: string,
+    summary: string,
+  ) {
+    return CourseMaterialModel.addAttachmentSummary(
+      courseId,
+      sectionId,
+      attachmentId,
+      summary,
+    );
+  }
+
+  public static async addAttachmentFlashCards(
+    courseId: string,
+    sectionId: string,
+    attachmentId: string,
+    flashCards: FlashCardSchema[],
+  ) {
+    return CourseMaterialModel.addAttachmentFlashCards(
+      courseId,
+      sectionId,
+      attachmentId,
+      flashCards,
+    );
+  }
+
+  public static async getAttachmentDocIds(
+    courseId: string,
+    sectionId: string,
+    attachmentId: string,
+  ) {
+    const docIds = await CourseMaterialModel.getAttachmentDocIds(
+      courseId,
+      sectionId,
+      attachmentId,
+    );
+
+    if (!docIds) {
+      throw new API_ERROR(API_MESSAGES.DOESNT_EXIST);
+    }
+
+    return docIds;
+  }
+
+  public static async getAttachmentFlashCards(
+    courseId: string,
+    sectionId: string,
+    attachmentId: string,
+    questionId?: string,
+  ) {
+    const flashCards = await CourseMaterialModel.getAttachmentFlashCards(
+      courseId,
+      sectionId,
+      attachmentId,
+      questionId,
+    );
+
+    if (!flashCards) {
+      throw new API_ERROR(API_MESSAGES.DOESNT_EXIST);
+    }
+
+    return flashCards;
+  }
+
+  public static async addAttachmentMCQs(
+    courseId: string,
+    sectionId: string,
+    attachmentId: string,
+    mcqQuestions: MCQQuestionSchema[],
+  ) {
+    return CourseMaterialModel.addAttachmentMCQs(
+      courseId,
+      sectionId,
+      attachmentId,
+      mcqQuestions,
+    );
+  }
+
+  public static async addAttachmentTFs(
+    courseId: string,
+    sectionId: string,
+    attachmentId: string,
+    tfQuestions: TFQuestionSchema[],
+  ) {
+    return CourseMaterialModel.addAttachmentTFs(
+      courseId,
+      sectionId,
+      attachmentId,
+      tfQuestions,
+    );
+  }
+
+  public static async getAttachment(
+    courseId: string,
+    sectionId: string,
+    attachmentId: string,
+  ) {
+    const attachment = await CourseMaterialModel.getAttachment(
+      courseId,
+      sectionId,
+      attachmentId,
+    );
+
+    if (!attachment) {
+      throw new API_ERROR(API_MESSAGES.DOESNT_EXIST);
+    }
+
+    return attachment;
   }
 
   public static async editAttachment(

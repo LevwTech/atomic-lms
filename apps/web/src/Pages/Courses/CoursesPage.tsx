@@ -33,11 +33,9 @@ function CoursesPage() {
       <Sidebar
         primaryLogo="./BUE_Logo.svg"
         secondaryLogo="./miniUniLogo.svg"
-        user={{ name: "Abdelrahman", id: "Abdelrahman192222" }}
+        user={{ name: user.name, id: user.username }}
       />
-      <div className=" h-full w-[55vw]  rounded-[13.6px] relative">
-        <Courses courses={courses} />
-      </div>
+      <Courses courses={courses} />
       <div className="bg-[var(--White)] h-full w-[30vw] rounded-[13.6px]">
         <Announcements />
       </div>

@@ -1,12 +1,12 @@
-import { Request, Response } from 'express';
-import CourseMaterialService from '../services/course-material';
-import { ValidatedRequest } from '../../../common/middlewares/validationMiddleware';
-import { CourseMaterialDTO } from '@atomic/dto';
+import { Request, Response } from "express";
+import CourseMaterialService from "../services/course-material";
+import { ValidatedRequest } from "../../../common/middlewares/validationMiddleware";
+import { CourseMaterialDTO } from "@atomic/dto";
 
 class CourseMaterialController {
   public static async getCourseMaterial(
     req: ValidatedRequest<typeof CourseMaterialDTO.getCourseMaterial>,
-    res: Response
+    res: Response,
   ) {
     const { courseId } = req.params;
 
@@ -20,10 +20,10 @@ class CourseMaterialController {
 
   public static async createCourseMaterial(
     req: ValidatedRequest<typeof CourseMaterialDTO.createCourseMaterial>,
-    res: Response
+    res: Response,
   ) {
     const courseMaterial = await CourseMaterialService.createCourseMaterial(
-      req.body
+      req.body,
     );
 
     res.json(courseMaterial);
@@ -31,7 +31,7 @@ class CourseMaterialController {
 
   public static async getSection(
     req: ValidatedRequest<typeof CourseMaterialDTO.getSection>,
-    res: Response
+    res: Response,
   ) {
     const { courseId, sectionId } = req.params;
 
@@ -44,7 +44,7 @@ class CourseMaterialController {
 
   public static async addSection(
     req: ValidatedRequest<typeof CourseMaterialDTO.addSection>,
-    res: Response
+    res: Response,
   ) {
     const { courseId } = req.params;
     const { section } = req.body;
@@ -56,12 +56,12 @@ class CourseMaterialController {
       content: [],
     });
 
-    return res.status(200).json({ message: 'Section added' });
+    return res.status(200).json({ message: "Section added" });
   }
 
   public static async editSection(
     req: ValidatedRequest<typeof CourseMaterialDTO.editSection>,
-    res: Response
+    res: Response,
   ) {
     const { courseId, sectionId } = req.params;
     const { section } = req.body;
@@ -74,15 +74,15 @@ class CourseMaterialController {
       courseId,
       sectionId,
       title,
-      description
+      description,
     );
 
-    res.status(200).json({ message: 'Section edited' });
+    res.status(200).json({ message: "Section edited" });
   }
 
   public static async removeSection(
     req: ValidatedRequest<typeof CourseMaterialDTO.removeSection>,
-    res: Response
+    res: Response,
   ) {
     const { courseId, sectionId } = req.params;
 
@@ -90,12 +90,12 @@ class CourseMaterialController {
 
     await CourseMaterialService.removeSection(courseId, sectionId);
 
-    res.status(200).json({ message: 'Section removed' });
+    res.status(200).json({ message: "Section removed" });
   }
 
   public static async addAttachment(
     req: ValidatedRequest<typeof CourseMaterialDTO.addAttachment>,
-    res: Response
+    res: Response,
   ) {
     // ! Check if teacher is the owner of the course
 
@@ -104,23 +104,39 @@ class CourseMaterialController {
     const attachment = req.file as Express.MulterS3.File;
 
     if (!attachment) {
-      return res.status(400).json({ message: 'No attachment provided' });
+      return res.status(400).json({ message: "No attachment provided" });
     }
 
-    await CourseMaterialService.addAttachment(courseId, sectionId, {
-      title: title || attachment.originalname,
-      fileName: attachment.originalname,
-      key: attachment.key,
-      url: attachment.location,
-      contentType: attachment.mimetype,
-    });
+    await CourseMaterialService.addAttachment(
+      courseId,
+      sectionId,
+      title,
+      attachment,
+    );
 
-    return res.status(200).json({ message: 'Attachment added' });
+    return res.status(200).json({ message: "Attachment added" });
+  }
+
+  public static async getAttachment(
+    req: ValidatedRequest<typeof CourseMaterialDTO.getAttachment>,
+    res: Response,
+  ) {
+    const { courseId, sectionId, attachmentId } = req.params;
+
+    // ! Check if student is enrolled in the course or teacher is the owner of the course
+
+    const attachment = await CourseMaterialService.getAttachment(
+      courseId,
+      sectionId,
+      attachmentId,
+    );
+
+    res.json(attachment);
   }
 
   public static async editAttachment(
     req: ValidatedRequest<typeof CourseMaterialDTO.editAttachment>,
-    res: Response
+    res: Response,
   ) {
     const { courseId, sectionId, attachmentId } = req.params;
     const { title } = req.body;
@@ -131,15 +147,15 @@ class CourseMaterialController {
       courseId,
       sectionId,
       attachmentId,
-      title
+      title,
     );
 
-    res.status(200).json({ message: 'Attachment edited' });
+    res.status(200).json({ message: "Attachment edited" });
   }
 
   public static async removeAttachment(
     req: ValidatedRequest<typeof CourseMaterialDTO.removeAttachment>,
-    res: Response
+    res: Response,
   ) {
     const { courseId, sectionId, attachmentId } = req.params;
 
@@ -148,10 +164,10 @@ class CourseMaterialController {
     await CourseMaterialService.removeAttachment(
       courseId,
       sectionId,
-      attachmentId
+      attachmentId,
     );
 
-    res.status(200).json({ message: 'Attachment removed' });
+    res.status(200).json({ message: "Attachment removed" });
   }
 }
 

@@ -71,6 +71,13 @@ materialsRouter.post(
   CourseMaterialController.addAttachment,
 );
 
+materialsRouter.get(
+  "/:courseId/section/:sectionId/attachment/:attachmentId",
+  authMiddleware(),
+  validationMiddleware(CourseMaterialDTO.getAttachment),
+  CourseMaterialController.getAttachment,
+);
+
 materialsRouter.put(
   "/:courseId/section/:sectionId/attachment/:attachmentId",
   authMiddleware({
