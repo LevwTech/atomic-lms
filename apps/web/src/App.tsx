@@ -1,6 +1,6 @@
 import LoginPage from "./Pages/Auth/Login/Login";
 import CoursesPage from "./Pages/Courses/CoursesPage";
-import { Link, Route, Routes } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 import Announcements from "./Pages/Courses/Announcements";
 import Grades from "./Pages/Courses/Grades";
 import SingleCoursePage from "./Pages/Courses/SingleCourse";
@@ -16,6 +16,7 @@ import PdfViewerPage from "./Pages/Courses/pdfViewer";
 import AiChatbot from "./Pages/Courses/AiChatbot";
 import { pdfjs } from "react-pdf";
 import SummaryPage from "./Pages/Courses/summary";
+import ExamPage from "./Pages/Courses/ExamPage";
 
 pdfjs.GlobalWorkerOptions.workerSrc = new URL(
   "pdfjs-dist/build/pdf.worker.min.mjs",
@@ -149,6 +150,14 @@ function App() {
         element={
           <ProtectedRoute>
             <PdfViewerPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/exam"
+        element={
+          <ProtectedRoute>
+            <ExamPage />
           </ProtectedRoute>
         }
       />

@@ -59,10 +59,10 @@ function ReceivedMessage({
   if (message.type === "human") return;
 
   return (
-    <div className="flex gap-3 w-[80%]">
+    <div className="flex gap-3 w-[90%]">
       <img src="/chatbotLogo.svg" className="w-10 h-10 rounded-full" />
       <div className="rounded-lg bg-white p-4 border border-[#E4E4E7]">
-        <Markdown>{message.data.content}</Markdown>
+        <Markdown className="prose m-0 pb-0">{message.data.content}</Markdown>
         <div className="flex gap-4 flex-wrap pt-3">
           {message.data.additional_kwargs.citations.map((citation, index) => (
             <div

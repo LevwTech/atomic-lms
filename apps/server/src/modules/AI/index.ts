@@ -36,4 +36,18 @@ aiRouter.get(
   AIController.getChat,
 );
 
+aiRouter.post(
+  "/generate-exam",
+  authMiddleware(),
+  validationMiddleware(AIDto.getExamQuestions),
+  AIController.getExamQuestions,
+);
+
+aiRouter.post(
+  "/answer-exam",
+  authMiddleware(),
+  validationMiddleware(AIDto.answerExamQuestions),
+  AIController.answerExamQuestions,
+);
+
 export default aiRouter;
