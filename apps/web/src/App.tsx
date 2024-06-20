@@ -10,6 +10,8 @@ import { useEffect, useState } from "react";
 import { useUserStore } from "./store/user.store";
 import ReactLoading from "react-loading";
 import Uplaod from "./Pages/Courses/Upload";
+import Flashcards from "./Pages/Courses/FlashcardsPage";
+import Answer from "./Pages/Courses/Answer";
 import PdfViewerPage from "./Pages/Courses/pdfViewer";
 import AiChatbot from "./Pages/Courses/AiChatbot";
 import { pdfjs } from "react-pdf";
@@ -169,6 +171,25 @@ function App() {
                 Sorry, the page was not found!
               </div>
             </div>
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/flashcards"
+        element={
+          <ProtectedRoute>
+            <Flashcards />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/answer"
+        element={
+          <ProtectedRoute>
+            <Answer
+              question="Lorem ipsum dolor sit amet consectetur"
+              answer="Lorem ipsum dolor sit amet consectetur adipisicing elit. Eius optio similique exercitationem doloremque nostrum amet velit voluptatum quo perferendis officiis."
+              explaination="Lorem ipsum dolor sit amet consectetur adipisicing elit. Eius optio similique exercitationem doloremque nostrum amet velit voluptatum quo perferendis officiis." studentAnswer={""} advice={""}            />
           </ProtectedRoute>
         }
       />
