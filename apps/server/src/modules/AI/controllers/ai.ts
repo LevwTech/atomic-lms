@@ -69,4 +69,31 @@ export default class AIController {
 
     res.status(200).json(chats);
   }
+
+  public static async getExamQuestions(
+    req: ValidatedRequest<typeof AIDto.getExamQuestions>,
+    res: Response,
+  ) {
+    const { courseId, numMCQ, numTF, numFlashCards } = req.body;
+
+    const questions = await AIService.getExamQuestions(
+      courseId,
+      numMCQ,
+      numTF,
+      numFlashCards,
+    );
+
+    res.status(200).json(questions);
+  }
+
+  public static async answerExamQuestions(
+    req: ValidatedRequest<typeof AIDto.answerExamQuestions>,
+    res: Response,
+  ) {
+    const { courseId, answers } = req.body;
+
+    const results = await AIService.answerExamQuestions(answers, courseId);
+
+    res.status(200).json(results);
+  }
 }

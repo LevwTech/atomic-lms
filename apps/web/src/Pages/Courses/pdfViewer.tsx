@@ -4,6 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useNavigate, useParams } from "react-router-dom";
 import { Page, Document } from "react-pdf";
 import React, { useEffect, useRef, useState } from "react";
+import FileChatBot from "../../components/fileChatbot";
 
 function PdfViewerPage() {
   const { courseId, sectionId, attachmentId } = useParams();
@@ -17,6 +18,9 @@ function PdfViewerPage() {
   const containerRef = useRef<HTMLDivElement>(null);
   const [inputValue, setInputValue] = useState<number>(1);
   const [progress, setProgress] = useState(0);
+  const [chatBot, setChatBot] = useState(
+    searchParams.get("chatId") ? true : false,
+  );
 
   function onDocumentLoadSuccess({ numPages }: { numPages: number }) {
     setNumPages(numPages);
@@ -119,6 +123,7 @@ function PdfViewerPage() {
       </div>
     );
   }
+
   return (
     <div className="h-screen p-[40px] flex justify-between gap-[40px]">
       <Sidebar
@@ -126,12 +131,21 @@ function PdfViewerPage() {
         secondaryLogo="./miniUniLogo.svg"
         user={{ name: "Abdelrahman", id: "Abdelrahman192222" }}
       />
-      <div className="h-full w-[85vw] rounded-[14px] items-center flex flex-col bg-[#f9f9f9]  gap-[30px] relative">
+      <div
+        className={`h-full ${chatBot ? "w-[42vw]" : "w-[85vw]"} rounded-[14px] items-center flex flex-col bg-[#f9f9f9]  gap-[30px] relative`}
+      >
         <div
           className="w-full h-full rounded-[14px] overflow-scroll flex flex-col p-[30px] pb-20 items-center bg-[#f9f9f9]"
           ref={containerRef}
         >
-          <Document file={attachment.url} onLoadSuccess={onDocumentLoadSuccess}>
+          <Document
+            file={
+              attachment.url.startsWith("https")
+                ? attachment.url
+                : "https://" + attachment.url
+            }
+            onLoadSuccess={onDocumentLoadSuccess}
+          >
             <div className="flex flex-col w-full gap-[20px]">
               {Array.from(new Array(numPages), (_, index) => (
                 <div
@@ -185,7 +199,7 @@ function PdfViewerPage() {
               <img src="/downloadicon.svg" />
               {progress > 0 && progress + "%"}
             </button>
-            {attachment.isSummarized && (
+            {attachment.isSummarized && !chatBot && (
               <button
                 className="flex gap-2 px-4 py-2 bg-[#EFF2FB] rounded-lg items-center text-sm"
                 onClick={() =>
@@ -198,14 +212,17 @@ function PdfViewerPage() {
                 Summary
               </button>
             )}
-            {attachment.doesHaveFlashCards && (
+            {attachment.doesHaveFlashCards && !chatBot && (
               <button className="flex gap-2 px-4 py-2 bg-[#EFF2FB] rounded-lg items-center text-sm">
                 <img src="/flashcards.svg" />
                 Flash Cards
               </button>
             )}
             {attachment.doesHaveChatBot && (
-              <button className="flex gap-2 px-4 py-2 bg-[#EFF2FB] rounded-lg items-center text-sm">
+              <button
+                className="flex gap-2 px-4 py-2 bg-[#EFF2FB] rounded-lg items-center text-sm"
+                onClick={() => setChatBot(!chatBot)}
+              >
                 <img src="/filechat.svg" />
                 Chat with File
               </button>
@@ -213,6 +230,14 @@ function PdfViewerPage() {
           </div>
         </div>
       </div>
+      {chatBot && (
+        <FileChatBot
+          courseId={courseId!}
+          sectionId={sectionId!}
+          attachmentId={attachmentId!}
+          scrollToPage={scrollToPage}
+        />
+      )}
     </div>
   );
 }

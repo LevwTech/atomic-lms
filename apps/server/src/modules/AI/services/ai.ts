@@ -17,20 +17,20 @@ import { API_ERROR } from "../../../common/helpers/throwApiError";
 import { API_MESSAGES } from "../../../common/helpers/apiMessages";
 import { MongoDBChatMessageHistory } from "@langchain/mongodb";
 import mongoose, { Types } from "mongoose";
-import { RunnableSequence } from "@langchain/core/runnables";
+import { RunnableLambda, RunnableSequence } from "@langchain/core/runnables";
 import { createHistoryAwareRetriever } from "langchain/chains/history_aware_retriever";
 import { z } from "zod";
 import { Document } from "@langchain/core/documents";
 import { AIMessage, HumanMessage } from "@langchain/core/messages";
 import { CohereRerank } from "@langchain/cohere";
-import { loadSummarizationChain, loadQAChain } from "langchain/chains";
+import { loadSummarizationChain } from "langchain/chains";
 import path from "path";
 import { PPTXLoader } from "@langchain/community/document_loaders/fs/pptx";
 import { DocxLoader } from "@langchain/community/document_loaders/fs/docx";
 import { RecursiveCharacterTextSplitter } from "@langchain/textsplitters";
-import { END, START, StateGraph } from "@langchain/langgraph";
 import {
   FlashCardSchema,
+  MCQOptionSchema,
   MCQQuestionSchema,
   QuestionTypes,
   TFQuestionAnswer,
@@ -217,8 +217,8 @@ export default class AIService {
     const retriever = vectorStore.asRetriever(40);
 
     const llm = new ChatOpenAI({
-      model: "gpt-3.5-turbo",
-      modelName: "gpt-3.5-turbo",
+      model: "gpt-4o",
+      modelName: "gpt-4o",
       temperature: 0.5,
     });
 
@@ -227,7 +227,7 @@ export default class AIService {
         answer: z
           .string()
           .describe(
-            "The answer to the user question in markdown format, which is based only on the given sources.",
+            "The answer to the user question in markdown format with a h3 header, which is based only on the given sources.",
           ),
         newChatTitle: z
           .string()
@@ -268,7 +268,7 @@ export default class AIService {
     const historyAwarRetriever = await createHistoryAwareRetriever({
       llm,
       retriever,
-      rephrasePrompt,
+      rephrasePrompt: rephrasePrompt as any,
     });
 
     const collection = mongoose.connection.db.collection("chats");
@@ -303,29 +303,33 @@ export default class AIService {
     });
 
     const questionAnswerChain = RunnableSequence.from([
-      async (input) => {
-        input.context = await cohereRerank.compressDocuments(
-          input.context,
-          input.input,
-        );
-        return input;
-      },
-      (input) => {
-        input.context = formatDocsForCitation(input.context);
-        return input;
-      },
+      new RunnableLambda({
+        func: async (input: any) => {
+          input.context = await cohereRerank.compressDocuments(
+            input.context,
+            input.input,
+          );
+          return input;
+        },
+      }),
+      new RunnableLambda({
+        func: (input: any) => {
+          input.context = formatDocsForCitation(input.context);
+          return input;
+        },
+      }),
       chatbotQPrompt,
-      llmWithCitationTool,
+      llmWithCitationTool as any,
     ]).withConfig({
       runName: "Bot Answer Generation",
     });
 
     const ragChain = await createRetrievalChain({
       retriever: historyAwarRetriever,
-      combineDocsChain: questionAnswerChain,
+      combineDocsChain: questionAnswerChain as any,
     });
 
-    const response = await ragChain.invoke({
+    const response: any = await ragChain.invoke({
       chat_history: await chatHistory.getMessages(),
       input: question,
       chat_title: chat.title,
@@ -342,7 +346,7 @@ export default class AIService {
       courseId: string;
     }[] = [];
 
-    response.answer.citations.forEach((citation) => {
+    response.answer.citations.forEach((citation: any) => {
       course.sections.forEach((section) => {
         const doc = section.content.find((doc) => {
           return doc._id.toString() === citation.fileName;
@@ -424,8 +428,8 @@ export default class AIService {
 
     const summarizeChain = loadSummarizationChain(llm, {
       type: "map_reduce",
-      combineMapPrompt: summarizationPrompt,
-      combinePrompt: summarizationPrompt,
+      combineMapPrompt: summarizationPrompt as any,
+      combinePrompt: summarizationPrompt as any,
       returnIntermediateSteps: true,
       // prompt: summarizationPrompt,
     }).withConfig({
@@ -526,7 +530,7 @@ export default class AIService {
         return input;
       },
       flashCardsPrompt,
-      llmWithFlashCardTool,
+      llmWithFlashCardTool as any,
     ]).withConfig({
       runName: "Flash Cards Generation",
     });
@@ -552,7 +556,7 @@ export default class AIService {
           pageNumber: question.pageNumber,
           docId: question.docId,
           explanation: question.explanation,
-          type: QuestionTypes.TF,
+          type: QuestionTypes.FLASHCARD,
         });
       }
     }
@@ -621,7 +625,7 @@ export default class AIService {
 
     const generateFlashCardsChain = RunnableSequence.from([
       flashCardsPrompt,
-      llmWithFlashCardTool,
+      llmWithFlashCardTool as any,
     ]).withConfig({
       runName: "Flash Card Answering",
     });
@@ -741,7 +745,7 @@ export default class AIService {
         return input;
       },
       MCQQuestionsPrompt,
-      llmWithMCQTool,
+      llmWithMCQTool as any,
     ]).withConfig({
       runName: "MCQ Questions Generation",
     });
@@ -768,7 +772,7 @@ export default class AIService {
             pageNumber: question.pageNumber,
             docId: question.docId,
             explanation: question.explanation,
-            type: QuestionTypes.TF,
+            type: QuestionTypes.MCQ,
           });
       }
     }
@@ -868,7 +872,7 @@ export default class AIService {
         return input;
       },
       TFQuestionsPrompt,
-      llmWithMCQTool,
+      llmWithMCQTool as any,
     ]).withConfig({
       runName: "True and False Questions Generation",
     });
@@ -907,5 +911,301 @@ export default class AIService {
     );
 
     console.log("Generated TF Questions for document with id: ", attachmentId);
+  }
+
+  public static async getExamQuestions(
+    courseId: string,
+    numMCQ: number,
+    numTF: number,
+    numFlashCards: number,
+  ) {
+    const course =
+      await CourseMaterialService.getCourseMaterialWithContent(courseId);
+
+    const mcqs: {
+      courseId: string;
+      sectionId: string;
+      attachmentId: string;
+      fileName: string;
+      _id?: Types.ObjectId | undefined;
+      type: QuestionTypes;
+      question: string;
+      options: MCQOptionSchema[];
+      explanation: string;
+      pageNumber: number;
+      docId: string;
+    }[] = [];
+
+    const tfs: {
+      courseId: string;
+      sectionId: string;
+      attachmentId: string;
+      fileName: string;
+      _id?: Types.ObjectId | undefined;
+      type: QuestionTypes;
+      question: string;
+      answer: TFQuestionAnswer;
+      explanation: string;
+      pageNumber: number;
+      docId: string;
+    }[] = [];
+
+    const flashCards: {
+      courseId: string;
+      sectionId: string;
+      attachmentId: string;
+      fileName: string;
+      _id?: Types.ObjectId | undefined;
+      type: QuestionTypes;
+      question: string;
+      answer: string;
+      explanation: string;
+      pageNumber: number;
+      docId: string;
+    }[] = [];
+
+    for (const section of course.sections) {
+      for (const attachment of section.content) {
+        if (attachment.doesHaveMCQs) {
+          mcqs.push(
+            ...attachment.mcqQuestions.map((question) => ({
+              courseId,
+              sectionId: (section as any)._id as string,
+              attachmentId: attachment._id,
+              fileName: attachment.title,
+              type: question.type,
+              question: question.question,
+              options: question.options,
+              explanation: question.explanation,
+              pageNumber: question.pageNumber,
+              docId: question.docId,
+              _id: question._id,
+            })),
+          );
+        }
+
+        if (attachment.doesHaveTFs) {
+          tfs.push(
+            ...attachment.tfQuestions.map((question) => ({
+              courseId,
+              sectionId: (section as any)._id as string,
+              attachmentId: attachment._id,
+              fileName: attachment.title,
+              type: question.type,
+              question: question.question,
+              answer: question.answer,
+              explanation: question.explanation,
+              pageNumber: question.pageNumber,
+              docId: question.docId,
+              _id: question._id,
+            })),
+          );
+        }
+
+        if (attachment.doesHaveFlashCards) {
+          flashCards.push(
+            ...attachment.flashCards.map((question) => ({
+              courseId,
+              sectionId: (section as any)._id as string,
+              attachmentId: attachment._id,
+              fileName: attachment.title,
+              type: question.type,
+              question: question.question,
+              answer: question.answer,
+              explanation: question.explanation,
+              pageNumber: question.pageNumber,
+              docId: question.docId,
+              _id: question._id,
+            })),
+          );
+        }
+      }
+    }
+
+    const mcqQuestions = mcqs
+      .sort(() => Math.random() - 0.5)
+      .slice(0, Math.min(numMCQ, mcqs.length));
+
+    const tfQuestions = tfs
+      .sort(() => Math.random() - 0.5)
+      .slice(0, Math.min(numTF, tfs.length));
+
+    const flashCardQuestions = flashCards
+      .sort(() => Math.random() - 0.5)
+      .slice(0, Math.min(numFlashCards, flashCards.length));
+
+    return {
+      mcqQuestions,
+      tfQuestions,
+      flashCardQuestions,
+    };
+  }
+
+  public static async answerExamQuestions(
+    questions: {
+      questionId: string;
+      studentAnswer: string;
+    }[],
+    courseId: string,
+  ) {
+    const llm = new ChatOpenAI({
+      model: "gpt-4o",
+      modelName: "gpt-4o",
+      temperature: 0,
+      maxTokens: -1,
+    });
+
+    const outputFormat = z
+      .object({
+        answers: z
+          .array(
+            z
+              .object({
+                questionId: z.string().describe("the question id"),
+                isCorrect: z
+                  .enum(["correct", "partially_correct", "incorrect"])
+                  .describe(
+                    'stating the student answer is "correct", "partially_correct" or "incorrect"',
+                  ),
+                explaination: z
+                  .string()
+                  .describe(
+                    "an explaination why the answer is correct, partially correct or incorrect",
+                  ),
+                correctAnswer: z
+                  .string()
+                  .describe("the correct answer to the flash card question"),
+                advise: z
+                  .string()
+                  .describe(
+                    "an advise to the student on how to improve their answer",
+                  ),
+              })
+              .describe(
+                "an object stating if the student answer is correct, partially correct or incorrect",
+              ),
+          )
+          .describe("an array of answers to the exam questions"),
+      })
+      .describe("an object with answers to the exam questions");
+
+    const llmWithFlashCardTool = llm.withStructuredOutput(outputFormat, {
+      name: "cited_flash_cards",
+    });
+
+    const flashCardsPrompt = new PromptTemplate({
+      template: AIPrompts.answerExamQuestionsQSystemPrompt,
+      inputVariables: ["questions"],
+    });
+
+    const formatFlashCardsForAnswer = (
+      cards: {
+        sectionId: string;
+        attachmentId: string;
+        courseId: string;
+        studentAnswer: string;
+        _id: Types.ObjectId;
+        type: QuestionTypes;
+        question: string;
+        answer: string;
+        explanation: string;
+        pageNumber: number;
+        docId: string;
+      }[],
+    ): string => {
+      return (
+        "\n\n" +
+        cards
+          .map(
+            (card) =>
+              `questionId:${card._id.toString()}\nquestion: ${card.question}\nPage Number: ${card.pageNumber || 0}\nCorrect Answer: ${card.answer}\nexplanation: ${card.explanation}\nStudent Answer: ${card.studentAnswer}`,
+          )
+          .join("\n\n")
+      );
+    };
+
+    const generateFlashCardsChain = RunnableSequence.from([
+      (input) => {
+        input.questions = formatFlashCardsForAnswer(input.questions);
+        return input;
+      },
+      flashCardsPrompt,
+      llmWithFlashCardTool as any,
+    ]).withConfig({
+      runName: "exam Answering",
+    });
+
+    const course =
+      await CourseMaterialService.getCourseMaterialWithContent(courseId);
+
+    const questionsIds = questions.map((question) => question.questionId);
+
+    const flashCards: {
+      sectionId: string;
+      attachmentId: string;
+      courseId: string;
+      studentAnswer: string;
+      _id: Types.ObjectId;
+      type: QuestionTypes;
+      question: string;
+      answer: string;
+      explanation: string;
+      pageNumber: number;
+      docId: string;
+    }[] = [];
+
+    for (const section of course.sections) {
+      for (const attachment of section.content) {
+        attachment.flashCards.forEach((question) => {
+          if (questionsIds.includes(question._id!.toString())) {
+            const studentAnswer = questions.find(
+              (q) => q.questionId === question._id!.toString(),
+            )!.studentAnswer;
+            flashCards.push({
+              type: question.type,
+              question: question.question,
+              answer: question.answer,
+              explanation: question.explanation,
+              pageNumber: question.pageNumber,
+              docId: question.docId,
+              sectionId: (section as any)._id as string,
+              attachmentId: attachment._id,
+              courseId,
+              studentAnswer,
+              _id: question._id!,
+            });
+          }
+        });
+      }
+    }
+
+    const response = await generateFlashCardsChain.invoke({
+      questions: flashCards,
+    });
+
+    const orderedAnswers = questions
+      .map((question) =>
+        response.answers.find(
+          (answer: any) => answer.questionId === question.questionId,
+        ),
+      )
+      .map((answer) => {
+        const card = flashCards.find(
+          (card) => card._id.toString() === answer.questionId,
+        );
+
+        return {
+          ...answer,
+          question: card?.question,
+          pageNumber: card?.pageNumber,
+          correctAnswer: card?.answer,
+          docId: card?.docId,
+          courseId: card?.courseId,
+          sectionId: card?.sectionId,
+          attachmentId: card?.attachmentId,
+        };
+      });
+
+    return orderedAnswers;
   }
 }

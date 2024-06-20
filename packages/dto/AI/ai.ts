@@ -39,4 +39,25 @@ export class AIDto {
       chatId: ObjectIdString,
     }),
   };
+
+  public static getExamQuestions = {
+    body: z.object({
+      courseId: UUIDString,
+      numMCQ: z.number().int().positive(),
+      numTF: z.number().int().positive(),
+      numFlashCards: z.number().int().positive(),
+    }),
+  };
+
+  public static answerExamQuestions = {
+    body: z.object({
+      courseId: UUIDString,
+      answers: z.array(
+        z.object({
+          questionId: ObjectIdString,
+          studentAnswer: z.string().min(1).max(1000),
+        }),
+      ),
+    }),
+  };
 }

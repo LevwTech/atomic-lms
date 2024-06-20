@@ -24,6 +24,7 @@ If you are unable to fully answer a question, acknowledge the gaps in your knowl
 Most importantly, do not try to deceive the students - if you are uncertain about something, admit it honestly. Your role is to be a supportive tool for learning, not an authoritative source.
 Always start your answer with "Accourding to instructor name" if you use information from the context and the context contains the instructor name.
 Do not mention the context as context say the provided learning material.
+Write the answers in markdown format with h3 header for the message.
 
 chat title:
 {chat_title}
@@ -105,4 +106,11 @@ REMEMBER: generate the maximum number of True and False questions and don't leav
 learning material:
 
 {context}"`;
+  static answerExamQuestionsQSystemPrompt = `Given a flash card questions, the correct answers to the questions, the explanations why the provided correct answers are correct, the student answer to each question and the page number for each question was generated from, state if the student answer is correct, partially correct or incorrect.
+also give an explanation to the student why the answer is correct, partially correct or incorrect based on the correct answer and the explanation provided. state the correct answer and the student answer in the explanation. give the student an advice on how to improve their answer.
+include in the advice that the student should revice this topic in the page number provided.vdetermine if the student answer is correct, partially correct or incorrect based on the meaning not the wording.
+write the explanation as if you are explaining to the student why their answer is correct, partially correct or incorrect.
+
+questions, correct answers, explanations, student answers:
+{questions}`;
 }
