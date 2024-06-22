@@ -1,6 +1,6 @@
 # Atomic LMS
 
-The learning management system of the future.
+The Learning Management System of the Future.
 
 ![identity](/Atomic%20LMS.png)
 
