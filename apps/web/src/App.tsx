@@ -17,6 +17,7 @@ import AiChatbot from "./Pages/Courses/AiChatbot";
 import { pdfjs } from "react-pdf";
 import SummaryPage from "./Pages/Courses/summary";
 import ExamPage from "./Pages/Courses/ExamPage";
+import CreateExamPage from "./Pages/Courses/createExam";
 
 pdfjs.GlobalWorkerOptions.workerSrc = new URL(
   "pdfjs-dist/build/pdf.worker.min.mjs",
@@ -162,6 +163,14 @@ function App() {
         }
       />
       <Route
+        path="/createExam/:courseId"
+        element={
+          <ProtectedRoute>
+            <CreateExamPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
         path="*"
         element={
           <ProtectedRoute>
@@ -175,7 +184,7 @@ function App() {
         }
       />
       <Route
-        path="/flashcards"
+        path="/courses/:courseId/:sectionId/:attachmentId/flashcards"
         element={
           <ProtectedRoute>
             <Flashcards />
@@ -189,7 +198,10 @@ function App() {
             <Answer
               question="Lorem ipsum dolor sit amet consectetur"
               answer="Lorem ipsum dolor sit amet consectetur adipisicing elit. Eius optio similique exercitationem doloremque nostrum amet velit voluptatum quo perferendis officiis."
-              explaination="Lorem ipsum dolor sit amet consectetur adipisicing elit. Eius optio similique exercitationem doloremque nostrum amet velit voluptatum quo perferendis officiis." studentAnswer={""} advice={""}            />
+              explaination="Lorem ipsum dolor sit amet consectetur adipisicing elit. Eius optio similique exercitationem doloremque nostrum amet velit voluptatum quo perferendis officiis."
+              studentAnswer={""}
+              advice={""}
+            />
           </ProtectedRoute>
         }
       />

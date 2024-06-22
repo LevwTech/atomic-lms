@@ -1,4 +1,4 @@
-import { Button } from "@atomic/web-ui";
+import { AnswerLabel, Button, CollapsibleCard } from "@atomic/web-ui";
 import SideBar from "@atomic/web-ui/SideBar/sideBar";
 import { useQuery } from "@tanstack/react-query";
 import React, { useEffect, useState } from "react";
@@ -95,7 +95,7 @@ const FlashCardInput = ({
       />
     </div>
     <div className="flex justify-between px-[20px] py-[5px] bg-[#f5f5f5] rounded-b-[10px] border ">
-      <p>{5}/3000</p>
+      <p>{5}/500</p>
     </div>
   </div>
 );
@@ -123,6 +123,7 @@ const ExamPage: React.FC<Props> = ({}) => {
       pageNumber: number;
       _id: string;
       studentAnswer: string;
+      isCorrect: string;
     }[]
   >([]);
 
@@ -134,11 +135,12 @@ const ExamPage: React.FC<Props> = ({}) => {
       fileName: string;
       type: string;
       question: string;
-      answer: boolean;
+      answer: string;
       explanation: string;
       pageNumber: number;
       _id: string;
       studentAnswer: string;
+      isCorrect: string;
     }[]
   >([]);
 
@@ -196,12 +198,14 @@ const ExamPage: React.FC<Props> = ({}) => {
         exam.mcqQuestions.map((question: any) => ({
           ...question,
           studentAnswer: "",
+          isCorrect: "",
         })),
       );
       setTfQuestions(
         exam.tfQuestions.map((question: any) => ({
           ...question,
           studentAnswer: "",
+          isCorrect: "",
         })),
       );
       setFlashCardQuestions(
@@ -251,7 +255,7 @@ const ExamPage: React.FC<Props> = ({}) => {
     const iscorrect = res.map((ans: any) => ({
       isCorrect: ans.isCorrect,
       explanation: ans.explaination,
-      advice: ans.advice,
+      advice: ans.advise,
       questionId: ans.questionId,
     }));
 
@@ -261,18 +265,39 @@ const ExamPage: React.FC<Props> = ({}) => {
           (ans: any) => ans.questionId === question._id,
         );
 
+        console.log(answer);
+
         return {
           ...question,
           isCorrect: answer.isCorrect,
           explanation: answer.explanation,
-          advice: answer.advise,
+          advice: answer.advice,
         };
       }),
     );
 
+    // grade TF and MCQ
+    const tfAnswers = tfQuestions.map((question) => ({
+      ...question,
+      isCorrect:
+        question.answer === question.studentAnswer ? "correct" : "incorrect",
+    }));
+
+    const mcqAnswers = mcqQuestions.map((question) => ({
+      ...question,
+      isCorrect:
+        question.options.find((option) => option.isCorrect)?.letter ===
+        question.studentAnswer
+          ? "correct"
+          : "incorrect",
+    }));
+
+    setTfQuestions(tfAnswers);
+    setMcqQuestions(mcqAnswers);
     setCurrentQuestionIndex(0);
     setCurrentType(QuestionType.TF);
     setLoadingAnswers(false);
+    setShowAnswers(true);
   };
 
   const handleStudentAnswerChange = (studentAnswer: string) => {
@@ -313,7 +338,7 @@ const ExamPage: React.FC<Props> = ({}) => {
           ? mcqQuestions[currentQuestionIndex]
           : flashCardQuestions[currentQuestionIndex];
 
-    if (currentQuestion.studentAnswer === "") {
+    if (currentQuestion.studentAnswer === "" && !showAnswers) {
       return;
     }
     if (currentType === QuestionType.TF) {
@@ -425,7 +450,7 @@ const ExamPage: React.FC<Props> = ({}) => {
             ))}
           </div>
         </div>
-        <div className="flex flex-col items-center justify-center">
+        <div className="flex flex-col items-center justify-center gap-8">
           <div className="bg-white flex flex-col w-[70%] p-10 items-center justify-center rounded-xl shadow-md gap-3">
             <p className="text-[#BCBCBC] font-poppins text-2xl font-normal leading-normal uppercase text-center">
               Question {currentExamIndex + 1}/
@@ -441,7 +466,48 @@ const ExamPage: React.FC<Props> = ({}) => {
                   : flashCardQuestions[currentQuestionIndex]?.question}
             </p>
           </div>
-          {currentType === QuestionType.TF ? (
+          {showAnswers ? (
+            <div className="flex flex-col w-[75%] items-center justify-center">
+              <AnswerLabel
+                isCorrect={
+                  currentType === QuestionType.TF
+                    ? tfQuestions[currentQuestionIndex]?.isCorrect
+                    : currentType === QuestionType.MCQ
+                      ? mcqQuestions[currentQuestionIndex]?.isCorrect
+                      : flashCardQuestions[currentQuestionIndex]?.isCorrect
+                }
+              />
+              <CollapsibleCard
+                correctAnswer={
+                  currentType === QuestionType.TF
+                    ? tfQuestions[currentQuestionIndex]?.answer!
+                    : currentType === QuestionType.MCQ
+                      ? mcqQuestions[currentQuestionIndex]?.options.find(
+                          (option) => option.isCorrect,
+                        )?.letter! +
+                        ") " +
+                        mcqQuestions[currentQuestionIndex]?.options.find(
+                          (option) => option.isCorrect,
+                        )?.text!
+                      : flashCardQuestions[currentQuestionIndex]?.answer!
+                }
+                explanation={
+                  currentType === QuestionType.TF
+                    ? tfQuestions[currentQuestionIndex]?.explanation
+                    : currentType === QuestionType.MCQ
+                      ? mcqQuestions[currentQuestionIndex]?.explanation
+                      : flashCardQuestions[currentQuestionIndex]?.explanation
+                }
+                advice={
+                  currentType === QuestionType.FLASH_CARD
+                    ? flashCardQuestions[currentQuestionIndex]?.advice
+                    : ""
+                }
+                haveAdvice={currentType === QuestionType.FLASH_CARD}
+              />
+            </div>
+          ) : null}
+          {showAnswers ? null : currentType === QuestionType.TF ? (
             <TFInput
               handleChange={handleStudentAnswerChange}
               value={tfQuestions[currentQuestionIndex]?.studentAnswer}
@@ -477,31 +543,39 @@ const ExamPage: React.FC<Props> = ({}) => {
             <img src="./BackButton.svg" alt="" className="mr-2" />
             Previous Question
           </button>
-          <Button
-            style={{
-              marginTop: "0",
-              height: "40px",
-              fontSize: "15px",
-              fontWeight: "normal",
-              display: "flex",
-              alignItems: "center",
-              backgroundColor: "var(--Secondary)",
-              color: "var(--Primary)",
-            }}
-            onPress={
-              currentExamIndex + 1 ===
+          {showAnswers &&
+          currentExamIndex + 1 ===
+            mcqQuestions.length +
+              tfQuestions.length +
+              flashCardQuestions.length ? null : (
+            <Button
+              style={{
+                marginTop: "0",
+                height: "40px",
+                fontSize: "15px",
+                fontWeight: "normal",
+                display: "flex",
+                alignItems: "center",
+                backgroundColor: "var(--Secondary)",
+                color: "var(--Primary)",
+              }}
+              onPress={
+                currentExamIndex + 1 ===
+                mcqQuestions.length +
+                  tfQuestions.length +
+                  flashCardQuestions.length
+                  ? handleFinishExam
+                  : handleNextQuestion
+              }
+            >
+              {currentExamIndex + 1 ===
               mcqQuestions.length +
                 tfQuestions.length +
                 flashCardQuestions.length
-                ? handleFinishExam
-                : handleNextQuestion
-            }
-          >
-            {currentExamIndex + 1 ===
-            mcqQuestions.length + tfQuestions.length + flashCardQuestions.length
-              ? "Finish Exam"
-              : "Next Question"}
-          </Button>
+                ? "Finish Exam"
+                : "Next Question"}
+            </Button>
+          )}
         </div>
       </div>
     </div>

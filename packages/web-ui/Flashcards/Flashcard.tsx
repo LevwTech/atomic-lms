@@ -9,30 +9,42 @@ const flashcardVariants = {
   exit: { opacity: 0, rotateY: -90, transition: { duration: 0.5 } },
 };
 
-const Flashcard = ({
+export const Flashcard = ({
   card,
+  flippable = true,
+  flipped,
+  setFlipped,
+  currentIndex,
+  numOfQuestions,
 }: {
   card: { question: string; answer: string; explaination: string };
+  flippable?: boolean;
+  flipped: boolean;
+  currentIndex: number;
+  numOfQuestions: number;
+  setFlipped: (flipped: boolean) => void;
 }) => {
-  const [flipped, setFlipped] = useState(false);
+  console.log("card", card);
   const flashcardHeight =
     Math.ceil(Math.max(card.question.length / 45, card.answer.length / 45)) *
       50 +
     50;
   return (
     <motion.div
-      className={`${styles.flashcards} relative  `}
+      className={`${styles.flashcards} relative`}
       style={{ height: `${flashcardHeight}px` }}
       initial="initial"
       animate={flipped ? "animateBack" : "animateFront"}
       variants={flashcardVariants}
-      onClick={() => setFlipped(!flipped)}
+      onClick={() => {
+        if (flippable) setFlipped(!flipped);
+      }}
     >
       <div
-        className={`absolute inset-0 ${styles.backfaceHidden} ${flipped ? "hidden" : ""} p-[30px]`}
+        className={`absolute inset-0 ${styles.backfaceHidden} ${flipped ? "hidden" : ""} p-[30px] flex flex-col items-center justify-center`}
       >
         <h1 className="text-[#BCBCBC] font-poppins text-2xl font-normal leading-normal uppercase text-center">
-          Question 1/30
+          Question {currentIndex + 1}/{numOfQuestions}
         </h1>
         <br />
         <p className="text-[#35383F] text-center font-poppins text-2xl font-bold leading-[35px] uppercase">
@@ -40,7 +52,7 @@ const Flashcard = ({
         </p>
       </div>
       <div
-        className={`absolute inset-0 ${styles.backfaceHidden} ${flipped ? "" : "hidden"}  p-[30px]`}
+        className={`absolute inset-0 ${styles.backfaceHidden} ${flipped && flippable ? "" : "hidden"}  p-[30px]`}
       >
         <h1
           className={`text-[#BCBCBC] font-poppins text-2xl font-normal leading-normal uppercase text-center  ${styles.mirroredText}`}
@@ -57,5 +69,3 @@ const Flashcard = ({
     </motion.div>
   );
 };
-
-export default Flashcard;

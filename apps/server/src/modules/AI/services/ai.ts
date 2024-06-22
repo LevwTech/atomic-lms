@@ -21,7 +21,11 @@ import { RunnableLambda, RunnableSequence } from "@langchain/core/runnables";
 import { createHistoryAwareRetriever } from "langchain/chains/history_aware_retriever";
 import { z } from "zod";
 import { Document } from "@langchain/core/documents";
-import { AIMessage, HumanMessage } from "@langchain/core/messages";
+import {
+  AIMessage,
+  AIMessageChunk,
+  HumanMessage,
+} from "@langchain/core/messages";
 import { CohereRerank } from "@langchain/cohere";
 import { loadSummarizationChain } from "langchain/chains";
 import path from "path";
@@ -569,6 +573,18 @@ export default class AIService {
     );
 
     console.log("Generated flash cards for document with id: ", attachmentId);
+  }
+
+  public static async getFlashCards(
+    courseId: string,
+    sectionId: string,
+    attachmentId: string,
+  ) {
+    return CourseMaterialService.getAttachmentFlashCards(
+      courseId,
+      sectionId,
+      attachmentId,
+    );
   }
 
   public static async answerFlashCard(
@@ -1207,5 +1223,150 @@ export default class AIService {
       });
 
     return orderedAnswers;
+  }
+
+  public static async AITutor(
+    courseId: string,
+    sectionId: string,
+    attachmentId: string,
+    userId: string,
+    studentNamme: string,
+    message?: string,
+    chatId?: string,
+  ) {
+    const embeddings = new OpenAIEmbeddings({
+      model: "text-embedding-3-large",
+    });
+
+    const pinecone = new Pinecone({ apiKey: process.env.PINECONE_API_KEY! });
+
+    const pineconeIndex = pinecone.Index(process.env.PINECONE_INDEX!);
+
+    const filter: any = { namespace: courseId, attachmentId };
+
+    const vectorStore = await PineconeStore.fromExistingIndex(embeddings, {
+      filter,
+      pineconeIndex,
+      namespace: courseId,
+    });
+
+    const retriever = vectorStore.asRetriever(250);
+
+    const llm = new ChatOpenAI({
+      model: "gpt-4o",
+      modelName: "gpt-4o",
+      temperature: 0.5,
+    });
+
+    const formatDocsForCitation = (docs: Array<Document>): string => {
+      return (
+        "\n\n" +
+        docs
+          .map(
+            (doc: Document) =>
+              `File Name: ${doc.metadata.attachmentId}\nPage Number: ${doc.metadata["loc.pageNumber"] || 0}\nPage Content: ${doc.pageContent}`,
+          )
+          .join("\n\n")
+      );
+    };
+
+    const aiTutorPrompt = ChatPromptTemplate.fromMessages([
+      ["system", AIPrompts.AITutorQSystemPrompt],
+      new MessagesPlaceholder("chat_history"),
+      ["human", "{input}"],
+    ]);
+
+    const collection = mongoose.connection.db.collection("chats");
+
+    if (!chatId) {
+      const chat = await ChatModel.createChat(
+        userId,
+        courseId,
+        sectionId,
+        attachmentId,
+      );
+      chatId = chat._id.toString();
+    }
+
+    const chatHistory = new MongoDBChatMessageHistory({
+      collection: collection as any,
+      sessionId: chatId,
+    });
+
+    const outputFormat = z
+      .object({
+        message: z
+          .string()
+          .describe(
+            "Your message to the student maybe explaining or answering",
+          ),
+        pageNumber: z
+          .number()
+          .describe(
+            "The page number of the SPECIFIC page you are explaining or answering student question from.",
+          ),
+      })
+      .describe("A cited AI Tutor Message");
+
+    const llmWithCitationTool = llm.withStructuredOutput(outputFormat, {
+      name: "cited_explaination",
+    });
+
+    const aiTutorAnswerChain = RunnableSequence.from([
+      new RunnableLambda({
+        func: (input: any) => {
+          // sort douments by page
+          input.context = input.context.sort(
+            (a: Document, b: Document) =>
+              a.metadata.pageNumber - b.metadata.pageNumber,
+          );
+          input.context = formatDocsForCitation(input.context);
+          return input;
+        },
+      }),
+      aiTutorPrompt,
+      llmWithCitationTool as any,
+    ]).withConfig({
+      runName: "AI Tutor Answer Generation",
+    });
+
+    const tutorChain = await createRetrievalChain({
+      retriever: retriever,
+      combineDocsChain: aiTutorAnswerChain as any,
+    });
+
+    const response = await tutorChain.invoke({
+      chat_history: await chatHistory.getMessages(),
+      input: message ? message : "hi",
+      student_name: studentNamme,
+    });
+
+    const newMessages = [
+      new AIMessage({
+        content: (response.answer as any).message,
+        additional_kwargs: {
+          citations: [
+            {
+              pageNumber: (response.answer as any).pageNumber,
+              fileName: "",
+              sectionId,
+              attachmentId,
+            },
+          ],
+        },
+      }),
+    ];
+
+    if (message) {
+      newMessages.unshift(new HumanMessage(message));
+    }
+
+    chatHistory.addMessages(newMessages);
+
+    return {
+      response: (response.answer as any).message,
+      pageNumber: (response.answer as any).pageNumber,
+      chatId,
+    };
   }
 }

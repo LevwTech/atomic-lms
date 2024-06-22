@@ -67,6 +67,10 @@ function ModuleContentPage() {
     navigate(`/courses/${courseId}/${sectionId}/${_id}/pdf`);
   };
 
+  const openExam = () => {
+    navigate(`/createExam/${courseId}`);
+  };
+
   if (isLoading || isLoadingSections) {
     return (
       <div className="h-screen p-[40px] flex justify-center items-center gap-[40px]">
@@ -89,6 +93,7 @@ function ModuleContentPage() {
           userType={user.type! as any}
           goToUpload={goToUpload}
           openFile={openFile}
+          openExam={openExam}
         />
       </div>
       <div className="bg-[var(--White)] h-full w-[30vw] rounded-[13.6px]">

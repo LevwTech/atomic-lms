@@ -1,8 +1,8 @@
 import Sidebar from "@atomic/web-ui/SideBar/sideBar";
-import InstagramStories from "@atomic/web-ui/InstagramStories/InstagramStories";
-import CollapsibleCard from "@atomic/web-ui/CollapsibleCard/CollapsibleCard";
-import { Button } from "@atomic/web-ui/Button/button";
-import AnswerLabel from "@atomic/web-ui/AnswerLabel/answerLabel";
+import { InstagramStories } from "@atomic/web-ui";
+import { CollapsibleCard } from "@atomic/web-ui";
+import { Button } from "@atomic/web-ui";
+import { AnswerLabel } from "@atomic/web-ui";
 function Answer(card: {
   question: string;
   studentAnswer: string;

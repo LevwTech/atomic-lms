@@ -27,7 +27,7 @@ const ContentComponent: React.FC<ContentProps> = ({
       <motion.div
         initial={{ height: "80%" }}
         whileHover={{ height: "100%" }}
-        className="bg-[var(--WDarker)] rounded-lg relative flex justify-center p-2"
+        className={`${id === 12345 ? (isHovered ? "bg-gradient-to-tl from-[#FFE53B] to-[#00FFFF]" : "bg-gradient-to-tl from-[#00FFFF] to-[#FFE53B]") : "bg-[var(--WDarker)]"} rounded-lg relative flex justify-center p-2`}
         onMouseEnter={() => {
           setHoveredDiv(id);
           setIsHovered(true);
@@ -40,7 +40,9 @@ const ContentComponent: React.FC<ContentProps> = ({
         <img src={image} alt={title} />
       </motion.div>
       <motion.div className="bg-[var(--White)] rounded-b-lg flex flex-col justify-center">
-        <p className={`text-black ml-2 mb-1 font-poppins text-[1vw] font-bold leading-none mt-2 ${isHovered ? 'break-words hyphens-auto' : 'truncate'}`}>
+        <p
+          className={`text-black ml-2 mb-1 font-poppins text-[1vw] font-bold leading-none mt-2 ${isHovered ? "break-words hyphens-auto" : "truncate"}`}
+        >
           {title}
         </p>
       </motion.div>

@@ -36,9 +36,7 @@ function SideBar({ primaryLogo, secondaryLogo, user }: SideBarProps) {
           <div className="mx-auto">
             <div
               className={
-                isSidebarOpen
-                  ? " mb-20 mt-4"
-                  : "flex justify-center mb-20 mt-4  "
+                isSidebarOpen ? " mb-20 mt-4" : "flex justify-center mb-20 mt-4"
               }
             >
               <Link to="/">
@@ -48,7 +46,7 @@ function SideBar({ primaryLogo, secondaryLogo, user }: SideBarProps) {
                       ? `mx-2 ${styles.logo} ${styles.navLink}  `
                       : styles.navLink
                   }
-                  src={isSidebarOpen ? primaryLogo : secondaryLogo}
+                  src={isSidebarOpen ? "/BUE_Logo.svg" : "/miniUniLogo.svg"}
                   alt="University Logo"
                 />
               </Link>

@@ -1,4 +1,4 @@
-function answerLabel({ isCorrect }: { isCorrect: string }) {
+export function AnswerLabel({ isCorrect }: { isCorrect: string }) {
   let iconSrc = "";
   let bgColor = "";
   let textColor = "";
@@ -39,5 +39,3 @@ function answerLabel({ isCorrect }: { isCorrect: string }) {
     </div>
   );
 }
-
-export default answerLabel;

@@ -1,33 +1,16 @@
-function instagramStories(): any {
-  interface Question {
-    // // id: number;
-    title: string;
-    description: string;
-  }
-  const questions: Question[] = [
-    {
-      //   // id: 1,
-      title: "What is your favorite color?",
-      description: "Please select your favorite color from the options below.",
-    },
-    {
-      // id: 2,
-      title: "How many pets do you have?",
-      description: "Enter the number of pets you currently own.",
-    },
-    {
-      // id: 3,
-      title: "Do you prefer cats or dogs?",
-      description: "Choose between cats or dogs.",
-    },
-  ];
+export function InstagramStories({
+  questions,
+  currentQuestionNumber,
+}: {
+  questions: any[];
+  currentQuestionNumber: number;
+}): any {
   const widthPercentage = `${(100 / questions.length).toFixed(2)}%`;
-  const currentQuestionNumber = 0;
 
   return (
     <>
       <div className="flex h-[10%]  p-[30px]">
-        {questions.map((question, index) => {
+        {questions.map((_, index) => {
           const isHighlighted = index === currentQuestionNumber;
 
           return (
@@ -44,5 +27,3 @@ function instagramStories(): any {
     </>
   );
 }
-
-export default instagramStories;

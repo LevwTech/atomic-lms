@@ -21,6 +21,13 @@ aiRouter.post(
 );
 
 aiRouter.post(
+  "/get-attachment-flashcards",
+  authMiddleware(),
+  validationMiddleware(AIDto.getAttachmentFlashcards),
+  AIController.getAttachmentFlashcards,
+);
+
+aiRouter.post(
   "/flashcards/answer",
   authMiddleware(),
   validationMiddleware(AIDto.answerFlashcard),
@@ -48,6 +55,13 @@ aiRouter.post(
   authMiddleware(),
   validationMiddleware(AIDto.answerExamQuestions),
   AIController.answerExamQuestions,
+);
+
+aiRouter.post(
+  "/ai-tutor",
+  authMiddleware(),
+  validationMiddleware(AIDto.AITutor),
+  AIController.AITutor,
 );
 
 export default aiRouter;

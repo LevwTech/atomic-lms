@@ -5,6 +5,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { Page, Document } from "react-pdf";
 import React, { useEffect, useRef, useState } from "react";
 import FileChatBot from "../../components/fileChatbot";
+import AITutor from "../../components/aiTutor";
 
 function PdfViewerPage() {
   const { courseId, sectionId, attachmentId } = useParams();
@@ -21,6 +22,9 @@ function PdfViewerPage() {
   const [chatBot, setChatBot] = useState(
     searchParams.get("chatId") ? true : false,
   );
+  const [aiTutor, setAiTutor] = useState(
+    searchParams.get("aiTutorId") ? true : false,
+  );
 
   function onDocumentLoadSuccess({ numPages }: { numPages: number }) {
     setNumPages(numPages);
@@ -30,9 +34,14 @@ function PdfViewerPage() {
   }
 
   function scrollToPage(page: number) {
+    console.log("page:", page);
+    console.log("pageRefs", pageRefs);
     const pageRef = pageRefs.current[page - 1];
-    console.log(pageRef);
+    console.log("pageRef", pageRef);
     if (pageRef.current) {
+      console.log("pageRef.current", pageRef.current);
+      console.log("here");
+      console.log(pageRef.current.scrollIntoView);
       pageRef.current.scrollIntoView({ behavior: "smooth" });
     }
   }
@@ -132,7 +141,7 @@ function PdfViewerPage() {
         user={{ name: "Abdelrahman", id: "Abdelrahman192222" }}
       />
       <div
-        className={`h-full ${chatBot ? "w-[42vw]" : "w-[85vw]"} rounded-[14px] items-center flex flex-col bg-[#f9f9f9]  gap-[30px] relative`}
+        className={`h-full ${chatBot || aiTutor ? "w-[42vw]" : "w-[85vw]"} rounded-[14px] items-center flex flex-col bg-[#f9f9f9]  gap-[30px] relative`}
       >
         <div
           className="w-full h-full rounded-[14px] overflow-scroll flex flex-col p-[30px] pb-20 items-center bg-[#f9f9f9]"
@@ -213,12 +222,28 @@ function PdfViewerPage() {
               </button>
             )}
             {attachment.doesHaveFlashCards && !chatBot && (
-              <button className="flex gap-2 px-4 py-2 bg-[#EFF2FB] rounded-lg items-center text-sm">
+              <button
+                className="flex gap-2 px-4 py-2 bg-[#EFF2FB] rounded-lg items-center text-sm"
+                onClick={() =>
+                  navigate(
+                    `/courses/${courseId}/${sectionId}/${attachmentId}/flashcards`,
+                  )
+                }
+              >
                 <img src="/flashcards.svg" />
                 Flash Cards
               </button>
             )}
-            {attachment.doesHaveChatBot && (
+            {attachment.doesHaveChatBot && !chatBot && (
+              <button
+                className="flex gap-2 px-4 py-2 bg-[#EFF2FB] rounded-lg items-center text-sm"
+                onClick={() => setAiTutor(!aiTutor)}
+              >
+                <img src="/filechat.svg" />
+                AI Tutor
+              </button>
+            )}
+            {attachment.doesHaveChatBot && !aiTutor && (
               <button
                 className="flex gap-2 px-4 py-2 bg-[#EFF2FB] rounded-lg items-center text-sm"
                 onClick={() => setChatBot(!chatBot)}
@@ -232,6 +257,14 @@ function PdfViewerPage() {
       </div>
       {chatBot && (
         <FileChatBot
+          courseId={courseId!}
+          sectionId={sectionId!}
+          attachmentId={attachmentId!}
+          scrollToPage={scrollToPage}
+        />
+      )}
+      {aiTutor && (
+        <AITutor
           courseId={courseId!}
           sectionId={sectionId!}
           attachmentId={attachmentId!}

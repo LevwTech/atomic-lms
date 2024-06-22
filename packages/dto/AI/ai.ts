@@ -24,6 +24,14 @@ export class AIDto {
     }),
   };
 
+  public static getAttachmentFlashcards = {
+    body: z.object({
+      courseId: UUIDString,
+      sectionId: ObjectIdString,
+      attachmentId: ObjectIdString,
+    }),
+  };
+
   public static answerFlashcard = {
     body: z.object({
       courseId: UUIDString,
@@ -58,6 +66,16 @@ export class AIDto {
           studentAnswer: z.string().min(1).max(1000),
         }),
       ),
+    }),
+  };
+
+  public static AITutor = {
+    body: z.object({
+      courseId: UUIDString,
+      sectionId: ObjectIdString,
+      attachmentId: ObjectIdString,
+      message: z.string().optional(),
+      chatId: ObjectIdString.optional(),
     }),
   };
 }

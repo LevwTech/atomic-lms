@@ -34,6 +34,21 @@ export default class AIController {
     res.status(200).json(aiResponse);
   }
 
+  public static async getAttachmentFlashcards(
+    req: ValidatedRequest<typeof AIDto.getAttachmentFlashcards>,
+    res: Response,
+  ) {
+    const { courseId, sectionId, attachmentId } = req.body;
+
+    const flashcards = await AIService.getFlashCards(
+      courseId,
+      sectionId,
+      attachmentId,
+    );
+
+    res.status(200).json(flashcards);
+  }
+
   public static async answerFlashcard(
     req: ValidatedRequest<typeof AIDto.answerFlashcard>,
     res: Response,
@@ -95,5 +110,26 @@ export default class AIController {
     const results = await AIService.answerExamQuestions(answers, courseId);
 
     res.status(200).json(results);
+  }
+
+  public static async AITutor(
+    req: ValidatedRequest<typeof AIDto.AITutor>,
+    res: Response,
+  ) {
+    const { courseId, sectionId, attachmentId, message, chatId } = req.body;
+
+    const user = getUserFromRequest(req);
+
+    const reply = await AIService.AITutor(
+      courseId,
+      sectionId,
+      attachmentId,
+      user.id,
+      user.firstName,
+      message,
+      chatId,
+    );
+
+    res.status(200).json(reply);
   }
 }

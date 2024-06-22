@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { Pagination } from "../Pagination/Pagination";
 import ContentComponent from "../contentComponent/ContentComponent";
 import styles from "./ModuleContent.module.css";
-import { useNavigate } from "react-router-dom";
 
 interface DownloadComponentProps extends React.SVGProps<SVGSVGElement> {
   fill?: string;
@@ -62,7 +61,16 @@ const ModuleContent: React.FC<{
   changeSection: (sectionTitle: string) => void;
   goToUpload: () => void;
   openFile: (_id: string) => void;
-}> = ({ type, files, changeSection, userType, goToUpload, openFile }) => {
+  openExam: () => void;
+}> = ({
+  type,
+  files,
+  changeSection,
+  userType,
+  goToUpload,
+  openFile,
+  openExam,
+}) => {
   const [batchDownload, setBatchDownload] = useState(false);
   const [selectedContents, setSelectedContents] = useState<Content[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
@@ -193,6 +201,22 @@ const ModuleContent: React.FC<{
           )}
         </div>
         <div className="h-fit mt-[30px] grid grid-cols-4 gap-[3%]">
+          {type === "Exams" && (
+            <div
+              className="border-2 rounded-lg p-[8px] col-span-1 aspect-[153/142] cursor-pointer flex flex-col justify-between"
+              onClick={openExam}
+            >
+              <ContentComponent
+                id={12345}
+                date={"10/19/2023"}
+                hoveredDiv={hoveredDiv}
+                image={`/newExamIcon.png`}
+                setHoveredDiv={setHoveredDiv}
+                title={"AI Exam!"}
+                url={""}
+              />
+            </div>
+          )}
           {currentContents?.map((content, index) =>
             batchDownload ? (
               <div
@@ -223,7 +247,9 @@ const ModuleContent: React.FC<{
                 key={index}
                 className="border-2 rounded-lg p-[8px] col-span-1 aspect-[153/142] cursor-pointer flex flex-col justify-between"
                 onClick={() => {
-                  openFile(content._id);
+                  content.contentType === "application/pdf"
+                    ? openFile(content._id)
+                    : openContentInNewTab(content.url);
                 }}
               >
                 <ContentComponent

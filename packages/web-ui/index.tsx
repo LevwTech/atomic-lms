@@ -13,3 +13,8 @@ export { AnnouncementsGrid } from "./Grid/AnnouncementsGrid";
 export { SingleCourseGrid } from "./Grid/SingleCourseGrid";
 export { GradeCardClosed, GradeCardOpened } from "./Cards/GradeCards";
 export { CoursesCard } from "./Cards/CoursesCard";
+export { InstagramStories } from "./InstagramStories/instagramStories";
+export { Flashcard } from "./Flashcards/Flashcard";
+export { AnswerOrFlashcards } from "./AnswerOrFlashcards/AnswerOrFlashcards";
+export { AnswerLabel } from "./AnswerLabel/answerLabel";
+export { CollapsibleCard } from "./CollapsibleCard/CollapsibleCard";
