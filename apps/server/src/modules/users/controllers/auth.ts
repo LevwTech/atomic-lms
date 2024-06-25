@@ -19,6 +19,24 @@ class AuthController {
     return res.status(StatusCodes.OK).json(tokens);
   }
 
+  // edit user
+  public static async editUser(req: Request, res: Response) {
+    const { username, data } = req.body;
+
+    await AuthSerivce.editUser(username, data);
+
+    return res
+      .status(StatusCodes.OK)
+      .json({ message: getReasonPhrase(StatusCodes.OK) });
+  }
+
+  public static async getSingleUser(req: Request, res: Response) {
+    const { username } = req.query;
+
+    const user = await AuthSerivce.getSingleUser(username as string);
+    return res.status(StatusCodes.OK).json(user);
+  }
+
   public static async getAllUsers(req: Request, res: Response) {
     const page = req.query.page ? parseInt(req.query.page as string) : 1;
     const limit = req.query.limit ? parseInt(req.query.limit as string) : 10;

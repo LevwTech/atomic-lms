@@ -10,6 +10,6 @@ const mainRouter = express.Router();
 mainRouter.use("/users", usersRouter);
 mainRouter.use("/course", courseRouter);
 mainRouter.use("/course-marerial", materialsRouter);
-mainRouter.use("/ai", aiRouter);
+// mainRouter.use("/ai", aiRouter);
 
 export default mainRouter;

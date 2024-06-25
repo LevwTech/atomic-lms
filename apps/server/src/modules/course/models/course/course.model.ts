@@ -10,6 +10,18 @@ import UserModel from "../../../users/models/user/user.model";
 import CourseMaterialService from "../../../../modules/courses-material/services/course-material";
 
 export default class CourseModel {
+  public static async getSingleCourse(courseId: string) {
+    return await PostGresDataSource.getRepository(Course).findOne({
+      where: { id: courseId },
+      relations: [
+        "prerequisiteCourses",
+        "prerequisiteCourseGroups",
+        "students",
+        "teachers",
+      ],
+    });
+  }
+
   public static async getAllCourses(
     page: number,
     limit: number,

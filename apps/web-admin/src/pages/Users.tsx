@@ -1,10 +1,10 @@
 import { useQuery } from "@tanstack/react-query";
 import Header from "../components/Header";
 import Layout from "../components/Layout";
-import Table from "../components/Table";
 import { useEffect, useState } from "react";
 import Pagination from "../components/Pagination";
 import { useLocation } from "react-router-dom";
+import UsersTable from "../components/UsersTable";
 
 export default function Users(): JSX.Element {
   const location = useLocation();
@@ -90,7 +90,11 @@ export default function Users(): JSX.Element {
       ) : (
         <div className="flex flex-col justify-between h-full">
           <div className="flex flex-col gap-4">
-            <Table headers={headers} data={updatedUsers} refetch={refetch} />
+            <UsersTable
+              headers={headers}
+              data={updatedUsers}
+              refetch={refetch}
+            />
             <div className="flex items-center self-end gap-4 mb-10">
               <p>Number of Users</p>
               <select

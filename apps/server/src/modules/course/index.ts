@@ -14,6 +14,22 @@ import {
 const courseRouter = express.Router();
 
 courseRouter.get(
+  "/single-course",
+  authMiddleware({
+    [USER_TYPES.ADMIN]: [],
+  }),
+  CourseController.getSingleCourse,
+);
+
+courseRouter.get(
+  "/single-course-group",
+  authMiddleware({
+    [USER_TYPES.ADMIN]: [],
+  }),
+  CourseController.getSingleCourseGroup,
+);
+
+courseRouter.get(
   "/courses",
   authMiddleware({
     [USER_TYPES.ADMIN]: [],
@@ -70,7 +86,6 @@ courseRouter.put(
   authMiddleware({
     [USER_TYPES.ADMIN]: [ADMIN_PERMISSIONS.EDIT_COURSE],
   }),
-  validationMiddleware(CourseDTO.editCourse),
   CourseController.editCourse,
 );
 

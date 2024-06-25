@@ -56,6 +56,22 @@ class UserModel {
     }
   }
 
+  // edit user
+  public static async editUser(username: string, data: any) {
+    await PostGresDataSource.getRepository(User).update(
+      { username },
+      {
+        username: data.username,
+        firstName: data.firstName,
+        lastName: data.lastName,
+        email: data.email,
+        type: data.type,
+        permissions: data.permissions,
+        password: data.password,
+      },
+    );
+  }
+
   public static async getAllUsers(
     page: number,
     limit: number,

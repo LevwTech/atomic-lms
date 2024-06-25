@@ -7,6 +7,23 @@ import getUserFromRequest from "../../../common/helpers/getUserFromRequest";
 import { studentCoursesOptions } from "@atomic/common";
 
 export default class CourseController {
+  // getSingleCourseGroup
+  public static async getSingleCourseGroup(req: Request, res: Response) {
+    const { courseGroupId } = req.query;
+
+    const courseGroup = await CourseService.getSingleCourseGroup(
+      courseGroupId as string,
+    );
+    return res.status(StatusCodes.OK).json(courseGroup);
+  }
+
+  public static async getSingleCourse(req: Request, res: Response) {
+    const { courseId } = req.query;
+
+    const course = await CourseService.getSingleCourse(courseId as string);
+    return res.status(StatusCodes.OK).json(course);
+  }
+
   public static async getAllCourses(req: Request, res: Response) {
     const page = req.query.page ? parseInt(req.query.page as string) : 1;
     const limit = req.query.limit ? parseInt(req.query.limit as string) : 10;

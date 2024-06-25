@@ -12,6 +12,8 @@ import Login from "./pages/Login";
 import ProtectedRoute from "./utils/ProtectedRoute";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import EditUser from "./pages/EditUser";
+import EditCourse from "./pages/EditCourse";
 
 function App() {
   return (
@@ -46,7 +48,7 @@ function App() {
           path="/courses/edit/:id"
           element={
             <ProtectedRoute>
-              <Course />
+              <EditCourse />
             </ProtectedRoute>
           }
         />
@@ -63,6 +65,14 @@ function App() {
           element={
             <ProtectedRoute>
               <NewUser />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/users/edit/:username"
+          element={
+            <ProtectedRoute>
+              <EditUser />
             </ProtectedRoute>
           }
         />

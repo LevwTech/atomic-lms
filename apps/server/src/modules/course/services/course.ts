@@ -9,6 +9,16 @@ import { API_MESSAGES } from "../../../common/helpers/apiMessages";
 export default class CourseService {
   // TODO: handle course creation with course groups or prerequisiteCourseGroups
 
+  // getSingleCourseGroup
+
+  public static async getSingleCourseGroup(courseGroupId: string) {
+    return await CourseGroupModel.getSingleCourseGroup(courseGroupId);
+  }
+
+  public static async getSingleCourse(courseId: string) {
+    return await CourseModel.getSingleCourse(courseId);
+  }
+
   public static async getAllCourses(
     page: number,
     limit: number,
@@ -148,9 +158,7 @@ export default class CourseService {
     return await course.childCourses;
   }
 
-  public static async editCourse(
-    courseEdits: DTOBodyType<typeof CourseDTO.editCourse>,
-  ) {
+  public static async editCourse(courseEdits: any) {
     const course = await CourseModel.getCourse(courseEdits.id);
     if (!course) throw new API_ERROR(API_MESSAGES.DOESNT_EXIST);
     if (courseEdits.name) {

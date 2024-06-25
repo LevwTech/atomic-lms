@@ -7,11 +7,25 @@ import { userSchema } from "../components/forms/Schemas";
 import { toast } from "react-toastify";
 import ReactLoading from "react-loading";
 import { X } from "lucide-react";
+import { useParams } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
+import { useNavigate } from "react-router-dom";
 
 export default function EditUser(): JSX.Element {
+  const { username } = useParams();
   const [loading, setLoading] = React.useState(false);
   const [permission, setPermission] = React.useState("ADMIN");
-  const [signedPermissions, setSignedPermissions] = React.useState([]);
+  const navigate = useNavigate();
+
+  const { isLoading, data: user } = useQuery({
+    queryKey: ["single-user", { username }],
+    queryFn: () =>
+      fetch(`http://localhost:3000/users/get-single?username=${username}`, {
+        headers: {
+          authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+        },
+      }).then((res) => res.json()),
+  });
 
   const { values, errors, handleSubmit, handleChange, touched, setFieldValue } =
     useFormik({
@@ -28,18 +42,24 @@ export default function EditUser(): JSX.Element {
       validationSchema: userSchema,
       onSubmit: async (values) => {
         setLoading(true);
-        const res = await fetch("http://localhost:3000/users/create", {
+        const res = await fetch("http://localhost:3000/users/edit-user", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
             authorization: `Bearer ${localStorage.getItem("accessToken")}`,
           },
-          body: JSON.stringify(values),
+          body: JSON.stringify({
+            username: values.username,
+            data: {
+              ...values,
+            },
+          }),
         });
         const data = await res.json();
-        if (res.status === 201) {
+        if (res.status === 200) {
           setLoading(false);
-          toast.success("User created successfully");
+          toast.success("User updated successfully");
+          navigate("/users");
         } else {
           setLoading(false);
           toast.error(data.message);
@@ -166,12 +186,27 @@ export default function EditUser(): JSX.Element {
   ];
 
   useEffect(() => {
-    setFieldValue("permissions", signedPermissions);
-  }, [signedPermissions, setFieldValue]);
+    if (user) {
+      setFieldValue("firstName", user.firstName);
+      setFieldValue("lastName", user.lastName);
+      setFieldValue("email", user.email);
+      setFieldValue("username", user.username);
+      setFieldValue("type", user.type);
+      setFieldValue("password", user.password);
+      setFieldValue("permissions", user.permissions);
+    }
+  }, [setFieldValue, user]);
 
+  if (isLoading) {
+    return (
+      <div className="h-screen p-[40px] flex justify-center items-center gap-[40px]">
+        <ReactLoading type="spinningBubbles" color="#11664F" />
+      </div>
+    );
+  }
   return (
     <Layout>
-      <Header back={"/users"} title="New User" />
+      <Header back={"/users"} title="Edit User" />
       <div className="flex gap-10">
         <form onSubmit={handleSubmit} className="flex flex-col gap-10 w-[50%]">
           <div className="flex flex-col gap-4 w-full">
@@ -250,19 +285,14 @@ export default function EditUser(): JSX.Element {
                 <p className="text-sm text-gray-600">Permissions</p>
                 <select
                   onChange={(e) => {
-                    setSignedPermissions([
-                      ...signedPermissions,
+                    setFieldValue("permissions", [
+                      ...values.permissions,
                       e.target.value,
                     ]);
                   }}
                   className="w-full rounded"
                 >
-                  <option
-                    value="disabled"
-                    disabled={signedPermissions.length !== 0}
-                  >
-                    Select a permission
-                  </option>
+                  <option value="disabled">Select a permission</option>
                   {permission === "ADMIN"
                     ? adminPermissions.map((permission) => (
                         <option key={permission.value} value={permission.value}>
@@ -310,17 +340,17 @@ export default function EditUser(): JSX.Element {
               onClick={handleSubmit}
               className="rounded bg-[#11664F] px-8 py-2 text-white transition lg:hover:bg-[#11664F]/80 h-10"
             >
-              Create user
+              Edit user
             </button>
           )}
         </form>
         <div className="flex flex-col gap-2 w-[50%]">
           <p className="text-sm text-gray-600">User Permissions</p>
           <div className="flex gap-2 flex-wrap">
-            {signedPermissions.length === 0 && (
+            {values.permissions.length === 0 && (
               <p className="text-sm">No signed permissions yet.</p>
             )}
-            {signedPermissions.map((permission) => (
+            {values.permissions.map((permission) => (
               <div
                 key={permission}
                 className="flex items-center border rounded-lg px-4 py-2 gap-4"
@@ -328,8 +358,9 @@ export default function EditUser(): JSX.Element {
                 <p>{permission}</p>
                 <button
                   onClick={() =>
-                    setSignedPermissions(
-                      signedPermissions.filter((p) => p !== permission),
+                    setFieldValue(
+                      "permissions",
+                      values.permissions.filter((perm) => perm !== permission),
                     )
                   }
                 >

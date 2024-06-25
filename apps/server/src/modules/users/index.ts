@@ -32,6 +32,15 @@ usersRouter.get(
   AuthController.getAllUsers,
 );
 
+// get single user
+usersRouter.get(
+  "/get-single",
+  authMiddleware({
+    [USER_TYPES.ADMIN]: [],
+  }),
+  AuthController.getSingleUser,
+);
+
 // takes refresh token and returns new access token and refresh token
 usersRouter.get("/refresh-token", AuthController.refreshToken);
 
@@ -50,6 +59,16 @@ usersRouter.post(
 // change user password
 // change user info
 // forgot password
+
+// edit user
+
+usersRouter.post(
+  "/edit-user",
+  authMiddleware({
+    [USER_TYPES.ADMIN]: [],
+  }),
+  AuthController.editUser,
+);
 
 usersRouter.post(
   "/add-permissions",

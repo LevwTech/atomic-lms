@@ -12,7 +12,6 @@ import { useNavigate } from "react-router-dom";
 export default function NewUser(): JSX.Element {
   const [loading, setLoading] = React.useState(false);
   const [permission, setPermission] = React.useState("ADMIN");
-  const [signedPermissions, setSignedPermissions] = React.useState([]);
   const navigate = useNavigate();
 
   const { values, errors, handleSubmit, handleChange, touched, setFieldValue } =
@@ -168,10 +167,6 @@ export default function NewUser(): JSX.Element {
     },
   ];
 
-  useEffect(() => {
-    setFieldValue("permissions", signedPermissions);
-  }, [signedPermissions, setFieldValue]);
-
   return (
     <Layout>
       <Header back={"/users"} title="New User" />
@@ -253,8 +248,8 @@ export default function NewUser(): JSX.Element {
                 <p className="text-sm text-gray-600">Permissions</p>
                 <select
                   onChange={(e) => {
-                    setSignedPermissions([
-                      ...signedPermissions,
+                    setFieldValue("permissions", [
+                      ...values.permissions,
                       e.target.value,
                     ]);
                   }}
@@ -262,7 +257,7 @@ export default function NewUser(): JSX.Element {
                 >
                   <option
                     value="disabled"
-                    disabled={signedPermissions.length !== 0}
+                    disabled={values.permissions.length !== 0}
                   >
                     Select a permission
                   </option>
@@ -320,10 +315,10 @@ export default function NewUser(): JSX.Element {
         <div className="flex flex-col gap-2 w-[50%]">
           <p className="text-sm text-gray-600">User Permissions</p>
           <div className="flex gap-2 flex-wrap">
-            {signedPermissions.length === 0 && (
+            {values.permissions.length === 0 && (
               <p className="text-sm">No signed permissions yet.</p>
             )}
-            {signedPermissions.map((permission) => (
+            {values.permissions.map((permission) => (
               <div
                 key={permission}
                 className="flex items-center border rounded-lg px-4 py-2 gap-4"
@@ -331,8 +326,9 @@ export default function NewUser(): JSX.Element {
                 <p>{permission}</p>
                 <button
                   onClick={() =>
-                    setSignedPermissions(
-                      signedPermissions.filter((p) => p !== permission),
+                    setFieldValue(
+                      "permissions",
+                      values.permissions.filter((p) => p !== permission),
                     )
                   }
                 >

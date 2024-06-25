@@ -6,6 +6,13 @@ import { API_MESSAGES } from "../../../../common/helpers/apiMessages";
 import CourseModel from "../course/course.model";
 
 export class CourseGroupModel {
+  // getSingleCourseGroup
+  public static async getSingleCourseGroup(courseGroupId: string) {
+    return await PostGresDataSource.getRepository(CourseGroup).findOne({
+      where: { id: courseGroupId },
+    });
+  }
+
   public static async getAllCourseGroups(page: number, limit: number) {
     const [courseGroups, totalCount] = await PostGresDataSource.getRepository(
       CourseGroup,

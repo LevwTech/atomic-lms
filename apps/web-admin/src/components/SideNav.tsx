@@ -41,12 +41,12 @@ export default function SideNav() {
       icon: <UserCog />,
       href: "/users",
     },
-    {
-      id: 2,
-      name: "Permissions Management",
-      icon: <Stamp />,
-      href: "/permissions",
-    },
+    // {
+    //   id: 2,
+    //   name: "Permissions Management",
+    //   icon: <Stamp />,
+    //   href: "/permissions",
+    // },
     {
       id: 3,
       name: "Courses Management",

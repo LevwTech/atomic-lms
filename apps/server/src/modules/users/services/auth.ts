@@ -25,6 +25,15 @@ class AuthSerivce {
     });
   }
 
+  // edit user
+  public static async editUser(username: string, data: any) {
+    await UserModel.editUser(username, data);
+  }
+
+  public static async getSingleUser(username: string) {
+    return await UserModel.getUserByUsername(username);
+  }
+
   public static async getAllUsers(
     page: number,
     limit: number,

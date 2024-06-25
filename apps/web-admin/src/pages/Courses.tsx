@@ -5,6 +5,8 @@ import Table from "../components/Table";
 import { useQuery } from "@tanstack/react-query";
 import { useLocation } from "react-router-dom";
 import Pagination from "../components/Pagination";
+import CoursesTable from "../components/CoursesTable";
+import CoursesGroupsTable from "../components/CoursesGroups";
 
 export default function Courses(): JSX.Element {
   const [selection, setSelection] = React.useState<"Courses" | "Groups">(
@@ -72,6 +74,7 @@ export default function Courses(): JSX.Element {
 
   if (selection === "Courses") {
     updatesTable = courses?.courses.map((course) => ({
+      id: course.id,
       name: course.name,
       code: course.code,
       startDate: new Date(course.startDate).toLocaleDateString(),
@@ -79,12 +82,11 @@ export default function Courses(): JSX.Element {
     }));
   } else {
     updatesTable = courses?.courseGroups.map((courseGroup) => ({
+      id: courseGroup.id,
       name: courseGroup.name,
       numberOfGroups: courseGroup.__courses__.length,
     }));
   }
-
-  console.log(selection);
 
   return (
     <Layout>
@@ -128,7 +130,20 @@ export default function Courses(): JSX.Element {
       ) : (
         <div className="flex flex-col justify-between h-full">
           <div className="flex flex-col gap-4">
-            <Table headers={headers} data={updatesTable} refetch={refetch} />
+            {selection === "Courses" ? (
+              <CoursesTable
+                headers={headers}
+                data={updatesTable}
+                refetch={refetch}
+              />
+            ) : (
+              <CoursesGroupsTable
+                headers={headers}
+                data={updatesTable}
+                refetch={refetch}
+              />
+            )}
+
             <div className="flex items-center self-end gap-4 mb-10">
               <p>Number of Courses</p>
               <select
