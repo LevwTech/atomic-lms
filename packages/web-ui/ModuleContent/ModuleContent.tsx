@@ -154,7 +154,7 @@ const ModuleContent: React.FC<{
             >
               {!batchDownload ? (
                 <button
-                  className="bg-[#F33950] mr-2 rounded-[10px] p-[10px] flex items-center"
+                  className="bg-[#B7ED3F] mr-2 rounded-[10px] p-[10px] flex items-center"
                   onClick={handleCancelClick}
                 >
                   <DownloadComponentImg fill="var(--Primary)" />
@@ -165,7 +165,7 @@ const ModuleContent: React.FC<{
               ) : (
                 <>
                   <button
-                    className="bg-[#F33950] mr-2 rounded-[10px] p-[10px] flex"
+                    className="bg-[#B7ED3F] mr-2 rounded-[10px] p-[10px] flex"
                     onClick={handleCancelClick}
                   >
                     <img alt="" className="mr-2" src="/Cancel.svg" />

@@ -10,6 +10,28 @@ which might reference context in the chat history, determine if the question nee
 general questions do not need supporting learning material. questions about any scientific or factual topic need supporting learning material.
 return a json object with a boolean field 'retrieval_needed' set to true if the question needs supporting learning material and false otherwise.`;
 
+  static hallucinationDetectionQSystemPrompt = `Given a question and its AI-generated answer, determine if the answer is hallucinated by checking if the answer is not relatable to the question.
+if the answer is in the context of the question, it is not hallucinated. if the answer is not in the context of the question, it is hallucinated.
+  return a json object with a boolean field 'hallucinated' set to true if the answer contains hallucinated content and false otherwise.
+
+question: {input}
+
+answer: {aiAnswer}`;
+
+  static checkAnswerQSystemPrompt = `Given a question, the AI-generated answer, the AI-generated citations and the learning material content
+check if the answer is correct based on the learning material content and validate the citations.
+return a json object with a boolean field 'correct' set to true if the answer is correct and false otherwise.
+
+question: {question}
+
+answer: {answer}
+
+citations: {citations}
+
+learning material:
+
+{context}`;
+
   static chatbotQSystemPrompt = `You are Atomic, an advanced language model created by a team of 6 engineering students at The British University in Egypt as their graduation project. Your purpose is to assist students using the Atomic Learning Management System (LMS) by answering questions and providing explanations related to their course material.
 When a student asks you a question, you may sometimes be provided with relevant context in the form of documents, textbook sections, lecture notes etc. In such cases, you should answer the question solely based on the information present in the given context, without adding any external knowledge from your training data.
 Analyze the context thoroughly to understand the core concepts involved. Then provide a detailed answer that directly responds to the question using key information, explanations and examples found in the context material.
@@ -69,6 +91,7 @@ learning material:
 also give an explanation to the student why the answer is correct, partially correct or incorrect based on the correct answer and the explanation provided. state the correct answer and the student answer in the explanation. give the student an advice on how to improve their answer.
 include in the advice that the student should revice this topic in the page number provided.vdetermine if the student answer is correct, partially correct or incorrect based on the meaning not the wording.
 write the explanation as if you are explaining to the student why their answer is correct, partially correct or incorrect.
+Don't generate questions that are not related to the learning material like university names, course names, lecutre names, or instructor names.
 
 flash card question:
 {question}
@@ -91,6 +114,7 @@ return the questions and answers as an array of objects in JSON format where eac
 the options are an array of objects where each object has these keys "letter", "text", "isCorrect". the letter is the option letter, the text is the option text and isCorrect is a boolean that is true if the option is correct and false otherwise.
 the explination should explain why the answer is correct from the learning material.
 REMEMBER: generate the maximum number of MCQ questions and answers and don't leave any educational point without a question.
+Don't generate questions that are not related to the learning material like university names, course names, lecutre names, or instructor names.
 
 learning material:
 

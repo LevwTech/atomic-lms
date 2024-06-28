@@ -4,7 +4,7 @@ import Markdown from "react-markdown";
 import { ElevenLabsClient } from "elevenlabs";
 
 const elevenlabs = new ElevenLabsClient({
-  apiKey: "sk_abf68092e5c896cedf255c233113be8563772a2c98edeed1",
+  apiKey: "sk_3d04a74995a0ec8db9d2cd187252252f89e4211057b6a1d7",
 });
 
 type message =
@@ -147,9 +147,9 @@ function AITutor({ courseId, sectionId, attachmentId, scrollToPage }: Props) {
   const fetchAudioStream = async (text: string) => {
     try {
       const audioStream: any = await elevenlabs.generate({
-        voice: "Alice",
+        voice: "Fin",
         text,
-        model_id: "eleven_turbo_v2",
+        model_id: "eleven_multilingual_v1",
       });
 
       const chunks: Uint8Array[] = [];

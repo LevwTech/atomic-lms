@@ -263,6 +263,32 @@ export default class AIService {
       name: "cited_answers",
     });
 
+    const hallucinationCheckerOutput = z
+      .object({
+        is_hallucinated: z.boolean().describe("if the answer is hallucinated"),
+      })
+      .describe("an object stating if the answer is hallucinated");
+
+    const hallucinationChecker = llm.withStructuredOutput(
+      hallucinationCheckerOutput,
+      {
+        name: "hallucination_checker",
+      },
+    );
+
+    const correctAnswerCheckerOutput = z
+      .object({
+        is_correct: z.boolean().describe("if the answer is correct"),
+      })
+      .describe("an object stating if the answer is correct");
+
+    const correctAnswerChecker = llm.withStructuredOutput(
+      correctAnswerCheckerOutput,
+      {
+        name: "correct_answer_checker",
+      },
+    );
+
     const rephrasePrompt = ChatPromptTemplate.fromMessages([
       ["system", AIPrompts.contextualizeQSystemPrompt],
       new MessagesPlaceholder("chat_history"),
@@ -287,6 +313,34 @@ export default class AIService {
       new MessagesPlaceholder("chat_history"),
       ["user", "{input}"],
     ]);
+
+    const hallucinationCheckQPrompt = PromptTemplate.fromTemplate(
+      AIPrompts.hallucinationDetectionQSystemPrompt,
+    );
+
+    const hallucinationCheckChain = RunnableSequence.from([
+      new RunnableLambda({
+        func: async (input: any) => {
+          input.aiAnswer = input.answer.answer;
+          return input;
+        },
+      }),
+      hallucinationCheckQPrompt,
+      hallucinationChecker as any,
+    ]).withConfig({
+      runName: "Hallucination Checker",
+    });
+
+    const correctAnswerCheckQPrompt = PromptTemplate.fromTemplate(
+      AIPrompts.checkAnswerQSystemPrompt,
+    );
+
+    const correctAnswerCheckChain = RunnableSequence.from([
+      correctAnswerCheckQPrompt,
+      correctAnswerChecker as any,
+    ]).withConfig({
+      runName: "Correct Answer Checker",
+    });
 
     const formatDocsForCitation = (docs: Array<Document>): string => {
       return (
@@ -339,6 +393,39 @@ export default class AIService {
       chat_title: chat.title,
     });
 
+    let hallucination: any;
+    try {
+      hallucination = await hallucinationCheckChain.invoke({
+        answer: response.answer,
+        input: question,
+      });
+
+      console.log(hallucination);
+    } catch (e) {}
+
+    let correctAnswer: any;
+    try {
+      correctAnswer = await correctAnswerCheckChain.invoke({
+        answer: response.answer.answer,
+        question: question,
+        citations: response.answer.citations
+          .map(
+            (citation: any, index: number) =>
+              "Citation " +
+              index +
+              1 +
+              " File Name: " +
+              citation.fileName +
+              " Page Number: " +
+              citation.pageNumber,
+          )
+          .join("\n"),
+        context: response.context,
+      });
+
+      console.log(correctAnswer);
+    } catch (e) {}
+
     const course =
       await CourseMaterialService.getCourseMaterialWithContent(courseId);
 
@@ -382,7 +469,26 @@ export default class AIService {
       response.answer.newChatTitle,
     );
 
-    await Promise.all([updateChatHistory, updateTitle]);
+    Promise.all([updateChatHistory, updateTitle]);
+
+    if (hallucination && hallucination.is_hallucinated) {
+      return {
+        answer:
+          "We have detected that there might be some hallucination in the answer. Please review the answer.\n" +
+          response.answer.answer,
+        citations: [],
+        newChatTitle: response.answer.newChatTitle,
+      };
+    }
+
+    if (correctAnswer && !correctAnswer.is_correct) {
+      return {
+        answer: `we couldn't validate this answer. Please review the answer.
+${response.answer.answer}`,
+        citations: citationsWithFileName,
+        newChatTitle: response.answer.newChatTitle,
+      };
+    }
 
     return {
       answer: response.answer.answer,

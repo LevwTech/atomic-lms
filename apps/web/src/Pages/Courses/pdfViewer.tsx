@@ -6,6 +6,11 @@ import { Page, Document } from "react-pdf";
 import React, { useEffect, useRef, useState } from "react";
 import FileChatBot from "../../components/fileChatbot";
 import AITutor from "../../components/aiTutor";
+interface SelectionInfo {
+  text: string;
+  x: number;
+  y: number;
+}
 
 function PdfViewerPage() {
   const { courseId, sectionId, attachmentId } = useParams();
@@ -24,6 +29,10 @@ function PdfViewerPage() {
   );
   const [aiTutor, setAiTutor] = useState(
     searchParams.get("aiTutorId") ? true : false,
+  );
+
+  const [selectionInfo, setSelectionInfo] = useState<SelectionInfo | null>(
+    null,
   );
 
   function onDocumentLoadSuccess({ numPages }: { numPages: number }) {
@@ -100,12 +109,48 @@ function PdfViewerPage() {
     link.click();
   };
 
+  const handleMouseUp = () => {
+    const selection = window.getSelection();
+    if (selection && selection.rangeCount > 0) {
+      const range = selection.getRangeAt(0);
+      const selectedText = range.toString();
+      const container = containerRef.current;
+
+      if (
+        container &&
+        container.contains(range.commonAncestorContainer) &&
+        selectedText
+      ) {
+        const rect = range.getBoundingClientRect();
+        const containerRect = container.getBoundingClientRect();
+
+        setSelectionInfo({
+          text: selectedText,
+          x: rect.left - containerRect.left + container.scrollLeft,
+          y: rect.bottom - containerRect.top + container.scrollTop,
+        });
+      } else {
+        setSelectionInfo(null);
+      }
+    }
+  };
+
+  const handleDocumentClick = (event: MouseEvent) => {
+    const container = containerRef.current;
+    if (container && !container.contains(event.target as Node)) {
+      return;
+    }
+    handleMouseUp();
+  };
+
   useEffect(() => {
     const container = containerRef.current;
     if (container) {
       container.addEventListener("scroll", handleScroll);
+      document.addEventListener("mouseup", handleDocumentClick);
       return () => {
         container.removeEventListener("scroll", handleScroll);
+        document.removeEventListener("mouseup", handleDocumentClick);
       };
     }
   }, [numPages, pageNumber]);
@@ -133,6 +178,8 @@ function PdfViewerPage() {
     );
   }
 
+  console.log("selectionInfo", selectionInfo);
+
   return (
     <div className="h-screen p-[40px] flex justify-between gap-[40px]">
       <Sidebar
@@ -144,7 +191,7 @@ function PdfViewerPage() {
         className={`h-full ${chatBot || aiTutor ? "w-[42vw]" : "w-[85vw]"} rounded-[14px] items-center flex flex-col bg-[#f9f9f9]  gap-[30px] relative`}
       >
         <div
-          className="w-full h-full rounded-[14px] overflow-scroll flex flex-col p-[30px] pb-20 items-center bg-[#f9f9f9]"
+          className={`w-full h-full relative rounded-[14px] overflow-scroll flex flex-col p-[30px] pb-20 items-center bg-[#f9f9f9] ${aiTutor ? "justify-center" : ""}`}
           ref={containerRef}
         >
           <Document
@@ -156,23 +203,29 @@ function PdfViewerPage() {
             onLoadSuccess={onDocumentLoadSuccess}
           >
             <div className="flex flex-col w-full gap-[20px]">
-              {Array.from(new Array(numPages), (_, index) => (
-                <div
-                  key={`page_${index + 1}`}
-                  className="shadow-md rounded"
-                  ref={pageRefs.current[index]}
-                >
-                  <Page
-                    pageNumber={index + 1}
-                    scale={scale}
-                    onLoadSuccess={({ pageNumber }) => {
-                      if (pageNumber === Number(searchParams.get("page"))) {
-                        scrollToPage(pageNumber);
-                      }
-                    }}
-                  />
+              {!aiTutor &&
+                Array.from(new Array(numPages), (_, index) => (
+                  <div
+                    key={`page_${index + 1}`}
+                    className="shadow-md rounded"
+                    ref={pageRefs.current[index]}
+                  >
+                    <Page
+                      pageNumber={index + 1}
+                      scale={scale}
+                      onLoadSuccess={({ pageNumber }) => {
+                        if (pageNumber === Number(searchParams.get("page"))) {
+                          scrollToPage(pageNumber);
+                        }
+                      }}
+                    />
+                  </div>
+                ))}
+              {aiTutor && (
+                <div className="shadow-md rounded">
+                  <Page pageNumber={pageNumber} scale={scale} />
                 </div>
-              ))}
+              )}
             </div>
           </Document>
         </div>
@@ -180,7 +233,8 @@ function PdfViewerPage() {
           <div className="flex gap-4 items-center">
             <div className="bg-[#EFF2FB] py-1 px-2 rounded-lg flex items-center gap-2">
               <input
-                value={inputValue}
+                value={aiTutor ? pageNumber : inputValue}
+                disabled={aiTutor}
                 onChange={handleInputChange}
                 onKeyDown={handleInputKeyDown}
                 className="w-10 flex text-center border-none rounded h-8 text-sm p-0"
@@ -237,7 +291,10 @@ function PdfViewerPage() {
             {attachment.doesHaveChatBot && !chatBot && (
               <button
                 className="flex gap-2 px-4 py-2 bg-[#EFF2FB] rounded-lg items-center text-sm"
-                onClick={() => setAiTutor(!aiTutor)}
+                onClick={() => {
+                  setAiTutor(!aiTutor);
+                  setPageNumber(1);
+                }}
               >
                 <img src="/filechat.svg" />
                 AI Tutor
@@ -261,6 +318,8 @@ function PdfViewerPage() {
           sectionId={sectionId!}
           attachmentId={attachmentId!}
           scrollToPage={scrollToPage}
+          selectedText={selectionInfo ? selectionInfo.text : ""}
+          setSelectedText={setSelectionInfo}
         />
       )}
       {aiTutor && (
@@ -268,7 +327,7 @@ function PdfViewerPage() {
           courseId={courseId!}
           sectionId={sectionId!}
           attachmentId={attachmentId!}
-          scrollToPage={scrollToPage}
+          scrollToPage={setPageNumber}
         />
       )}
     </div>

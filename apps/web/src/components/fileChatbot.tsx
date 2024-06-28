@@ -76,10 +76,12 @@ function ChatHistory({
   messages,
   loading,
   goToCitation,
+  summarizedText,
 }: {
   messages: message[];
   loading: boolean;
   goToCitation: (pageNumber: number) => void;
+  summarizedText: string;
 }) {
   const messagesEndRef = React.useRef(null);
 
@@ -90,7 +92,12 @@ function ChatHistory({
   }, [messages]);
 
   return (
-    <div className="flex flex-col h-full w-full gap-8 py-10 overflow-y-auto pl-8 pb-36">
+    <div
+      className="flex flex-col h-full w-full gap-8 py-10 overflow-y-auto pl-8"
+      style={{
+        paddingBottom: summarizedText !== "" ? "210px" : "110px",
+      }}
+    >
       {messages.map((message, index) =>
         message.type === "human" ? (
           <SentMessage message={message} />
@@ -131,6 +138,8 @@ type Props = {
   sectionId: string;
   attachmentId: string;
   scrollToPage: (pageNumber: number) => void;
+  selectedText: string;
+  setSelectedText: (text: any) => void;
 };
 
 function FileChatBot({
@@ -138,6 +147,8 @@ function FileChatBot({
   sectionId,
   attachmentId,
   scrollToPage,
+  selectedText,
+  setSelectedText,
 }: Props) {
   const searchParams = new URLSearchParams(window.location.search);
 
@@ -158,7 +169,9 @@ function FileChatBot({
     if (inputValue.length === 0) return;
     setSendingMessage(true);
     let currentChatId = chatId;
-    let currentMessage = inputValue;
+    let currentMessage = selectedText
+      ? inputValue + "\n" + selectedText
+      : inputValue;
 
     if (!currentChatId) {
       const { chatId: newChatId } = await fetch(
@@ -220,6 +233,7 @@ function FileChatBot({
 
     setInputValue("");
     setChatTitle(res.newChatTitle);
+    setSelectedText(null);
     setSendingMessage(false);
   };
 
@@ -262,11 +276,20 @@ function FileChatBot({
           loading={sendingMessage}
           messages={messages}
           goToCitation={goToCitation}
+          summarizedText={selectedText}
         />
       ) : (
         <EmptyChat />
       )}
       <div className="absolute flex flex-col bottom-4 left-1/2 transform border rounded-[10px] w-[95%] -translate-x-1/2 bg-white border-[#11664F]">
+        {selectedText && (
+          <div
+            className="p-4 border-b-[1px] bg-[#E5E4E8] m-4 rounded-[5px] text-[#6D6C75] italic hover:bg-[#ffe4e5] hover:border hover:border-[#fa727e] cursor-pointer transition-all"
+            onClick={() => setSelectedText(null)}
+          >
+            <p className="text-sm truncate">{selectedText}</p>
+          </div>
+        )}
         <div className="flex">
           <textarea
             placeholder="Ask me anything you want..."
@@ -286,10 +309,45 @@ function FileChatBot({
           </button>
         </div>
         <div className="flex justify-between px-[20px] py-[10px] bg-[#f5f5f5] rounded-b-[10px] border ">
-          <div className="flex items-center gap-1 font-medium">
-            <img src="/attach.svg" />
-            <p> Attach</p>
-          </div>
+          {!selectedText ? (
+            <div className="flex items-center gap-1 font-medium">
+              <img src="/attach.svg" />
+              <p> Attach</p>
+            </div>
+          ) : (
+            <div className="flex gap-4">
+              <div
+                className="hover:bg-[#B7ED3F] px-2 py-1 rounded text-sm bg-[#e6e6e6] transition-all cursor-pointer"
+                onClick={() => {
+                  if (!sendingMessage) {
+                    setInputValue("Explain this content to me.");
+                  }
+                }}
+              >
+                Expain
+              </div>
+              <div
+                className="hover:bg-[#B7ED3F] px-2 py-1 rounded text-sm bg-[#e6e6e6] transition-all cursor-pointer"
+                onClick={() => {
+                  if (!sendingMessage) {
+                    setInputValue("Explain this content in a simpler way.");
+                  }
+                }}
+              >
+                Simplify
+              </div>
+              <div
+                className="hover:bg-[#B7ED3F] px-2 py-1 rounded text-sm bg-[#e6e6e6] transition-all cursor-pointer"
+                onClick={() => {
+                  if (!sendingMessage) {
+                    setInputValue("Summarize this content for me.");
+                  }
+                }}
+              >
+                Summarize
+              </div>
+            </div>
+          )}
           <p>{inputValue.length}/3000</p>
         </div>
       </div>
