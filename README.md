@@ -10,7 +10,7 @@ The Learning Management System of the Future.
 
 ## 📺 Demo
 
-<iframe width="560" height="315" src="https://www.youtube.com/embed/2_vTg_1BMZo" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+[![Watch the Demo](https://img.youtube.com/vi/2_vTg_1BMZo/0.jpg)](https://www.youtube.com/watch?v=2_vTg_1BMZo)
 
 ## 🛠️ Setup Guide
 
