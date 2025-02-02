@@ -6,7 +6,7 @@ The Learning Management System of the Future.
 
 ## 🚀 Introduction
 
-**Atomic LMS** is a next-generation Learning Management System designed to streamline online education, enhance user engagement, and simplify course management for educators and institutions.
+**Atomic LMS** is a next-generation, AI-powered Learning Management System designed to streamline online education, enhance user engagement, and simplify course management for educators and institutions. It offers personalized learning experiences tailored to meet the unique needs of each learner.
 
 ## 📺 Demo
 
