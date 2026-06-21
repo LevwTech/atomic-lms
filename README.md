@@ -12,6 +12,10 @@ The Learning Management System of the Future.
 
 [![Watch the Demo](https://img.youtube.com/vi/2_vTg_1BMZo/0.jpg)](https://www.youtube.com/watch?v=2_vTg_1BMZo)
 
+## 📐 Architecture
+<img width="1280" height="495" alt="image" src="https://github.com/user-attachments/assets/1b7fe724-2581-486e-a448-5dce040144df" />
+
+
 ## 🛠️ Setup Guide
 
 Follow these steps to set up the project environment:
